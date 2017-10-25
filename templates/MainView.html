@@ -6,7 +6,10 @@
 					<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}">
 						<div class="sales_list_scroll scroll-inner">
 							<div class="items_list sales_list">
-								<div class="items_sub_list sales_sub_list" data-bind="foreach: salesList">
+								<span class="list_notification" data-bind="visible: loadingList()" id="selenium_contacts_loading_info">
+									<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_LIST'}"></span>
+								</span>
+								<div class="items_sub_list sales_sub_list" data-bind="foreach: salesList, visible : !loadingList()">
 									<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
 										<div class="item_content">
 											<span class="data table fadeout" >

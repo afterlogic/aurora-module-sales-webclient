@@ -20,7 +20,7 @@ var
 function CMainView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	var iItemsPerPage = 20;
+	this.iItemsPerPage = 20;
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
 	 */
@@ -34,8 +34,13 @@ function CMainView()
 	);
 	
 	this.pageSwitcherLocked = ko.observable(false);
-	this.oPageSwitcher = new CPageSwitcherView(0, iItemsPerPage);
+	this.oPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
+	this.oPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentPage(iCurrentpage);
+		this.requestSalesList();
+	}, this);
 	this.currentPage = ko.observable(1);
+	this.loadingList = ko.observable(false);
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -54,10 +59,14 @@ CMainView.prototype.onShow = function ()
 
 CMainView.prototype.requestSalesList = function ()
 {
+	this.loadingList(true);
 	Ajax.send(
 		'Sales',
 		'GetSales', 
-		{},
+		{
+			'Offset': (this.currentPage() - 1) * this.iItemsPerPage,
+			'Limit': this.iItemsPerPage,
+		},
 		this.onGetSalesResponse,
 		this
 	);
@@ -78,6 +87,7 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 			})) : [];
 		this.salesList(aNewCollection);
 		this.oPageSwitcher.setCount(iItemsCount);
+		this.loadingList(false);
 	}
 };
 
