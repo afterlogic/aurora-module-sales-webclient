@@ -27,11 +27,17 @@ function CMainView()
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	this.salesList = ko.observableArray([]);
 	this.selectedItem = ko.observable(null);
+	this.isSearchFocused = ko.observable(false);
+	this.searchInput = ko.observable('');
 	
 	this.selector = new CSelector(
 		this.salesList,
 		_.bind(this.viewItem, this)
 	);
+	
+	this.isSearch = ko.computed(function () {
+		return this.searchInput() !== '';
+	}, this);
 	
 	this.pageSwitcherLocked = ko.observable(false);
 	this.oPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
@@ -66,6 +72,7 @@ CMainView.prototype.requestSalesList = function ()
 		{
 			'Offset': (this.currentPage() - 1) * this.iItemsPerPage,
 			'Limit': this.iItemsPerPage,
+			'Search': this.searchInput(),
 		},
 		this.onGetSalesResponse,
 		this
@@ -104,6 +111,19 @@ CMainView.prototype.onBind = function ()
 		$('.sales_list', this.$viewDom),
 		$('.sales_list_scroll.scroll-inner', this.$viewDom)
 	);
+};
+
+CMainView.prototype.searchSubmit = function ()
+{
+	this.oPageSwitcher.currentPage(1);
+	this.requestSalesList();
+};
+
+CMainView.prototype.onClearSearchClick = function ()
+{
+	// initiation empty search
+	this.searchInput('');
+	this.searchSubmit();
 };
 
 module.exports = new CMainView();

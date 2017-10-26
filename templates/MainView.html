@@ -3,11 +3,23 @@
 		<div class="panel" data-splitter="sales_list">
 			<div class="panel_content">
 				<div class="middle_bar">
+					<div class="panel_top">
+						<span class="search_block">
+							<span class="input" data-bind="css: {'focus': isSearchFocused}">
+								<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: searchSubmit"></span>
+								<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInput, onEnter: searchSubmit, hasfocus: isSearchFocused" />
+							</span>
+						</span>
+					</div>
 					<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}">
 						<div class="sales_list_scroll scroll-inner">
 							<div class="items_list sales_list">
 								<span class="list_notification" data-bind="visible: loadingList()" id="selenium_contacts_loading_info">
 									<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_LIST'}"></span>
+								</span>
+								<span class="list_notification" data-bind="visible: isSearch()">
+									<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearSearchClick"></span>
+									<span class="description" data-bind="text: searchInput"></span>
 								</span>
 								<div class="items_sub_list sales_sub_list" data-bind="foreach: salesList, visible : !loadingList()">
 									<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
@@ -26,7 +38,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="panel_bottom unselectable" data-bind="visible: oPageSwitcher.pages().length > 0, template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>
+				<div class="panel_bottom unselectable" data-bind="visible: oPageSwitcher.pages().length > 0 && !loadingList(), template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>
 			</div>
 		</div>
 		<div class="panel sale_viewer" data-splitter="sale_viewer">
