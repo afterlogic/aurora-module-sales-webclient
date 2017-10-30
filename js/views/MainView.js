@@ -87,11 +87,11 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 	{
 		var
 			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = Types.isNonEmptyArray(oResult.List) ? _.compact(_.map(oResult.List, function (oItemData) {
-				var oItem = new CSalesListItemModel();
-				oItem.parse(oItemData);
-				return oItem;
-			})) : [];
+			aNewCollection = Types.isNonEmptyArray(oResult.Sales) ? _.compact(_.map(oResult.Sales, function (oItemData) {
+					var oItem = new CSalesListItemModel();
+					oItem.parse(oItemData, oResult.Customers, oResult.Products);
+					return oItem;
+				})) : [];
 		this.salesList(aNewCollection);
 		this.oPageSwitcher.setCount(iItemsCount);
 		this.loadingList(false);
