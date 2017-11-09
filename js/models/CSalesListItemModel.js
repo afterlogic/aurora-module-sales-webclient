@@ -50,7 +50,7 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);
 	this.sPhone = Types.pString(oCustomer[sModuleName + "::Phone"]);
-	this.sLanguage = Types.pString(oData[sModuleName + "::Language"]);
+	this.sLanguage = Types.pString(oCustomer[sModuleName + "::Language"]);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
 };
 
