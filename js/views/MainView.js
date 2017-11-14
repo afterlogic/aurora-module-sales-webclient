@@ -10,6 +10,7 @@ var
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
+	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
 ;
 
@@ -61,6 +62,11 @@ function CMainView()
 	}, this);
 	this.loadingSalesList = ko.observable(false);
 	this.isSalesVisible =  ko.observable(true);
+	this.isUpdatingSale = ko.observable(false);
+	this.saveSale = _.bind(this.saveSale, this);
+	this.selectedSalesItem.subscribe(_.bind(function () {
+		this.isUpdatingSale(false);
+	}, this));
 	
 	this.currentProductsPage = ko.observable(1);
 	this.oProductsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
@@ -70,6 +76,13 @@ function CMainView()
 	}, this);
 	this.loadingProductsList = ko.observable(false);
 	this.isProductsVisible = ko.observable(false);
+	this.isUpdatingProduct = ko.observable(false);
+	this.saveProduct = _.bind(this.saveProduct, this);
+	this.selectedProductsItem.subscribe(_.bind(function () {
+		this.isUpdatingProduct(false);
+	}, this));
+	
+	this.selectedStorage = ko.observable('sales');
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -160,7 +173,48 @@ CMainView.prototype.showSales = function ()
 {
 	this.isProductsVisible(false);
 	this.isSalesVisible(true);
+	this.selectedStorage('sales');
 };
+
+CMainView.prototype.saveSale = function ()
+{
+	this.isUpdatingSale(true);
+	if (this.selectedSalesItem().id === 0 || this.selectedSalesItem().iProductId === 0)
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
+	}
+	else
+	{
+		Ajax.send(
+			'Sales',
+			'UpdateSale', 
+			{
+				'SaleId': this.selectedSalesItem().id,
+				'ProductId': this.selectedSalesItem().iProductId
+			},
+			this.onGetSaleUpdateResponse,
+			this
+		);
+	}
+};
+
+CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	this.isUpdatingSale(false);
+
+	if (oResult)
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+	}
+	else
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+	}
+	this.requestProductsList();
+	this.requestSalesList();
+}
 
 CMainView.prototype.requestProductsList = function ()
 {
@@ -194,6 +248,7 @@ CMainView.prototype.onGetProductsResponse = function (oResponse)
 		this.productsList(aNewCollection);
 		this.oProductsPageSwitcher.setCount(iItemsCount);
 		this.loadingProductsList(false);
+//		this.productsSelector.itemSelected(this.selectedProductsItem());
 	}
 };
 
@@ -206,6 +261,7 @@ CMainView.prototype.showProducts = function ()
 {
 	this.isProductsVisible(true);
 	this.isSalesVisible(false);
+	this.selectedStorage('products');
 };
 
 CMainView.prototype.onClearProductsSearchClick = function ()
@@ -221,4 +277,45 @@ CMainView.prototype.productsSearchSubmit = function ()
 	this.requestProductsList();
 };
 
+CMainView.prototype.saveProduct = function ()
+{
+	this.isUpdatingProduct(true);
+	if (this.selectedProductsItem().id === 0 || this.selectedProductsItem().sProductName === "")
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
+	}
+	else
+	{
+		Ajax.send(
+			'Sales',
+			'UpdateProduct', 
+			{
+				'ProductId': this.selectedProductsItem().id,
+				'Name': this.selectedProductsItem().sProductName,
+				'ProductCode': this.selectedProductsItem().iProductCode,
+				'ShareItProductId': this.selectedProductsItem().iShareItProductId
+			},
+			this.onGetProductUpdateResponse,
+			this
+		);
+	}
+};
+
+CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	this.isUpdatingProduct(false);
+
+	if (oResult)
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+	}
+	else
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+	}
+	this.requestProductsList();
+	this.requestSalesList();
+}
 module.exports = new CMainView();

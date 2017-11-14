@@ -46,6 +46,7 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sEmail = Types.pString(oCustomer[sModuleName + "::Email"]);
 	this.sCustomerRegName = Types.pString(oCustomer[sModuleName + "::RegName"]);
 	this.iProductCode = Types.pInt(oProduct[sModuleName + "::ProductCode"]);
+	this.iProductId = Types.pInt(oProduct['EntityId']);
 	this.sProductName = Types.pString(oProduct[sModuleName + "::ProductName"]);
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);

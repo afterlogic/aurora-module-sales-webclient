@@ -1,4 +1,4 @@
-<div class="panel_top">
+<div class="panel_top" data-bind="visible: isSalesVisible()">
 	<span class="search_block">
 		<span class="input" data-bind="css: {'focus': isSalesSearchFocused}">
 			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: salesSearchSubmit"></span>
@@ -6,7 +6,7 @@
 		</span>
 	</span>
 </div>
-<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}">
+<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isSalesVisible()">
 	<div class="sales_list_scroll scroll-inner">
 		<div class="items_list sales_list">
 			<span class="list_notification" data-bind="visible: loadingSalesList()" id="selenium_sales_loading_info">
@@ -32,4 +32,4 @@
 		</div>
 	</div>
 </div>
-<div class="panel_bottom unselectable" data-bind="visible: oSalesPageSwitcher.pages().length > 0 && !loadingList(), template: {name: oSalesPageSwitcher.ViewTemplate, data: oSalesPageSwitcher}"></div>
+<div class="panel_bottom unselectable" data-bind="visible: isSalesVisible() && oSalesPageSwitcher.pages().length > 0 && !loadingSalesList(), template: {name: oSalesPageSwitcher.ViewTemplate, data: oSalesPageSwitcher}"></div>

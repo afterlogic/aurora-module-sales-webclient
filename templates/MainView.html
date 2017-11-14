@@ -12,60 +12,18 @@
 		<div class="panel" data-splitter="sales_list">
 			<div class="panel_content">
 				<div class="middle_bar">
-					<div data-bind="visible: isSalesVisible()">
 					<!-- ko template: {name: '%ModuleName%_SalesView'} --><!-- /ko -->
-					</div>
-					<div data-bind="visible: isProductsVisible()">
 					<!-- ko template: {name: '%ModuleName%_ProductsView'} --><!-- /ko -->
-					</div>
 				</div>
 			</div>
 		</div>
 		<div class="panel sale_viewer" data-splitter="sale_viewer">
 			<div class="panel_content ">
-				<div class="middle_bar" data-bind="with: selectedSalesItem">
-					<div class="fields">
-						<div class="row">
-							<span class="label">Product name:</span>
-							<span class="value" data-bind="text: sProductName"></span>
-						</div>
-						<div class="row">
-							<span class="label">License key:</span>
-							<span class="value" data-bind="text: sLicenseKey"></span>
-						</div>
-						<div class="row">
-							<span class="label">Net total:</span>
-							<span class="value" data-bind="text: '$' + iNetTotal"></span>
-						</div>
-						<div class="row">
-							<span class="label">Date:</span>
-							<span class="value" data-bind="text: sDate"></span>
-						</div>
-						<div class="row">
-							<span class="label">UUID:</span>
-							<span class="value" data-bind="text: UUID"></span>
-						</div>
-						<div class="row">
-							<span class="label">Customer name:</span>
-							<span class="value" data-bind="text: sCustomerRegName"></span>
-						</div>
-						<div class="row">
-							<span class="label">Email:</span>
-							<span class="value" data-bind="text: sEmail"></span>
-						</div>
-						<div class="row">
-							<span class="label">Phone:</span>
-							<span class="value" data-bind="text: sPhone"></span>
-						</div>
-						<div class="row">
-							<span class="label">Language:</span>
-							<span class="value" data-bind="text: sLanguage"></span>
-						</div>
-						<div class="row">
-							<span class="label">Maintenance Expiration Date:</span>
-							<span class="value" data-bind="text: sMaintenanceExpirationDate"></span>
-						</div>
-					</div>
+				<div data-bind="visible: isSalesVisible()">
+				<!-- ko template: {name: '%ModuleName%_SalesEditView'} --><!-- /ko -->
+				</div>
+				<div data-bind="visible: isProductsVisible()">
+				<!-- ko template: {name: '%ModuleName%_ProductsEditView'} --><!-- /ko -->
 				</div>
 			</div>
 		</div>
