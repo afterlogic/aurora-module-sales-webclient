@@ -43,15 +43,16 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.id =  Types.pInt(oData['EntityId']);
 	this.UUID =  Types.pString(oData['UUID']);
 	this.sDate =  moment(oData[sModuleName + "::Date"]).format('YYYY-MM-DD HH:mm');
-	this.sEmail = Types.pString(oCustomer[sModuleName + "::Email"]);
-	this.sCustomerRegName = Types.pString(oCustomer[sModuleName + "::RegName"]);
-	this.iProductCode = Types.pInt(oProduct[sModuleName + "::ProductCode"]);
-	this.iProductId = Types.pInt(oProduct['EntityId']);
-	this.sProductName = Types.pString(oProduct[sModuleName + "::ProductName"]);
+	this.sEmail = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Email"]) : "";
+	this.sCustomerRegName = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::RegName"]) : "";
+	this.sPhone = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Phone"]) : "";
+	this.sLanguage = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Language"]) : "";
+	this.iProductCode = oProduct !== null ? Types.pInt(oProduct[sModuleName + "::ProductCode"]) : 0;
+	this.iProductId = oProduct !== null ? Types.pInt(oProduct['EntityId']) : 0;
+	this.sProductName = oProduct !== null ? Types.pString(oProduct[sModuleName + "::ProductName"]) : 0;
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);
-	this.sPhone = Types.pString(oCustomer[sModuleName + "::Phone"]);
-	this.sLanguage = Types.pString(oCustomer[sModuleName + "::Language"]);
+	
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
 };
 
