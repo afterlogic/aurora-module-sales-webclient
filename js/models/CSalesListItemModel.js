@@ -43,6 +43,7 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.id =  Types.pInt(oData['EntityId']);
 	this.UUID =  Types.pString(oData['UUID']);
 	this.sDate =  moment(oData[sModuleName + "::Date"]).format('YYYY-MM-DD HH:mm');
+	this.iCustomerId = oCustomer !== null ? Types.pInt(oCustomer['EntityId']) : 0;
 	this.sEmail = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Email"]) : "";
 	this.sCustomerRegName = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::RegName"]) : "";
 	this.sPhone = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Phone"]) : "";

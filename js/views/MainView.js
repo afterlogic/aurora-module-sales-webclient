@@ -29,6 +29,7 @@ function CMainView()
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	this.salesList = ko.observableArray([]);
 	this.productsList = ko.observableArray([]);
+	this.productsFullList = ko.observableArray([]);
 	this.selectedSalesItem = ko.observable(null);
 	this.selectedProductsItem = ko.observable(null);
 	this.isSalesSearchFocused = ko.observable(false);
@@ -128,9 +129,16 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 					var oItem = new CSalesListItemModel();
 					oItem.parse(oItemData, oResult.Customers, oResult.Products);
 					return oItem;
-				})) : [];
+				})) : [],
+			aNewProductsCollection = _.compact(_.map(oResult.Products, function (oItemData) {
+				var oItem = new CProductsListItemModel();
+				oItem.parse(oItemData);
+				return oItem;
+			}))
+		;
 		this.salesList(aNewCollection);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
+		this.productsFullList(aNewProductsCollection);
 		this.loadingSalesList(false);
 	}
 };
