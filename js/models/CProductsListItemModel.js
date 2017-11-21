@@ -13,15 +13,11 @@ function CProductsListItemModel()
 	this.id = '';
 	this.UUID = '';
 	
-	this.sDate = '';
-	this.sEmail = '';
-	this.iProductCode = '';
+	this.iProductCode = 0;
 	this.sProductName = '';
-	this.sLicenseKey = '';
-	this.iNetTotal = '';
-	this.iCustomerId = '';
-	this.sLicenseKey = '';
-	this.iNetTotal = '';
+	this.iShareItProductId = 0;
+	this.bIsAutocreated = false;
+	this.sPayPalItem = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -41,8 +37,9 @@ CProductsListItemModel.prototype.parse = function (oData)
 	this.UUID =  Types.pString(oData['UUID']);
 	this.iProductCode = Types.pInt(oData[sModuleName + "::ProductCode"]);
 	this.sProductName = Types.pString(oData[sModuleName + "::ProductName"]);
-	this.iShareItProductId = Types.pString(oData[sModuleName + "::ShareItProductId"]);
-	this.bIsAutocreated = Types.pString(oData[sModuleName + "::IsAutocreated"]);
+	this.iShareItProductId = Types.pInt(oData[sModuleName + "::ShareItProductId"]);
+	this.bIsAutocreated = !!oData[sModuleName + "::IsAutocreated"];
+	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);
 };
 
 module.exports = CProductsListItemModel;

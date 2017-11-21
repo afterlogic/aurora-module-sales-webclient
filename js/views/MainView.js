@@ -134,10 +134,14 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 				var oItem = new CProductsListItemModel();
 				oItem.parse(oItemData);
 				return oItem;
-			}))
+			})),
+			oEmptyItem = new CProductsListItemModel()
 		;
 		this.salesList(aNewCollection);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
+		oEmptyItem.id = 0;
+		oEmptyItem.sProductName = "-";
+		aNewProductsCollection.unshift(oEmptyItem);
 		this.productsFullList(aNewProductsCollection);
 		this.loadingSalesList(false);
 	}
@@ -301,7 +305,8 @@ CMainView.prototype.saveProduct = function ()
 				'ProductId': this.selectedProductsItem().id,
 				'Name': this.selectedProductsItem().sProductName,
 				'ProductCode': this.selectedProductsItem().iProductCode,
-				'ShareItProductId': this.selectedProductsItem().iShareItProductId
+				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
+				'PayPalItem': this.selectedProductsItem().sPayPalItem
 			},
 			this.onGetProductUpdateResponse,
 			this

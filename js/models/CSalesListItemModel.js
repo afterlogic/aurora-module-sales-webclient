@@ -16,13 +16,17 @@ function CSalesListItemModel()
 	
 	this.sDate = '';
 	this.sEmail = '';
-	this.iProductCode = '';
+	this.iProductCode = 0;
 	this.sProductName = '';
 	this.sLicenseKey = '';
-	this.iNetTotal = '';
-	this.iCustomerId = '';
-	this.sLicenseKey = '';
-	this.iNetTotal = '';
+	this.iNetTotal = 0;
+	this.iCustomerId = 0;
+	this.sCustomerRegName = '';
+	this.sPhone = '';
+	this.sLanguage = '';
+	this.iProductId = 0;
+	this.sMaintenanceExpirationDate = '';
+	this.sAdditionalInfo = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -53,8 +57,8 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sProductName = oProduct !== null ? Types.pString(oProduct[sModuleName + "::ProductName"]) : 0;
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);
-	
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
+	this.sAdditionalInfo = Types.pString(oData[sModuleName + "::AdditionalInfo"]);
 };
 
 module.exports = CSalesListItemModel;
