@@ -8,7 +8,7 @@ var
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
-	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
+	CLicensesListItemModel = require('modules/%ModuleName%/js/models/CLicensesListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
@@ -28,31 +28,31 @@ function CMainView()
 	 */
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	this.salesList = ko.observableArray([]);
-	this.productsList = ko.observableArray([]);
-	this.productsFullList = ko.observableArray([]);
+	this.licensesList = ko.observableArray([]);
+	this.licensesFullList = ko.observableArray([]);
 	this.selectedSalesItem = ko.observable(null);
-	this.selectedProductsItem = ko.observable(null);
+	this.selectedLicensesItem = ko.observable(null);
 	this.isSalesSearchFocused = ko.observable(false);
-	this.isProductsSearchFocused = ko.observable(false);
+	this.isLicensesSearchFocused = ko.observable(false);
 	this.salesSearchInput = ko.observable('');
-	this.productsSearchInput = ko.observable('');
+	this.licensesSearchInput = ko.observable('');
 	
 	this.salesSelector = new CSelector(
 		this.salesList,
 		_.bind(this.viewSalesItem, this)
 	);
 	
-	this.productsSelector = new CSelector(
-		this.productsList,
-		_.bind(this.viewProductsItem, this)
+	this.licensesSelector = new CSelector(
+		this.licensesList,
+		_.bind(this.viewLicensesItem, this)
 	);
 	
 	this.isSalesSearch = ko.computed(function () {
 		return this.salesSearchInput() !== '';
 	}, this);
 	
-	this.isProductsSearch = ko.computed(function () {
-		return this.productsSearchInput() !== '';
+	this.isLicensesSearch = ko.computed(function () {
+		return this.licensesSearchInput() !== '';
 	}, this);
 	
 	this.currentSalesPage = ko.observable(1);
@@ -69,18 +69,18 @@ function CMainView()
 		this.isUpdatingSale(false);
 	}, this));
 	
-	this.currentProductsPage = ko.observable(1);
-	this.oProductsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
-	this.oProductsPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
-		this.currentProductsPage(iCurrentpage);
-		this.requestProductsList();
+	this.currentLicensesPage = ko.observable(1);
+	this.oLicensesPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
+	this.oLicensesPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentLicensesPage(iCurrentpage);
+		this.requestLicensesList();
 	}, this);
-	this.loadingProductsList = ko.observable(false);
-	this.isProductsVisible = ko.observable(false);
-	this.isUpdatingProduct = ko.observable(false);
-	this.saveProduct = _.bind(this.saveProduct, this);
-	this.selectedProductsItem.subscribe(_.bind(function () {
-		this.isUpdatingProduct(false);
+	this.loadingLicensesList = ko.observable(false);
+	this.isLicensesVisible = ko.observable(false);
+	this.isUpdatingLicense = ko.observable(false);
+	this.saveLicense = _.bind(this.saveLicense, this);
+	this.selectedLicensesItem.subscribe(_.bind(function () {
+		this.isUpdatingLicense(false);
 	}, this));
 	
 	this.selectedStorage = ko.observable('sales');
@@ -98,7 +98,7 @@ CMainView.prototype.ViewConstructorName = 'CMainView';
 CMainView.prototype.onShow = function ()
 {
 	this.requestSalesList();
-	this.requestProductsList();
+	this.requestLicensesList();
 };
 
 CMainView.prototype.requestSalesList = function ()
@@ -127,22 +127,22 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 			iItemsCount = Types.pInt(oResult.ItemsCount),
 			aNewCollection = Types.isNonEmptyArray(oResult.Sales) ? _.compact(_.map(oResult.Sales, function (oItemData) {
 					var oItem = new CSalesListItemModel();
-					oItem.parse(oItemData, oResult.Customers, oResult.Products);
+					oItem.parse(oItemData, oResult.Customers, oResult.Licenses);
 					return oItem;
 				})) : [],
-			aNewProductsCollection = _.compact(_.map(oResult.Products, function (oItemData) {
-				var oItem = new CProductsListItemModel();
+			aNewLicensesCollection = _.compact(_.map(oResult.Licenses, function (oItemData) {
+				var oItem = new CLicensesListItemModel();
 				oItem.parse(oItemData);
 				return oItem;
 			})),
-			oEmptyItem = new CProductsListItemModel()
+			oEmptyItem = new CLicensesListItemModel()
 		;
 		this.salesList(aNewCollection);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
 		oEmptyItem.id = 0;
-		oEmptyItem.sProductName = "-";
-		aNewProductsCollection.unshift(oEmptyItem);
-		this.productsFullList(aNewProductsCollection);
+		oEmptyItem.sLicenseName = "-";
+		aNewLicensesCollection.unshift(oEmptyItem);
+		this.licensesFullList(aNewLicensesCollection);
 		this.loadingSalesList(false);
 	}
 };
@@ -160,11 +160,11 @@ CMainView.prototype.onBind = function ()
 		$('.sales_list', this.$viewDom),
 		$('.sales_list_scroll.scroll-inner', this.$viewDom)
 	);
-	this.productsSelector.initOnApplyBindings(
-		'.products_sub_list .item',
-		'.products_sub_list .selected.item',
-		$('.products_list', this.$viewDom),
-		$('.products_list_scroll.scroll-inner', this.$viewDom)
+	this.licensesSelector.initOnApplyBindings(
+		'.licenses_sub_list .item',
+		'.licenses_sub_list .selected.item',
+		$('.licenses_list', this.$viewDom),
+		$('.licenses_list_scroll.scroll-inner', this.$viewDom)
 	);
 };
 
@@ -183,7 +183,7 @@ CMainView.prototype.onClearSalesSearchClick = function ()
 
 CMainView.prototype.showSales = function ()
 {
-	this.isProductsVisible(false);
+	this.isLicensesVisible(false);
 	this.isSalesVisible(true);
 	this.selectedStorage('sales');
 };
@@ -191,7 +191,7 @@ CMainView.prototype.showSales = function ()
 CMainView.prototype.saveSale = function ()
 {
 	this.isUpdatingSale(true);
-	if (this.selectedSalesItem().id === 0 || this.selectedSalesItem().iProductId === 0)
+	if (this.selectedSalesItem().id === 0 || this.selectedSalesItem().iLicenseId === 0)
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 	}
@@ -202,7 +202,7 @@ CMainView.prototype.saveSale = function ()
 			'UpdateSale', 
 			{
 				'SaleId': this.selectedSalesItem().id,
-				'ProductId': this.selectedSalesItem().iProductId
+				'LicenseId': this.selectedSalesItem().iLicenseId
 			},
 			this.onGetSaleUpdateResponse,
 			this
@@ -224,27 +224,27 @@ CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
-	this.requestProductsList();
+	this.requestLicensesList();
 	this.requestSalesList();
 }
 
-CMainView.prototype.requestProductsList = function ()
+CMainView.prototype.requestLicensesList = function ()
 {
-	this.loadingProductsList(true);
+	this.loadingLicensesList(true);
 	Ajax.send(
 		'Sales',
-		'GetProducts', 
+		'GetLicenses', 
 		{
-			'Offset': (this.currentProductsPage() - 1) * this.iItemsPerPage,
+			'Offset': (this.currentLicensesPage() - 1) * this.iItemsPerPage,
 			'Limit': this.iItemsPerPage,
-			'Search': this.productsSearchInput(),
+			'Search': this.licensesSearchInput(),
 		},
-		this.onGetProductsResponse,
+		this.onGetLicensesResponse,
 		this
 	);
 };
 
-CMainView.prototype.onGetProductsResponse = function (oResponse)
+CMainView.prototype.onGetLicensesResponse = function (oResponse)
 {
 	var oResult = oResponse.Result;
 
@@ -252,47 +252,47 @@ CMainView.prototype.onGetProductsResponse = function (oResponse)
 	{
 		var
 			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = _.compact(_.map(oResult.Products, function (oItemData) {
-					var oItem = new CProductsListItemModel();
+			aNewCollection = _.compact(_.map(oResult.Licenses, function (oItemData) {
+					var oItem = new CLicensesListItemModel();
 					oItem.parse(oItemData);
 					return oItem;
 				}));
-		this.productsList(aNewCollection);
-		this.oProductsPageSwitcher.setCount(iItemsCount);
-		this.loadingProductsList(false);
-//		this.productsSelector.itemSelected(this.selectedProductsItem());
+		this.licensesList(aNewCollection);
+		this.oLicensesPageSwitcher.setCount(iItemsCount);
+		this.loadingLicensesList(false);
+//		this.licensesSelector.itemSelected(this.selectedLicensesItem());
 	}
 };
 
-CMainView.prototype.viewProductsItem = function (oItem)
+CMainView.prototype.viewLicensesItem = function (oItem)
 {
-	this.selectedProductsItem(oItem);
+	this.selectedLicensesItem(oItem);
 };
 
-CMainView.prototype.showProducts = function ()
+CMainView.prototype.showLicenses = function ()
 {
-	this.isProductsVisible(true);
+	this.isLicensesVisible(true);
 	this.isSalesVisible(false);
-	this.selectedStorage('products');
+	this.selectedStorage('licenses');
 };
 
-CMainView.prototype.onClearProductsSearchClick = function ()
+CMainView.prototype.onClearLicensesSearchClick = function ()
 {
 	// initiation empty search
-	this.productsSearchInput('');
-	this.productsSearchSubmit();
+	this.licensesSearchInput('');
+	this.licensesSearchSubmit();
 };
 
-CMainView.prototype.productsSearchSubmit = function ()
+CMainView.prototype.licensesSearchSubmit = function ()
 {
-	this.oProductsPageSwitcher.currentPage(1);
-	this.requestProductsList();
+	this.oLicensesPageSwitcher.currentPage(1);
+	this.requestLicensesList();
 };
 
-CMainView.prototype.saveProduct = function ()
+CMainView.prototype.saveLicense = function ()
 {
-	this.isUpdatingProduct(true);
-	if (this.selectedProductsItem().id === 0 || this.selectedProductsItem().sProductName === "")
+	this.isUpdatingLicense(true);
+	if (this.selectedLicensesItem().id === 0 || this.selectedLicensesItem().sLicenseName === "")
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 	}
@@ -300,25 +300,25 @@ CMainView.prototype.saveProduct = function ()
 	{
 		Ajax.send(
 			'Sales',
-			'UpdateProduct', 
+			'UpdateLicense', 
 			{
-				'ProductId': this.selectedProductsItem().id,
-				'Name': this.selectedProductsItem().sProductName,
-				'ProductCode': this.selectedProductsItem().iProductCode,
-				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
-				'PayPalItem': this.selectedProductsItem().sPayPalItem
+				'LicenseId': this.selectedLicensesItem().id,
+				'Name': this.selectedLicensesItem().sLicenseName,
+				'LicenseCode': this.selectedLicensesItem().iLicenseCode,
+				'ShareItLicenseId': this.selectedLicensesItem().iShareItLicenseId,
+				'PayPalItem': this.selectedLicensesItem().sPayPalItem
 			},
-			this.onGetProductUpdateResponse,
+			this.onGetLicenseUpdateResponse,
 			this
 		);
 	}
 };
 
-CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
+CMainView.prototype.onGetLicenseUpdateResponse = function (oResponse)
 {
 	var oResult = oResponse.Result;
 
-	this.isUpdatingProduct(false);
+	this.isUpdatingLicense(false);
 
 	if (oResult)
 	{
@@ -328,7 +328,7 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
-	this.requestProductsList();
+	this.requestLicensesList();
 	this.requestSalesList();
 }
 module.exports = new CMainView();

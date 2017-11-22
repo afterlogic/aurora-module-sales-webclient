@@ -1,0 +1,32 @@
+<div class="panel_top" data-bind="visible: isLicensesVisible()">
+	<span class="search_block">
+		<span class="input" data-bind="css: {'focus': isLicensesSearchFocused}">
+			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: licensesSearchSubmit"></span>
+			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: licensesSearchInput, onEnter: licensesSearchSubmit, hasfocus: isLicensesSearchFocused" />
+		</span>
+	</span>
+</div>
+<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isLicensesVisible()">
+	<div class="licenses_list_scroll scroll-inner">
+		<div class="items_list licenses_list">
+			<span class="list_notification" data-bind="visible: loadingLicensesList()" id="selenium_licenses_loading_info">
+				<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_LIST'}"></span>
+			</span>
+			<span class="list_notification" data-bind="visible: isLicensesSearch()">
+				<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearLicensesSearchClick"></span>
+				<span class="description" data-bind="text: licensesSearchInput"></span>
+			</span>
+			<div class="items_sub_list licenses_sub_list" data-bind="foreach: licensesList, visible : !loadingLicensesList()">
+				<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
+					<div class="item_content">
+						<span class="data table fadeout" >
+							<span style="width: 30%" class="" data-bind="text: sLicenseName"></span>
+						</span>
+						<div class="separator"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel_bottom unselectable" data-bind="visible: isLicensesVisible() && oLicensesPageSwitcher.pages().length > 0 && !loadingLicensesList(), template: {name: oLicensesPageSwitcher.ViewTemplate, data: oLicensesPageSwitcher}"></div>

@@ -8,14 +8,14 @@ var
 /**
  * @constructor
  */
-function CProductsListItemModel()
-{	
+function CLicensesListItemModel()
+{
 	this.id = '';
 	this.UUID = '';
-	
-	this.iProductCode = 0;
-	this.sProductName = '';
-	this.iShareItProductId = 0;
+
+	this.iLicenseCode = 0;
+	this.sLicenseName = '';
+	this.iShareItLicenseId = 0;
 	this.bIsAutocreated = false;
 	this.sPayPalItem = '';
 
@@ -27,7 +27,7 @@ function CProductsListItemModel()
  *
  * @param {Object} oData
  */
-CProductsListItemModel.prototype.parse = function (oData)
+CLicensesListItemModel.prototype.parse = function (oData)
 {
 	var
 		sModuleName = 'Sales'
@@ -35,11 +35,11 @@ CProductsListItemModel.prototype.parse = function (oData)
 
 	this.id =  Types.pInt(oData['EntityId']);
 	this.UUID =  Types.pString(oData['UUID']);
-	this.iProductCode = Types.pInt(oData[sModuleName + "::ProductCode"]);
-	this.sProductName = Types.pString(oData[sModuleName + "::ProductName"]);
-	this.iShareItProductId = Types.pInt(oData[sModuleName + "::ShareItProductId"]);
+	this.iLicenseCode = Types.pInt(oData[sModuleName + "::LicenseCode"]);
+	this.sLicenseName = Types.pString(oData[sModuleName + "::LicenseName"]);
+	this.iShareItLicenseId = Types.pInt(oData[sModuleName + "::ShareItLicenseId"]);
 	this.bIsAutocreated = !!oData[sModuleName + "::IsAutocreated"];
 	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);
 };
 
-module.exports = CProductsListItemModel;
+module.exports = CLicensesListItemModel;
