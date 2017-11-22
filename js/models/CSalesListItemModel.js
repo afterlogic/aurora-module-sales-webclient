@@ -26,7 +26,8 @@ function CSalesListItemModel()
 	this.sLanguage = '';
 	this.iLicenseId = 0;
 	this.sMaintenanceExpirationDate = '';
-	this.sAdditionalInfo = '';
+	this.sRawData = '';
+	this.sRawDataType = 0;
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -58,7 +59,8 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oLicenses)
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
-	this.sAdditionalInfo = Types.pString(oData[sModuleName + "::AdditionalInfo"]);
+	this.sRawData = Types.pString(oData[sModuleName + "::RawData"]);
+	this.sRawDataType = Types.pInt(oData[sModuleName + "::RawDataType"]);
 };
 
 module.exports = CSalesListItemModel;
