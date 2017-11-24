@@ -41,8 +41,8 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oLicenses)
 {
 	var
 		sModuleName = 'Sales',
-		oCustomer = typeof oCustomers[oData[sModuleName + "::CustomerId"]] !== 'undefined' ? oCustomers[oData[sModuleName + "::CustomerId"]] : null,
-		oLicense = typeof oLicenses[oData[sModuleName + "::LicenseId"]] !== 'undefined' ? oLicenses[oData[sModuleName + "::LicenseId"]] : null
+		oCustomer = typeof oCustomers[oData[sModuleName + "::CustomerUUID"]] !== 'undefined' ? oCustomers[oData[sModuleName + "::CustomerUUID"]] : null,
+		oLicense = typeof oLicenses[oData[sModuleName + "::LicenseUUID"]] !== 'undefined' ? oLicenses[oData[sModuleName + "::LicenseUUID"]] : null
 	;
 
 	this.id =  Types.pInt(oData['EntityId']);
