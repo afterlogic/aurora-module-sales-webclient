@@ -13,7 +13,7 @@
 			<div class="panel_content">
 				<div class="middle_bar">
 					<!-- ko template: {name: '%ModuleName%_SalesView'} --><!-- /ko -->
-					<!-- ko template: {name: '%ModuleName%_LicensesView'} --><!-- /ko -->
+					<!-- ko template: {name: '%ModuleName%_ProductsView'} --><!-- /ko -->
 				</div>
 			</div>
 		</div>
@@ -22,8 +22,8 @@
 				<div data-bind="visible: isSalesVisible()">
 				<!-- ko template: {name: '%ModuleName%_SalesEditView'} --><!-- /ko -->
 				</div>
-				<div data-bind="visible: isLicensesVisible()">
-				<!-- ko template: {name: '%ModuleName%_LicensesEditView'} --><!-- /ko -->
+				<div data-bind="visible: isProductsVisible()">
+				<!-- ko template: {name: '%ModuleName%_ProductsEditView'} --><!-- /ko -->
 				</div>
 			</div>
 		</div>

@@ -10,21 +10,21 @@ var
  * @constructor
  */
 function CSalesListItemModel()
-{
+{	
 	this.id = '';
 	this.UUID = '';
-
+	
 	this.sDate = '';
 	this.sEmail = '';
-	this.iLicenseCode = 0;
-	this.sLicenseName = '';
+	this.iProductCode = 0;
+	this.sProductName = '';
 	this.sLicenseKey = '';
 	this.iNetTotal = 0;
 	this.iCustomerId = 0;
 	this.sCustomerRegName = '';
 	this.sPhone = '';
 	this.sLanguage = '';
-	this.iLicenseId = 0;
+	this.iProductId = 0;
 	this.sMaintenanceExpirationDate = '';
 	this.sRawData = '';
 	this.sRawDataType = 0;
@@ -37,12 +37,12 @@ function CSalesListItemModel()
  *
  * @param {Object} oData
  */
-CSalesListItemModel.prototype.parse = function (oData, oCustomers, oLicenses)
+CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 {
 	var
 		sModuleName = 'Sales',
 		oCustomer = typeof oCustomers[oData[sModuleName + "::CustomerUUID"]] !== 'undefined' ? oCustomers[oData[sModuleName + "::CustomerUUID"]] : null,
-		oLicense = typeof oLicenses[oData[sModuleName + "::LicenseUUID"]] !== 'undefined' ? oLicenses[oData[sModuleName + "::LicenseUUID"]] : null
+		oProduct = typeof oProducts[oData[sModuleName + "::ProductUUID"]] !== 'undefined' ? oProducts[oData[sModuleName + "::ProductUUID"]] : null
 	;
 
 	this.id =  Types.pInt(oData['EntityId']);
@@ -53,9 +53,9 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oLicenses)
 	this.sCustomerRegName = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::RegName"]) : "";
 	this.sPhone = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Phone"]) : "";
 	this.sLanguage = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Language"]) : "";
-	this.iLicenseCode = oLicense !== null ? Types.pInt(oLicense[sModuleName + "::LicenseCode"]) : 0;
-	this.iLicenseId = oLicense !== null ? Types.pInt(oLicense['EntityId']) : 0;
-	this.sLicenseName = oLicense !== null ? Types.pString(oLicense[sModuleName + "::LicenseName"]) : 0;
+	this.iProductCode = oProduct !== null ? Types.pInt(oProduct[sModuleName + "::ProductCode"]) : 0;
+	this.iProductId = oProduct !== null ? Types.pInt(oProduct['EntityId']) : 0;
+	this.sProductName = oProduct !== null ? Types.pString(oProduct[sModuleName + "::ProductName"]) : 0;
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData[sModuleName + "::NetTotal"]);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
