@@ -306,7 +306,8 @@ CMainView.prototype.saveProduct = function ()
 				'Name': this.selectedProductsItem().sProductName,
 				'ProductCode': this.selectedProductsItem().iProductCode,
 				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
-				'PayPalItem': this.selectedProductsItem().sPayPalItem
+				'PayPalItem': this.selectedProductsItem().sPayPalItem,
+				'ProductPrice': this.selectedProductsItem().iProductPrice
 			},
 			this.onGetProductUpdateResponse,
 			this
