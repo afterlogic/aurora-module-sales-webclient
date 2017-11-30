@@ -19,6 +19,7 @@ function CProductsListItemModel()
 	this.bIsAutocreated = false;
 	this.sPayPalItem = '';
 	this.iProductPrice = 0;
+	this.sProductHomepage = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -42,6 +43,7 @@ CProductsListItemModel.prototype.parse = function (oData)
 	this.bIsAutocreated = !!oData[sModuleName + "::IsAutocreated"];
 	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);
 	this.iProductPrice = Types.pInt(oData['Price']);
+	this.sProductHomepage = Types.pString(oData['Homepage']);
 };
 
 module.exports = CProductsListItemModel;

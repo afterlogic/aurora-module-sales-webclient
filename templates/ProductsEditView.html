@@ -30,6 +30,12 @@
 				<input class="input" type="text" data-bind="value: iProductPrice, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 			</span>
 		</div>
+		<div class="row">
+			<span class="label" data-bind="text: 'Homepage:'"></span>
+			<span class="value">
+				<input class="input" type="text" data-bind="value: sProductHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+			</span>
+		</div>
 	</div>
 	<div class="buttons">
 		<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdatingProduct()">
