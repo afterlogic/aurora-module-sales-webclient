@@ -7,9 +7,9 @@
 			</span>
 		</div>
 		<div class="row">
-			<span class="label" data-bind="text: 'Product code:'"></span>
+			<span class="label" data-bind="text: 'Product group:'"></span>
 			<span class="value">
-				<input class="input" type="text" data-bind="value: iProductCode, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				<select class="value input" data-bind="value: sProductGroupUUID, options: $parent.productGroupsFullList, optionsText: 'sTitle', optionsValue: 'UUID'"></select>
 			</span>
 		</div>
 		<div class="row">
@@ -33,7 +33,7 @@
 		<div class="row">
 			<span class="label" data-bind="text: 'Homepage:'"></span>
 			<span class="value">
-				<input class="input" type="text" data-bind="value: sProductHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 			</span>
 		</div>
 	</div>

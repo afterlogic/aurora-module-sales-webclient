@@ -9,6 +9,7 @@ var
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
+	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
@@ -27,34 +28,18 @@ function CMainView()
 	 * Text for displaying in browser title when sales screen is shown.
 	 */
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
+	//Sales
 	this.salesList = ko.observableArray([]);
-	this.productsList = ko.observableArray([]);
-	this.productsFullList = ko.observableArray([]);
 	this.selectedSalesItem = ko.observable(null);
-	this.selectedProductsItem = ko.observable(null);
 	this.isSalesSearchFocused = ko.observable(false);
-	this.isProductsSearchFocused = ko.observable(false);
 	this.salesSearchInput = ko.observable('');
-	this.productsSearchInput = ko.observable('');
-	
 	this.salesSelector = new CSelector(
 		this.salesList,
 		_.bind(this.viewSalesItem, this)
 	);
-	
-	this.productsSelector = new CSelector(
-		this.productsList,
-		_.bind(this.viewProductsItem, this)
-	);
-	
 	this.isSalesSearch = ko.computed(function () {
 		return this.salesSearchInput() !== '';
 	}, this);
-	
-	this.isProductsSearch = ko.computed(function () {
-		return this.productsSearchInput() !== '';
-	}, this);
-	
 	this.currentSalesPage = ko.observable(1);
 	this.oSalesPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
 	this.oSalesPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
@@ -68,7 +53,20 @@ function CMainView()
 	this.selectedSalesItem.subscribe(_.bind(function () {
 		this.isUpdatingSale(false);
 	}, this));
-	
+
+	//Products
+	this.productsList = ko.observableArray([]);
+	this.productsFullList = ko.observableArray([]);
+	this.selectedProductsItem = ko.observable(null);
+	this.isProductsSearchFocused = ko.observable(false);
+	this.productsSearchInput = ko.observable('');
+	this.productsSelector = new CSelector(
+		this.productsList,
+		_.bind(this.viewProductsItem, this)
+	);
+	this.isProductsSearch = ko.computed(function () {
+		return this.productsSearchInput() !== '';
+	}, this);
 	this.currentProductsPage = ko.observable(1);
 	this.oProductsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
 	this.oProductsPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
@@ -81,6 +79,33 @@ function CMainView()
 	this.saveProduct = _.bind(this.saveProduct, this);
 	this.selectedProductsItem.subscribe(_.bind(function () {
 		this.isUpdatingProduct(false);
+	}, this));
+	
+	//Product Groups
+	this.productGroupsList = ko.observableArray([]);
+	this.productGroupsFullList = ko.observableArray([]);
+	this.selectedProductGroupsItem = ko.observable(null);
+	this.isProductGroupsSearchFocused = ko.observable(false);
+	this.productGroupsSearchInput = ko.observable('');
+	this.productGroupsSelector = new CSelector(
+		this.productGroupsList,
+		_.bind(this.viewProductGroupsItem, this)
+	);
+	this.isProductGroupsSearch = ko.computed(function () {
+		return this.productGroupsSearchInput() !== '';
+	}, this);
+	this.currentProductGroupsPage = ko.observable(1);
+	this.oProductGroupsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
+	this.oProductGroupsPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentProductGroupsPage(iCurrentpage);
+		this.requestProductGroupsList();
+	}, this);
+	this.loadingProductGroupsList = ko.observable(false);
+	this.isProductGroupsVisible = ko.observable(false);
+	this.isUpdatingProductGroup = ko.observable(false);
+	this.saveProductGroup = _.bind(this.saveProductGroup, this);
+	this.selectedProductGroupsItem.subscribe(_.bind(function () {
+		this.isUpdatingProductGroup(false);
 	}, this));
 	
 	this.selectedStorage = ko.observable('sales');
@@ -99,6 +124,7 @@ CMainView.prototype.onShow = function ()
 {
 	this.requestSalesList();
 	this.requestProductsList();
+	this.requestProductGroupsList();
 };
 
 CMainView.prototype.requestSalesList = function ()
@@ -135,6 +161,11 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 				oItem.parse(oItemData);
 				return oItem;
 			})),
+			aNewProductGroupsCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
+				var oItem = new CProductGroupsListItemModel();
+				oItem.parse(oItemData);
+				return oItem;
+			})),
 			oEmptyItem = new CProductsListItemModel()
 		;
 		this.salesList(aNewCollection);
@@ -143,6 +174,7 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 		oEmptyItem.sProductName = "-";
 		aNewProductsCollection.unshift(oEmptyItem);
 		this.productsFullList(aNewProductsCollection);
+		this.productGroupsFullList(aNewProductGroupsCollection);
 		this.loadingSalesList(false);
 	}
 };
@@ -166,6 +198,12 @@ CMainView.prototype.onBind = function ()
 		$('.products_list', this.$viewDom),
 		$('.products_list_scroll.scroll-inner', this.$viewDom)
 	);
+	this.productGroupsSelector.initOnApplyBindings(
+		'.product_groups_sub_list .item',
+		'.product_groups_sub_list .selected.item',
+		$('.product_groups_list', this.$viewDom),
+		$('.product_groups_list_scroll.scroll-inner', this.$viewDom)
+	);
 };
 
 CMainView.prototype.salesSearchSubmit = function ()
@@ -184,6 +222,7 @@ CMainView.prototype.onClearSalesSearchClick = function ()
 CMainView.prototype.showSales = function ()
 {
 	this.isProductsVisible(false);
+	this.isProductGroupsVisible(false);
 	this.isSalesVisible(true);
 	this.selectedStorage('sales');
 };
@@ -228,6 +267,7 @@ CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	this.requestSalesList();
 }
 
+//Products
 CMainView.prototype.requestProductsList = function ()
 {
 	this.loadingProductsList(true);
@@ -272,6 +312,7 @@ CMainView.prototype.viewProductsItem = function (oItem)
 CMainView.prototype.showProducts = function ()
 {
 	this.isProductsVisible(true);
+	this.isProductGroupsVisible(false);
 	this.isSalesVisible(false);
 	this.selectedStorage('products');
 };
@@ -304,11 +345,11 @@ CMainView.prototype.saveProduct = function ()
 			{
 				'ProductId': this.selectedProductsItem().id,
 				'Name': this.selectedProductsItem().sProductName,
-				'ProductCode': this.selectedProductsItem().iProductCode,
+				'ProductGroupUUID': this.selectedProductsItem().sProductGroupUUID,
 				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
 				'PayPalItem': this.selectedProductsItem().sPayPalItem,
 				'ProductPrice': this.selectedProductsItem().iProductPrice,
-				'Homepage': this.selectedProductsItem().sProductHomepage
+				'Homepage': this.selectedProductsItem().sHomepage
 			},
 			this.onGetProductUpdateResponse,
 			this
@@ -333,4 +374,109 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 	this.requestProductsList();
 	this.requestSalesList();
 }
+
+//Product groups
+CMainView.prototype.requestProductGroupsList = function ()
+{
+	this.loadingProductGroupsList(true);
+	Ajax.send(
+		'Sales',
+		'GetProductGroups', 
+		{
+			'Offset': (this.currentProductGroupsPage() - 1) * this.iItemsPerPage,
+			'Limit': this.iItemsPerPage,
+			'Search': this.productGroupsSearchInput(),
+		},
+		this.onGetProductGroupsResponse,
+		this
+	);
+};
+
+CMainView.prototype.onGetProductGroupsResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	if (oResult)
+	{
+		var
+			iItemsCount = Types.pInt(oResult.ItemsCount),
+			aNewCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
+					var oItem = new CProductGroupsListItemModel();
+					oItem.parse(oItemData);
+					return oItem;
+				}));
+		this.productGroupsList(aNewCollection);
+		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
+		this.loadingProductGroupsList(false);
+//		this.productGroupsSelector.itemSelected(this.selectedProductGroupsItem());
+	}
+};
+
+CMainView.prototype.viewProductGroupsItem = function (oItem)
+{
+	this.selectedProductGroupsItem(oItem);
+};
+
+CMainView.prototype.showProductGroups = function ()
+{
+	this.isProductGroupsVisible(true);
+	this.isSalesVisible(false);
+	this.isProductsVisible(false);
+	this.selectedStorage('product_groups');
+};
+
+CMainView.prototype.onClearProductGroupsSearchClick = function ()
+{
+	// initiation empty search
+	this.productGroupsSearchInput('');
+	this.productGroupsSearchSubmit();
+};
+
+CMainView.prototype.productGroupsSearchSubmit = function ()
+{
+	this.oProductGroupsPageSwitcher.currentPage(1);
+	this.requestProductGroupsList();
+};
+
+CMainView.prototype.saveProductGroup = function ()
+{
+	this.isUpdatingProductGroup(true);
+	if (this.selectedProductGroupsItem().id === 0 || this.selectedProductGroupsItem().sTitle === "")
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
+	}
+	else
+	{
+		Ajax.send(
+			'Sales',
+			'UpdateProductGroup', 
+			{
+				'ProductGroupId': this.selectedProductGroupsItem().id,
+				'Title': this.selectedProductGroupsItem().sTitle,
+				'Homepage': this.selectedProductGroupsItem().sHomepage
+			},
+			this.onGetProductGroupUpdateResponse,
+			this
+		);
+	}
+};
+
+CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	this.isUpdatingProductGroup(false);
+
+	if (oResult)
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+	}
+	else
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+	}
+	this.requestProductGroupsList();
+	this.requestSalesList();
+}
+
 module.exports = new CMainView();
