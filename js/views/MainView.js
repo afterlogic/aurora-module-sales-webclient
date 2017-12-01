@@ -166,13 +166,19 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 				oItem.parse(oItemData);
 				return oItem;
 			})),
-			oEmptyItem = new CProductsListItemModel()
+			oEmptyItem = new CProductsListItemModel(),
+			oEmptyGroupItem = new CProductGroupsListItemModel()
 		;
 		this.salesList(aNewCollection);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
 		oEmptyItem.id = 0;
 		oEmptyItem.sProductName = "-";
 		aNewProductsCollection.unshift(oEmptyItem);
+
+		oEmptyGroupItem.UUID = "";
+		oEmptyGroupItem.sTitle = "-"
+		aNewProductGroupsCollection.unshift(oEmptyGroupItem);
+
 		this.productsFullList(aNewProductsCollection);
 		this.productGroupsFullList(aNewProductGroupsCollection);
 		this.loadingSalesList(false);
