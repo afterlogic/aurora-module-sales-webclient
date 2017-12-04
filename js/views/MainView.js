@@ -123,8 +123,8 @@ CMainView.prototype.ViewConstructorName = 'CMainView';
 CMainView.prototype.onShow = function ()
 {
 	this.requestSalesList();
-	this.requestProductsList();
-	this.requestProductGroupsList();
+	this.requestProductsFullList();
+	this.requestProductGroupsFullList();
 };
 
 CMainView.prototype.requestSalesList = function ()
@@ -155,32 +155,10 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 					var oItem = new CSalesListItemModel();
 					oItem.parse(oItemData, oResult.Customers, oResult.Products);
 					return oItem;
-				})) : [],
-			aNewProductsCollection = _.compact(_.map(oResult.Products, function (oItemData) {
-				var oItem = new CProductsListItemModel();
-				oItem.parse(oItemData);
-				return oItem;
-			})),
-			aNewProductGroupsCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
-				var oItem = new CProductGroupsListItemModel();
-				oItem.parse(oItemData);
-				return oItem;
-			})),
-			oEmptyItem = new CProductsListItemModel(),
-			oEmptyGroupItem = new CProductGroupsListItemModel()
+				})) : []
 		;
 		this.salesList(aNewCollection);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
-		oEmptyItem.id = 0;
-		oEmptyItem.sProductName = "-";
-		aNewProductsCollection.unshift(oEmptyItem);
-
-		oEmptyGroupItem.UUID = "";
-		oEmptyGroupItem.sTitle = "-"
-		aNewProductGroupsCollection.unshift(oEmptyGroupItem);
-
-		this.productsFullList(aNewProductsCollection);
-		this.productGroupsFullList(aNewProductGroupsCollection);
 		this.loadingSalesList(false);
 	}
 };
@@ -290,6 +268,30 @@ CMainView.prototype.requestProductsList = function ()
 	);
 };
 
+CMainView.prototype.requestProductsFullList = function ()
+{
+	this.loadingProductsList(true);
+	Ajax.send(
+		'Sales',
+		'GetProducts', 
+		{},
+		this.onGetProductsFullListResponse,
+		this
+	);
+};
+
+CMainView.prototype.requestProductGroupsFullList = function ()
+{
+	this.loadingProductGroupsList(true);
+	Ajax.send(
+		'Sales',
+		'GetProductGroups', 
+		{},
+		this.onGetProductGroupsFullListResponse,
+		this
+	);
+};
+
 CMainView.prototype.onGetProductsResponse = function (oResponse)
 {
 	var oResult = oResponse.Result;
@@ -302,11 +304,69 @@ CMainView.prototype.onGetProductsResponse = function (oResponse)
 					var oItem = new CProductsListItemModel();
 					oItem.parse(oItemData);
 					return oItem;
-				}));
+				}))
+		;
 		this.productsList(aNewCollection);
 		this.oProductsPageSwitcher.setCount(iItemsCount);
 		this.loadingProductsList(false);
 //		this.productsSelector.itemSelected(this.selectedProductsItem());
+	}
+};
+
+CMainView.prototype.onGetProductsFullListResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	if (oResult)
+	{
+		var
+			iItemsCount = Types.pInt(oResult.ItemsCount),
+			aNewProductsCollection = _.compact(_.map(oResult.Products, function (oItemData) {
+				var oItem = new CProductsListItemModel();
+				oItem.parse(oItemData);
+				return oItem;
+			})),
+			oEmptyItem = new CProductsListItemModel()
+		;
+		this.oProductsPageSwitcher.setCount(iItemsCount);
+		if (this.productsList().length < 1)
+		{
+			this.productsList(aNewProductsCollection.slice(0, this.iItemsPerPage));
+		}
+		this.loadingProductsList(false);
+		oEmptyItem.id = 0;
+		oEmptyItem.sProductName = "-";
+		aNewProductsCollection.unshift(oEmptyItem);
+		this.productsFullList(aNewProductsCollection);
+	}
+};
+
+CMainView.prototype.onGetProductGroupsFullListResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	if (oResult)
+	{
+		var
+			iItemsCount = Types.pInt(oResult.ItemsCount),
+			aNewProductGroupsCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
+				var oItem = new CProductGroupsListItemModel();
+				oItem.parse(oItemData);
+				return oItem;
+			})),
+			oEmptyGroupItem = new CProductGroupsListItemModel()
+		;
+		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
+		if (this.productGroupsList().length < 1)
+		{
+			this.productGroupsList(aNewProductGroupsCollection.slice(0, this.iItemsPerPage));
+		}
+		this.loadingProductGroupsList(false);
+		oEmptyGroupItem.id = 0;
+		oEmptyGroupItem.UUID = "";
+		oEmptyGroupItem.sTitle = "-"
+		aNewProductGroupsCollection.unshift(oEmptyGroupItem);
+		this.productGroupsFullList(aNewProductGroupsCollection);
 	}
 };
 
@@ -365,13 +425,33 @@ CMainView.prototype.saveProduct = function ()
 
 CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 {
-	var oResult = oResponse.Result;
+	var
+		oResult = oResponse.Result,
+		oProductElement = null,
+		iProductId = this.selectedProductsItem().id
+	;
 
 	this.isUpdatingProduct(false);
 
 	if (oResult)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+		//update item in full list
+		oProductElement = _.find(this.productsFullList(), function(element) {
+			if (element.id === iProductId)
+			{
+				return element;
+			}
+		});
+		if (oProductElement !== null)
+		{
+			oProductElement.sProductName = this.selectedProductsItem().sProductName;
+			oProductElement.sProductGroupUUID = this.selectedProductsItem().sProductGroupUUID;
+			oProductElement.iShareItProductId = this.selectedProductsItem().iShareItProductId;
+			oProductElement.sPayPalItem = this.selectedProductsItem().sPayPalItem;
+			oProductElement.iProductPrice = this.selectedProductsItem().iProductPrice;
+			oProductElement.sHomepage = this.selectedProductsItem().sHomepage;
+		}
 	}
 	else
 	{
@@ -459,7 +539,8 @@ CMainView.prototype.saveProductGroup = function ()
 			{
 				'ProductGroupId': this.selectedProductGroupsItem().id,
 				'Title': this.selectedProductGroupsItem().sTitle,
-				'Homepage': this.selectedProductGroupsItem().sHomepage
+				'Homepage': this.selectedProductGroupsItem().sHomepage,
+				'ProductCode': this.selectedProductGroupsItem().sProductCode
 			},
 			this.onGetProductGroupUpdateResponse,
 			this
@@ -469,20 +550,36 @@ CMainView.prototype.saveProductGroup = function ()
 
 CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 {
-	var oResult = oResponse.Result;
+	var
+		oResult = oResponse.Result,
+		oGroupElement = null,
+		iGroupId = this.selectedProductGroupsItem().id
+	;
 
 	this.isUpdatingProductGroup(false);
 
 	if (oResult)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+		//update item in full list
+		oGroupElement = _.find(this.productGroupsFullList(), function(element) {
+			if (element.id === iGroupId)
+			{
+				return element;
+			}
+		});
+		if (oGroupElement !== null)
+		{
+			oGroupElement.sTitle = this.selectedProductGroupsItem().sTitle;
+			oGroupElement.sHomepage = this.selectedProductGroupsItem().sHomepage;
+			oGroupElement.sProductCode = this.selectedProductGroupsItem().sProductCode;
+		}
 	}
 	else
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
 	this.requestProductGroupsList();
-	this.requestSalesList();
 }
 
 module.exports = new CMainView();
