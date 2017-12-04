@@ -32,7 +32,13 @@ function CMainView()
 	this.salesList = ko.observableArray([]);
 	this.selectedSalesItem = ko.observable(null);
 	this.isSalesSearchFocused = ko.observable(false);
+	this.newSalesSearchInput = ko.observable('');
 	this.salesSearchInput = ko.observable('');
+	this.salesSearchText = ko.computed(function () {
+		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
+			'SEARCH': this.salesSearchInput()
+		});
+	}, this);
 	this.salesSelector = new CSelector(
 		this.salesList,
 		_.bind(this.viewSalesItem, this)
@@ -59,7 +65,13 @@ function CMainView()
 	this.productsFullList = ko.observableArray([]);
 	this.selectedProductsItem = ko.observable(null);
 	this.isProductsSearchFocused = ko.observable(false);
+	this.newProductsSearchInput = ko.observable('');
 	this.productsSearchInput = ko.observable('');
+	this.productsSearchText = ko.computed(function () {
+		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
+			'SEARCH': this.productsSearchInput()
+		});
+	}, this);
 	this.productsSelector = new CSelector(
 		this.productsList,
 		_.bind(this.viewProductsItem, this)
@@ -86,7 +98,13 @@ function CMainView()
 	this.productGroupsFullList = ko.observableArray([]);
 	this.selectedProductGroupsItem = ko.observable(null);
 	this.isProductGroupsSearchFocused = ko.observable(false);
+	this.newProductGroupsSearchInput = ko.observable('');
 	this.productGroupsSearchInput = ko.observable('');
+	this.productGroupsSearchText = ko.computed(function () {
+		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
+			'SEARCH': this.productGroupsSearchInput()
+		});
+	}, this);
 	this.productGroupsSelector = new CSelector(
 		this.productGroupsList,
 		_.bind(this.viewProductGroupsItem, this)
@@ -130,6 +148,7 @@ CMainView.prototype.onShow = function ()
 CMainView.prototype.requestSalesList = function ()
 {
 	this.loadingSalesList(true);
+	this.salesSearchInput(this.newSalesSearchInput());
 	Ajax.send(
 		'Sales',
 		'GetSales', 
@@ -199,6 +218,7 @@ CMainView.prototype.salesSearchSubmit = function ()
 CMainView.prototype.onClearSalesSearchClick = function ()
 {
 	// initiation empty search
+	this.newSalesSearchInput('');
 	this.salesSearchInput('');
 	this.salesSearchSubmit();
 };
@@ -255,6 +275,7 @@ CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
 CMainView.prototype.requestProductsList = function ()
 {
 	this.loadingProductsList(true);
+	this.productsSearchInput(this.newProductsSearchInput());
 	Ajax.send(
 		'Sales',
 		'GetProducts', 
@@ -386,6 +407,7 @@ CMainView.prototype.showProducts = function ()
 CMainView.prototype.onClearProductsSearchClick = function ()
 {
 	// initiation empty search
+	this.newProductsSearchInput('');
 	this.productsSearchInput('');
 	this.productsSearchSubmit();
 };
@@ -465,6 +487,7 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 CMainView.prototype.requestProductGroupsList = function ()
 {
 	this.loadingProductGroupsList(true);
+	this.productGroupsSearchInput(this.newProductGroupsSearchInput());
 	Ajax.send(
 		'Sales',
 		'GetProductGroups', 
@@ -514,6 +537,7 @@ CMainView.prototype.showProductGroups = function ()
 CMainView.prototype.onClearProductGroupsSearchClick = function ()
 {
 	// initiation empty search
+	this.newProductGroupsSearchInput('');
 	this.productGroupsSearchInput('');
 	this.productGroupsSearchSubmit();
 };
