@@ -9,7 +9,7 @@
 <div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isProductGroupsVisible()">
 	<div class="product_groups_list_scroll scroll-inner">
 		<div class="items_list product_groups_list">
-			<span class="list_notification" data-bind="visible: isProductGroupsSearch()">
+			<span class="list_notification" data-bind="visible: isProductGroupsSearch() &&!loadingProductGroupsList()">
 				<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearProductGroupsSearchClick"></span>
 				<span class="description" data-bind="text: productGroupsSearchText"></span>
 			</span>

@@ -30,13 +30,15 @@ function CMainView()
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	//Sales
 	this.salesList = ko.observableArray([]);
+	this.salesCount = ko.observable(0);
 	this.selectedSalesItem = ko.observable(null);
 	this.isSalesSearchFocused = ko.observable(false);
 	this.newSalesSearchInput = ko.observable('');
 	this.salesSearchInput = ko.observable('');
 	this.salesSearchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.salesSearchInput()
+			'SEARCH': this.salesSearchInput(),
+			'COUNT': this.salesCount()
 		});
 	}, this);
 	this.salesSelector = new CSelector(
@@ -62,6 +64,7 @@ function CMainView()
 
 	//Products
 	this.productsList = ko.observableArray([]);
+	this.productsCount = ko.observable(0);
 	this.productsFullList = ko.observableArray([]);
 	this.selectedProductsItem = ko.observable(null);
 	this.isProductsSearchFocused = ko.observable(false);
@@ -69,7 +72,8 @@ function CMainView()
 	this.productsSearchInput = ko.observable('');
 	this.productsSearchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.productsSearchInput()
+			'SEARCH': this.productsSearchInput(),
+			'COUNT': this.productsCount()
 		});
 	}, this);
 	this.productsSelector = new CSelector(
@@ -95,6 +99,7 @@ function CMainView()
 	
 	//Product Groups
 	this.productGroupsList = ko.observableArray([]);
+	this.productGroupsCount = ko.observable(0);
 	this.productGroupsFullList = ko.observableArray([]);
 	this.selectedProductGroupsItem = ko.observable(null);
 	this.isProductGroupsSearchFocused = ko.observable(false);
@@ -102,7 +107,8 @@ function CMainView()
 	this.productGroupsSearchInput = ko.observable('');
 	this.productGroupsSearchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.productGroupsSearchInput()
+			'SEARCH': this.productGroupsSearchInput(),
+			'COUNT': this.productGroupsCount()
 		});
 	}, this);
 	this.productGroupsSelector = new CSelector(
@@ -177,6 +183,7 @@ CMainView.prototype.onGetSalesResponse = function (oResponse)
 				})) : []
 		;
 		this.salesList(aNewCollection);
+		this.salesCount(iItemsCount);
 		this.oSalesPageSwitcher.setCount(iItemsCount);
 		this.loadingSalesList(false);
 	}
@@ -328,6 +335,7 @@ CMainView.prototype.onGetProductsResponse = function (oResponse)
 				}))
 		;
 		this.productsList(aNewCollection);
+		this.productsCount(iItemsCount);
 		this.oProductsPageSwitcher.setCount(iItemsCount);
 		this.loadingProductsList(false);
 //		this.productsSelector.itemSelected(this.selectedProductsItem());
@@ -515,6 +523,7 @@ CMainView.prototype.onGetProductGroupsResponse = function (oResponse)
 					return oItem;
 				}));
 		this.productGroupsList(aNewCollection);
+		this.productGroupsCount(iItemsCount);
 		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
 		this.loadingProductGroupsList(false);
 //		this.productGroupsSelector.itemSelected(this.selectedProductGroupsItem());
