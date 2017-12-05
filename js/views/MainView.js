@@ -3,7 +3,10 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
+	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
+	
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
@@ -132,7 +135,30 @@ function CMainView()
 		this.isUpdatingProductGroup(false);
 	}, this));
 	
-	this.selectedStorage = ko.observable('sales');
+	this.selectedStorage = ko.observable(Enums.SalesStorages.Sales);
+	this.bigButtonText = ko.computed(function () {
+		switch (this.selectedStorage())
+		{
+			case Enums.SalesStorages.Products:
+				return 'New Product';
+			case Enums.SalesStorages.ProductGroups:
+				return 'New Group';
+		}
+		return '';
+	}, this);
+	this.bigButtonCommand = Utils.createCommand(this, function () {
+		switch (this.selectedStorage())
+		{
+			case Enums.SalesStorages.Products:
+				this.selectedProductsItem(new CProductsListItemModel());
+				this.productsSelector.itemSelected(null);
+				break;
+			case Enums.SalesStorages.ProductGroups:
+				this.selectedProductGroupsItem(new CProductGroupsListItemModel());
+				this.productGroupsSelector.itemSelected(null);
+				break;
+		}
+	});
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -161,7 +187,7 @@ CMainView.prototype.requestSalesList = function ()
 		{
 			'Offset': (this.currentSalesPage() - 1) * this.iItemsPerPage,
 			'Limit': this.iItemsPerPage,
-			'Search': this.salesSearchInput(),
+			'Search': this.salesSearchInput()
 		},
 		this.onGetSalesResponse,
 		this
@@ -235,7 +261,7 @@ CMainView.prototype.showSales = function ()
 	this.isProductsVisible(false);
 	this.isProductGroupsVisible(false);
 	this.isSalesVisible(true);
-	this.selectedStorage('sales');
+	this.selectedStorage(Enums.SalesStorages.Sales);
 };
 
 CMainView.prototype.saveSale = function ()
@@ -276,7 +302,7 @@ CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	}
 	this.requestProductsList();
 	this.requestSalesList();
-}
+};
 
 //Products
 CMainView.prototype.requestProductsList = function ()
@@ -289,7 +315,7 @@ CMainView.prototype.requestProductsList = function ()
 		{
 			'Offset': (this.currentProductsPage() - 1) * this.iItemsPerPage,
 			'Limit': this.iItemsPerPage,
-			'Search': this.productsSearchInput(),
+			'Search': this.productsSearchInput()
 		},
 		this.onGetProductsResponse,
 		this
@@ -393,7 +419,7 @@ CMainView.prototype.onGetProductGroupsFullListResponse = function (oResponse)
 		this.loadingProductGroupsList(false);
 		oEmptyGroupItem.id = 0;
 		oEmptyGroupItem.UUID = "";
-		oEmptyGroupItem.sTitle = "-"
+		oEmptyGroupItem.sTitle = "-";
 		aNewProductGroupsCollection.unshift(oEmptyGroupItem);
 		this.productGroupsFullList(aNewProductGroupsCollection);
 	}
@@ -409,7 +435,7 @@ CMainView.prototype.showProducts = function ()
 	this.isProductsVisible(true);
 	this.isProductGroupsVisible(false);
 	this.isSalesVisible(false);
-	this.selectedStorage('products');
+	this.selectedStorage(Enums.SalesStorages.Products);
 };
 
 CMainView.prototype.onClearProductsSearchClick = function ()
@@ -428,28 +454,30 @@ CMainView.prototype.productsSearchSubmit = function ()
 
 CMainView.prototype.saveProduct = function ()
 {
+	var
+		oProduct = this.selectedProductsItem(),
+		oParameters = oProduct ? {
+			'Name': oProduct.sProductName,
+			'ProductGroupUUID': oProduct.sProductGroupUUID,
+			'ShareItProductId': oProduct.iShareItProductId,
+			'PayPalItem': oProduct.sPayPalItem,
+			'ProductPrice': oProduct.iProductPrice,
+			'Homepage': oProduct.sHomepage
+		} : null,
+		sMethod = oProduct && oProduct.id === 0 ? 'CreateProduct' : 'UpdateProduct'
+	;
 	this.isUpdatingProduct(true);
-	if (this.selectedProductsItem().id === 0 || this.selectedProductsItem().sProductTitle === "")
+	if (oProduct.sProductName === '')
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 	}
 	else
 	{
-		Ajax.send(
-			'Sales',
-			'UpdateProduct', 
-			{
-				'ProductId': this.selectedProductsItem().id,
-				'Name': this.selectedProductsItem().sProductTitle,
-				'ProductGroupUUID': this.selectedProductsItem().sProductGroupUUID,
-				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
-				'PayPalItem': this.selectedProductsItem().sPayPalItem,
-				'ProductPrice': this.selectedProductsItem().iProductPrice,
-				'Homepage': this.selectedProductsItem().sHomepage
-			},
-			this.onGetProductUpdateResponse,
-			this
-		);
+		if (oProduct.id !== 0)
+		{
+			oParameters.ProductId = oProduct.id;
+		}
+		Ajax.send('Sales', sMethod, oParameters, this.onGetProductUpdateResponse, this);
 	}
 };
 
@@ -489,7 +517,7 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 	}
 	this.requestProductsList();
 	this.requestSalesList();
-}
+};
 
 //Product groups
 CMainView.prototype.requestProductGroupsList = function ()
@@ -502,7 +530,7 @@ CMainView.prototype.requestProductGroupsList = function ()
 		{
 			'Offset': (this.currentProductGroupsPage() - 1) * this.iItemsPerPage,
 			'Limit': this.iItemsPerPage,
-			'Search': this.productGroupsSearchInput(),
+			'Search': this.productGroupsSearchInput()
 		},
 		this.onGetProductGroupsResponse,
 		this
@@ -540,7 +568,7 @@ CMainView.prototype.showProductGroups = function ()
 	this.isProductGroupsVisible(true);
 	this.isSalesVisible(false);
 	this.isProductsVisible(false);
-	this.selectedStorage('product_groups');
+	this.selectedStorage(Enums.SalesStorages.ProductGroups);
 };
 
 CMainView.prototype.onClearProductGroupsSearchClick = function ()
@@ -613,6 +641,6 @@ CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
 	this.requestProductGroupsList();
-}
+};
 
 module.exports = new CMainView();

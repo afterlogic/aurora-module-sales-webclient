@@ -2,6 +2,13 @@
 	<div class="panels" data-bind="splitterFlex: {name: 'sales_list', sizes: [10, 60, 30]}">
 		<div class="panel left_panel folders_panel">
 			<div class="panel_content">
+				<div class="buttons big_single_button">
+					<span href="javascript: void(0)" class="button" data-bind="command: bigButtonCommand, 
+								style: {visibility: bigButtonText() === '' ? 'hidden' : 'visible'}">
+						<span class="icon"></span>
+						<span data-bind="text: bigButtonText"></span>
+					</span>
+				</div>
 				<div class="items_list collapsible">
 					<div class="folders">
 					<!-- ko template: {name: '%ModuleName%_ToolbarView'} --><!-- /ko --> 

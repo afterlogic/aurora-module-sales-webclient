@@ -1,16 +1,16 @@
 'use strict';
 
 module.exports = function (oAppData) {
+	require('modules/%ModuleName%/js/enums.js');
+	
 	var
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
-		sModuleName = 'sales'
+		sHashModuleName = 'sales'
 	;
 	
 	if (App.getUserRole() === Enums.UserRole.NormalUser)
 	{
 		var
-			_ = require('underscore'),
-
 			TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 			HeaderItemView = null
 		;
@@ -25,12 +25,13 @@ module.exports = function (oAppData) {
 			{
 				var oScreens = {};
 				
-				oScreens[sModuleName] = function () {
+				oScreens[sHashModuleName] = function () {
 					return require('modules/%ModuleName%/js/views/MainView.js');
 				};
 				
 				return oScreens;
 			},
+			
 			/**
 			 * Returns object of header item view of sales module.
 			 * 
@@ -45,7 +46,7 @@ module.exports = function (oAppData) {
 
 				return {
 					item: HeaderItemView,
-					name: sModuleName
+					name: sHashModuleName
 				};
 			}
 		};
