@@ -364,7 +364,7 @@ CMainView.prototype.onGetProductsFullListResponse = function (oResponse)
 		}
 		this.loadingProductsList(false);
 		oEmptyItem.id = 0;
-		oEmptyItem.sProductName = "-";
+		oEmptyItem.sProductTitle = "-";
 		aNewProductsCollection.unshift(oEmptyItem);
 		this.productsFullList(aNewProductsCollection);
 	}
@@ -429,7 +429,7 @@ CMainView.prototype.productsSearchSubmit = function ()
 CMainView.prototype.saveProduct = function ()
 {
 	this.isUpdatingProduct(true);
-	if (this.selectedProductsItem().id === 0 || this.selectedProductsItem().sProductName === "")
+	if (this.selectedProductsItem().id === 0 || this.selectedProductsItem().sProductTitle === "")
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 	}
@@ -440,7 +440,7 @@ CMainView.prototype.saveProduct = function ()
 			'UpdateProduct', 
 			{
 				'ProductId': this.selectedProductsItem().id,
-				'Name': this.selectedProductsItem().sProductName,
+				'Name': this.selectedProductsItem().sProductTitle,
 				'ProductGroupUUID': this.selectedProductsItem().sProductGroupUUID,
 				'ShareItProductId': this.selectedProductsItem().iShareItProductId,
 				'PayPalItem': this.selectedProductsItem().sPayPalItem,
@@ -475,7 +475,7 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 		});
 		if (oProductElement !== null)
 		{
-			oProductElement.sProductName = this.selectedProductsItem().sProductName;
+			oProductElement.sProductTitle = this.selectedProductsItem().sProductTitle;
 			oProductElement.sProductGroupUUID = this.selectedProductsItem().sProductGroupUUID;
 			oProductElement.iShareItProductId = this.selectedProductsItem().iShareItProductId;
 			oProductElement.sPayPalItem = this.selectedProductsItem().sPayPalItem;

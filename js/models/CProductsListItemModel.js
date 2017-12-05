@@ -14,7 +14,7 @@ function CProductsListItemModel()
 	this.UUID = '';
 	
 	this.sProductGroupUUID = '';
-	this.sProductName = '';
+	this.sProductTitle = '';
 	this.iShareItProductId = 0;
 	this.bIsAutocreated = false;
 	this.sPayPalItem = '';
@@ -38,7 +38,7 @@ CProductsListItemModel.prototype.parse = function (oData)
 	this.id =  Types.pInt(oData['EntityId']);
 	this.UUID =  Types.pString(oData['UUID']);
 	this.sProductGroupUUID = Types.pString(oData["ProductGroupUUID"]);
-	this.sProductName = Types.pString(oData[sModuleName + "::ProductName"]);
+	this.sProductTitle = Types.pString(oData["Title"]);
 	this.iShareItProductId = Types.pInt(oData[sModuleName + "::ShareItProductId"]);
 	this.bIsAutocreated = !!oData[sModuleName + "::IsAutocreated"];
 	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);

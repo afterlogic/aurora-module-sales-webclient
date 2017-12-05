@@ -55,7 +55,7 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sLanguage = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Language"]) : "";
 	this.iProductCode = oProduct !== null ? Types.pInt(oProduct[sModuleName + "::ProductCode"]) : 0;
 	this.iProductId = oProduct !== null ? Types.pInt(oProduct['EntityId']) : 0;
-	this.sProductName = oProduct !== null ? Types.pString(oProduct[sModuleName + "::ProductName"]) : 0;
+	this.sProductTitle = oProduct !== null ? Types.pString(oProduct["Title"]) : 0;
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData["Price"]);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
