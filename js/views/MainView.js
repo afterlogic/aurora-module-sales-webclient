@@ -457,7 +457,7 @@ CMainView.prototype.saveProduct = function ()
 	var
 		oProduct = this.selectedProductsItem(),
 		oParameters = oProduct ? {
-			'Name': oProduct.sProductName,
+			'Title': oProduct.sProductTitle,
 			'ProductGroupUUID': oProduct.sProductGroupUUID,
 			'ShareItProductId': oProduct.iShareItProductId,
 			'PayPalItem': oProduct.sPayPalItem,
