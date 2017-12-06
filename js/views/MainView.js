@@ -464,57 +464,41 @@ CMainView.prototype.saveProduct = function ()
 			'ProductPrice': oProduct.iProductPrice,
 			'Homepage': oProduct.sHomepage
 		} : null,
-		sMethod = oProduct && oProduct.id === 0 ? 'CreateProduct' : 'UpdateProduct'
+		sMethod = oProduct && oProduct.UUID === '' ? 'CreateProduct' : 'UpdateProduct'
 	;
-	this.isUpdatingProduct(true);
-	if (oProduct.sProductName === '')
+	
+	if (oProduct)
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
-	}
-	else
-	{
-		if (oProduct.id !== 0)
+		if (oProduct.sProductTitle === '')
 		{
-			oParameters.ProductId = oProduct.id;
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 		}
-		Ajax.send('Sales', sMethod, oParameters, this.onGetProductUpdateResponse, this);
+		else
+		{
+			if (oProduct.UUID !== '')
+			{
+				oParameters.ProductId = oProduct.id;
+			}
+			this.isUpdatingProduct(true);
+			Ajax.send('Sales', sMethod, oParameters, this.onGetProductUpdateResponse, this);
+		}
 	}
 };
 
 CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 {
-	var
-		oResult = oResponse.Result,
-		oProductElement = null,
-		iProductId = this.selectedProductsItem().id
-	;
-
 	this.isUpdatingProduct(false);
 
-	if (oResult)
+	if (oResponse.Result)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
-		//update item in full list
-		oProductElement = _.find(this.productsFullList(), function(element) {
-			if (element.id === iProductId)
-			{
-				return element;
-			}
-		});
-		if (oProductElement !== null)
-		{
-			oProductElement.sProductTitle = this.selectedProductsItem().sProductTitle;
-			oProductElement.sProductGroupUUID = this.selectedProductsItem().sProductGroupUUID;
-			oProductElement.iShareItProductId = this.selectedProductsItem().iShareItProductId;
-			oProductElement.sPayPalItem = this.selectedProductsItem().sPayPalItem;
-			oProductElement.iProductPrice = this.selectedProductsItem().iProductPrice;
-			oProductElement.sHomepage = this.selectedProductsItem().sHomepage;
-		}
 	}
 	else
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
+	
+	this.requestProductsFullList();
 	this.requestProductsList();
 	this.requestSalesList();
 };
@@ -554,7 +538,6 @@ CMainView.prototype.onGetProductGroupsResponse = function (oResponse)
 		this.productGroupsCount(iItemsCount);
 		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
 		this.loadingProductGroupsList(false);
-//		this.productGroupsSelector.itemSelected(this.selectedProductGroupsItem());
 	}
 };
 
@@ -587,59 +570,49 @@ CMainView.prototype.productGroupsSearchSubmit = function ()
 
 CMainView.prototype.saveProductGroup = function ()
 {
-	this.isUpdatingProductGroup(true);
-	if (this.selectedProductGroupsItem().id === 0 || this.selectedProductGroupsItem().sTitle === "")
+	var
+		oProductGroup = this.selectedProductGroupsItem(),
+		oParameters = oProductGroup ? {
+			'ProductGroupId': oProductGroup.id,
+			'Title': oProductGroup.sTitle,
+			'Homepage': oProductGroup.sHomepage,
+			'ProductCode': oProductGroup.sProductCode
+		} : null,
+		sMethod = oProductGroup && oProductGroup.UUID === '' ? 'CreateProductGroup' : 'UpdateProductGroup'
+	;
+	
+	if (oProductGroup)
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
-	}
-	else
-	{
-		Ajax.send(
-			'Sales',
-			'UpdateProductGroup', 
+		if (oProductGroup.sTitle === '')
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
+		}
+		else
+		{
+			if (oProductGroup.UUID !== '')
 			{
-				'ProductGroupId': this.selectedProductGroupsItem().id,
-				'Title': this.selectedProductGroupsItem().sTitle,
-				'Homepage': this.selectedProductGroupsItem().sHomepage,
-				'ProductCode': this.selectedProductGroupsItem().sProductCode
-			},
-			this.onGetProductGroupUpdateResponse,
-			this
-		);
+				oParameters.ProductId = oProductGroup.id;
+			}
+			this.isUpdatingProductGroup(true);
+			Ajax.send('Sales', sMethod, oParameters, this.onGetProductGroupUpdateResponse, this);
+		}
 	}
 };
 
 CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 {
-	var
-		oResult = oResponse.Result,
-		oGroupElement = null,
-		iGroupId = this.selectedProductGroupsItem().id
-	;
-
 	this.isUpdatingProductGroup(false);
 
-	if (oResult)
+	if (oResponse.Result)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
-		//update item in full list
-		oGroupElement = _.find(this.productGroupsFullList(), function(element) {
-			if (element.id === iGroupId)
-			{
-				return element;
-			}
-		});
-		if (oGroupElement !== null)
-		{
-			oGroupElement.sTitle = this.selectedProductGroupsItem().sTitle;
-			oGroupElement.sHomepage = this.selectedProductGroupsItem().sHomepage;
-			oGroupElement.sProductCode = this.selectedProductGroupsItem().sProductCode;
-		}
 	}
 	else
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
+	
+	this.requestProductGroupsFullList();
 	this.requestProductGroupsList();
 };
 
