@@ -41,8 +41,8 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 {
 	var
 		sModuleName = 'Sales',
-		oCustomer = typeof oCustomers[oData[sModuleName + "::CustomerUUID"]] !== 'undefined' ? oCustomers[oData[sModuleName + "::CustomerUUID"]] : null,
-		oProduct = typeof oProducts[oData[sModuleName + "::ProductUUID"]] !== 'undefined' ? oProducts[oData[sModuleName + "::ProductUUID"]] : null
+		oCustomer = typeof oCustomers[oData["CustomerUUID"]] !== 'undefined' ? oCustomers[oData["CustomerUUID"]] : null,
+		oProduct = typeof oProducts[oData["ProductUUID"]] !== 'undefined' ? oProducts[oData["ProductUUID"]] : null
 	;
 
 	this.id =  Types.pInt(oData['EntityId']);
@@ -50,7 +50,7 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sDate =  moment(oData["Date"]).format('YYYY-MM-DD HH:mm');
 	this.iCustomerId = oCustomer !== null ? Types.pInt(oCustomer['EntityId']) : 0;
 	this.sEmail = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Email"]) : "";
-	this.sCustomerRegName = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::RegName"]) : "";
+	this.sCustomerRegName = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::FullName"]) : "";
 	this.sPhone = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Phone"]) : "";
 	this.sLanguage = oCustomer !== null ? Types.pString(oCustomer[sModuleName + "::Language"]) : "";
 	this.iProductCode = oProduct !== null ? Types.pInt(oProduct[sModuleName + "::ProductCode"]) : 0;
@@ -59,8 +59,8 @@ CSalesListItemModel.prototype.parse = function (oData, oCustomers, oProducts)
 	this.sLicenseKey = Types.pString(oData[sModuleName + "::LicenseKey"]);
 	this.iNetTotal = Types.pInt(oData["Price"]);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + "::MaintenanceExpirationDate"]);
-	this.sRawData = Types.pString(oData[sModuleName + "::RawData"]);
-	this.sRawDataType = Types.pInt(oData[sModuleName + "::RawDataType"]);
+//	this.sRawData = Types.pString(oData[sModuleName + "::RawData"]);
+//	this.sRawDataType = Types.pInt(oData[sModuleName + "::RawDataType"]);
 };
 
 module.exports = CSalesListItemModel;
