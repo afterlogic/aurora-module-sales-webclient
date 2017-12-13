@@ -97,6 +97,7 @@ function CMainView()
 	this.isProductsVisible = ko.observable(false);
 	this.isUpdatingProduct = ko.observable(false);
 	this.saveProduct = _.bind(this.saveProduct, this);
+	this.removeProductBinded = _.bind(this.removeProduct, this);
 	this.selectedProductsItem.subscribe(_.bind(function () {
 		this.isUpdatingProduct(false);
 	}, this));
@@ -503,6 +504,37 @@ CMainView.prototype.onGetProductUpdateResponse = function (oResponse)
 	this.requestProductsFullList();
 	this.requestProductsList();
 	this.requestSalesList();
+};
+
+CMainView.prototype.removeProduct = function (oProduct)
+{
+	Popups.showPopup(ConfirmPopup, [TextUtils.i18n('%MODULENAME%/CONFIRM_REMOVE_PRODUCT'),  _.bind(function(bConfirm) {
+		if (bConfirm)
+		{
+			Ajax.send(
+				'Sales',
+				'DeleteProduct',
+				{'IdOrUUID': oProduct.UUID},
+				this.onProductDeleteResponse, 
+				this
+			);
+		}
+	}, this), oProduct.sProductTitle]);
+};
+
+CMainView.prototype.onProductDeleteResponse = function (oResponse)
+{
+	if (!oResponse.Result)
+	{
+		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_REMOVE_PROCESS'));
+	}
+	else
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_SUCCESS'));
+		this.requestProductsFullList();
+		this.requestProductsList();
+		this.selectedProductsItem(null);
+	}
 };
 
 //Product groups
