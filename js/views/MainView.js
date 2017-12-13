@@ -16,7 +16,8 @@ var
 	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js')
 ;
 
 /**
@@ -524,9 +525,18 @@ CMainView.prototype.removeProduct = function (oProduct)
 
 CMainView.prototype.onProductDeleteResponse = function (oResponse)
 {
+	var sMessage = '';
 	if (!oResponse.Result)
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_REMOVE_PROCESS'));
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_REMOVE_PROCESS'));
+		}
 	}
 	else
 	{
@@ -669,11 +679,13 @@ CMainView.prototype.removeProductGroup = function (oProductGroup)
 
 CMainView.prototype.onProductGroupDeleteResponse = function (oResponse)
 {
+	var sMessage = '';
 	if (!oResponse.Result)
 	{
-		if (oResponse.ErrorCode === 8001) //TODO: add enum for errors
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
 		{
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_DATA_INTEGRITY'));
+			Screens.showError(sMessage);
 		}
 		else
 		{
