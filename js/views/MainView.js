@@ -6,7 +6,8 @@ var
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
-	
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
@@ -131,6 +132,7 @@ function CMainView()
 	this.isProductGroupsVisible = ko.observable(false);
 	this.isUpdatingProductGroup = ko.observable(false);
 	this.saveProductGroup = _.bind(this.saveProductGroup, this);
+	this.removeProductGroupBinded = _.bind(this.removeProductGroup, this);
 	this.selectedProductGroupsItem.subscribe(_.bind(function () {
 		this.isUpdatingProductGroup(false);
 	}, this));
@@ -606,6 +608,7 @@ CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 	if (oResponse.Result)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+		this.selectedProductGroupsItem(null);
 	}
 	else
 	{
@@ -614,6 +617,44 @@ CMainView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 	
 	this.requestProductGroupsFullList();
 	this.requestProductGroupsList();
+};
+
+CMainView.prototype.removeProductGroup = function (oProductGroup)
+{
+	Popups.showPopup(ConfirmPopup, [TextUtils.i18n('%MODULENAME%/CONFIRM_REMOVE_PRODUCT_GROUP'),  _.bind(function(bConfirm) {
+		if (bConfirm)
+		{
+			Ajax.send(
+				'Sales',
+				'DeleteProductGroup',
+				{'IdOrUUID': oProductGroup.UUID},
+				this.onProductGroupDeleteResponse, 
+				this
+			);
+		}
+	}, this), oProductGroup.sTitle]);
+};
+
+CMainView.prototype.onProductGroupDeleteResponse = function (oResponse)
+{
+	if (!oResponse.Result)
+	{
+		if (oResponse.ErrorCode === 8001) //TODO: add enum for errors
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_DATA_INTEGRITY'));
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_REMOVE_PROCESS'));
+		}
+	}
+	else
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_GROUP_SUCCESS'));
+		this.requestProductGroupsFullList();
+		this.requestProductGroupsList();
+		this.selectedProductGroupsItem(null);
+	}
 };
 
 module.exports = new CMainView();

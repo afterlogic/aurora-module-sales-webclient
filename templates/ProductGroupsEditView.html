@@ -20,6 +20,7 @@
 		</div>
 	</div>
 	<div class="buttons">
+		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductGroupBinded, visible: !!UUID"></span>
 		<span class="button" data-bind="click: $parent.saveProductGroup, visible: !$parent.isUpdatingProductGroup()">
 			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 		</span>
