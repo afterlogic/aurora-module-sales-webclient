@@ -10,8 +10,14 @@
 					</span>
 				</div>
 				<div class="items_list collapsible">
-					<div class="folders">
-					<!-- ko template: {name: '%ModuleName%_ToolbarView'} --><!-- /ko --> 
+					<div class="folders" data-bind="foreach: aObjectTabs">
+						<div class="item canSelect" data-bind="css: { 'selected': sType === $parent.selectedStorage() }">
+							<a class="title" href="javascript: void(0);" data-bind="click: function () { $parent.showObjects(sType); }">
+								<span class="name">
+									<span class="text animGoal" data-bind="text: sText"></span>
+								</span>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -19,7 +25,7 @@
 		<div class="panel" data-splitter="sales_list">
 			<div class="panel_content">
 				<div class="middle_bar">
-					<!-- ko template: {name: '%ModuleName%_SalesView'} --><!-- /ko -->
+					<!-- ko template: {name: oSalesView.ViewTemplate, data: oSalesView} --><!-- /ko -->
 					<!-- ko template: {name: '%ModuleName%_ProductsView'} --><!-- /ko -->
 					<!-- ko template: {name: '%ModuleName%_ProductGroupsView'} --><!-- /ko -->
 				</div>
@@ -27,9 +33,7 @@
 		</div>
 		<div class="panel sale_viewer" data-splitter="sale_viewer">
 			<div class="panel_content ">
-				<div data-bind="visible: isSalesVisible()">
-				<!-- ko template: {name: '%ModuleName%_SalesEditView'} --><!-- /ko -->
-				</div>
+				<!-- ko template: {name: oSalesView.EditViewTemplate, data: oSalesView} --><!-- /ko -->
 				<div data-bind="visible: isProductsVisible()">
 				<!-- ko template: {name: '%ModuleName%_ProductsEditView'} --><!-- /ko -->
 				</div>

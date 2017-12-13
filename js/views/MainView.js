@@ -11,7 +11,6 @@ var
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
-	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
 	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
@@ -28,6 +27,9 @@ var
 function CMainView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
+	
+	this.oSalesView = require('modules/%ModuleName%/js/views/SalesView.js');
+	
 	this.iItemsPerPage = 20;
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
@@ -46,10 +48,6 @@ function CMainView()
 			'COUNT': this.salesCount()
 		});
 	}, this);
-	this.salesSelector = new CSelector(
-		this.salesList,
-		_.bind(this.viewSalesItem, this)
-	);
 	this.isSalesSearch = ko.computed(function () {
 		return this.salesSearchInput() !== '';
 	}, this);
@@ -60,9 +58,7 @@ function CMainView()
 		this.requestSalesList();
 	}, this);
 	this.loadingSalesList = ko.observable(false);
-	this.isSalesVisible =  ko.observable(true);
 	this.isUpdatingSale = ko.observable(false);
-	this.saveSale = _.bind(this.saveSale, this);
 	this.selectedSalesItem.subscribe(_.bind(function () {
 		this.isUpdatingSale(false);
 	}, this));
@@ -163,6 +159,21 @@ function CMainView()
 				break;
 		}
 	});
+	
+	this.aObjectTabs = [
+		{
+			sType: Enums.SalesStorages.Sales,
+			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_SALES_LIST')
+		},
+		{
+			sType: Enums.SalesStorages.Products,
+			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_PRODUCTS_LIST')
+		},
+		{
+			sType: Enums.SalesStorages.ProductGroups,
+			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_PRODUCT_GROUPS_LIST')
+		}
+	];
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -171,67 +182,44 @@ CMainView.prototype.ViewTemplate = '%ModuleName%_MainView';
 CMainView.prototype.ViewConstructorName = 'CMainView';
 
 
+CMainView.prototype.showObjects = function (sType)
+{
+	switch (sType)
+	{
+		case Enums.SalesStorages.Sales:
+			this.oSalesView.show();
+			this.isProductsVisible(false);
+			this.isProductGroupsVisible(false);
+			this.selectedStorage(Enums.SalesStorages.Sales);
+			break;
+		case Enums.SalesStorages.Products:
+			this.oSalesView.hide();
+			this.isProductsVisible(true);
+			this.isProductGroupsVisible(false);
+			this.selectedStorage(Enums.SalesStorages.Products);
+			break;
+		case Enums.SalesStorages.ProductGroups:
+			this.oSalesView.hide();
+			this.isProductGroupsVisible(true);
+			this.isProductsVisible(false);
+			this.selectedStorage(Enums.SalesStorages.ProductGroups);
+			break;
+	}
+};
+
 /**
  * Called every time when screen is shown.
  */
 CMainView.prototype.onShow = function ()
 {
-	this.requestSalesList();
+	this.oSalesView.onShow();
 	this.requestProductsFullList();
 	this.requestProductGroupsFullList();
 };
 
-CMainView.prototype.requestSalesList = function ()
-{
-	this.loadingSalesList(true);
-	this.salesSearchInput(this.newSalesSearchInput());
-	Ajax.send(
-		'Sales',
-		'GetSales', 
-		{
-			'Offset': (this.currentSalesPage() - 1) * this.iItemsPerPage,
-			'Limit': this.iItemsPerPage,
-			'Search': this.salesSearchInput()
-		},
-		this.onGetSalesResponse,
-		this
-	);
-};
-
-CMainView.prototype.onGetSalesResponse = function (oResponse)
-{
-	var oResult = oResponse.Result;
-
-	if (oResult)
-	{
-		var
-			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = Types.isNonEmptyArray(oResult.Sales) ? _.compact(_.map(oResult.Sales, function (oItemData) {
-					var oItem = new CSalesListItemModel();
-					oItem.parse(oItemData, oResult.Customers, oResult.Products);
-					return oItem;
-				})) : []
-		;
-		this.salesList(aNewCollection);
-		this.salesCount(iItemsCount);
-		this.oSalesPageSwitcher.setCount(iItemsCount);
-		this.loadingSalesList(false);
-	}
-};
-
-CMainView.prototype.viewSalesItem = function (oItem)
-{
-	this.selectedSalesItem(oItem);
-};
-
 CMainView.prototype.onBind = function ()
 {
-	this.salesSelector.initOnApplyBindings(
-		'.sales_sub_list .item',
-		'.sales_sub_list .selected.item',
-		$('.sales_list', this.$viewDom),
-		$('.sales_list_scroll.scroll-inner', this.$viewDom)
-	);
+	this.oSalesView.onBind();
 	this.productsSelector.initOnApplyBindings(
 		'.products_sub_list .item',
 		'.products_sub_list .selected.item',
@@ -244,68 +232,6 @@ CMainView.prototype.onBind = function ()
 		$('.product_groups_list', this.$viewDom),
 		$('.product_groups_list_scroll.scroll-inner', this.$viewDom)
 	);
-};
-
-CMainView.prototype.salesSearchSubmit = function ()
-{
-	this.oSalesPageSwitcher.currentPage(1);
-	this.requestSalesList();
-};
-
-CMainView.prototype.onClearSalesSearchClick = function ()
-{
-	// initiation empty search
-	this.newSalesSearchInput('');
-	this.salesSearchInput('');
-	this.salesSearchSubmit();
-};
-
-CMainView.prototype.showSales = function ()
-{
-	this.isProductsVisible(false);
-	this.isProductGroupsVisible(false);
-	this.isSalesVisible(true);
-	this.selectedStorage(Enums.SalesStorages.Sales);
-};
-
-CMainView.prototype.saveSale = function ()
-{
-	this.isUpdatingSale(true);
-	if (this.selectedSalesItem().id === 0 || this.selectedSalesItem().iProductId === 0)
-	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
-	}
-	else
-	{
-		Ajax.send(
-			'Sales',
-			'UpdateSale', 
-			{
-				'SaleId': this.selectedSalesItem().id,
-				'ProductId': this.selectedSalesItem().iProductId
-			},
-			this.onGetSaleUpdateResponse,
-			this
-		);
-	}
-};
-
-CMainView.prototype.onGetSaleUpdateResponse = function (oResponse)
-{
-	var oResult = oResponse.Result;
-
-	this.isUpdatingSale(false);
-
-	if (oResult)
-	{
-		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
-	}
-	else
-	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
-	}
-	this.requestProductsList();
-	this.requestSalesList();
 };
 
 //Products
@@ -432,14 +358,6 @@ CMainView.prototype.onGetProductGroupsFullListResponse = function (oResponse)
 CMainView.prototype.viewProductsItem = function (oItem)
 {
 	this.selectedProductsItem(oItem);
-};
-
-CMainView.prototype.showProducts = function ()
-{
-	this.isProductsVisible(true);
-	this.isProductGroupsVisible(false);
-	this.isSalesVisible(false);
-	this.selectedStorage(Enums.SalesStorages.Products);
 };
 
 CMainView.prototype.onClearProductsSearchClick = function ()
@@ -588,14 +506,6 @@ CMainView.prototype.onGetProductGroupsResponse = function (oResponse)
 CMainView.prototype.viewProductGroupsItem = function (oItem)
 {
 	this.selectedProductGroupsItem(oItem);
-};
-
-CMainView.prototype.showProductGroups = function ()
-{
-	this.isProductGroupsVisible(true);
-	this.isSalesVisible(false);
-	this.isProductsVisible(false);
-	this.selectedStorage(Enums.SalesStorages.ProductGroups);
 };
 
 CMainView.prototype.onClearProductGroupsSearchClick = function ()
