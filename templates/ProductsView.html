@@ -1,22 +1,22 @@
-<div class="panel_top" data-bind="visible: isProductsVisible()">
+<div class="panel_top" data-bind="visible: isVisible">
 	<span class="search_block">
-		<span class="input" data-bind="css: {'focus': isProductsSearchFocused}">
+		<span class="input" data-bind="css: {'focus': searchFocused}">
 			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: productsSearchSubmit"></span>
-			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: newProductsSearchInput, onEnter: productsSearchSubmit, hasfocus: isProductsSearchFocused" />
+			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInputValue, onEnter: productsSearchSubmit, hasfocus: searchFocused" />
 		</span>
 	</span>
 </div>
-<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isProductsVisible()">
+<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isVisible">
 	<div class="products_list_scroll scroll-inner">
 		<div class="items_list products_list">
-			<span class="list_notification" data-bind="visible: isProductsSearch() && ! loadingProductsList()">
+			<span class="list_notification" data-bind="visible: isSearch() && ! listLoading()">
 				<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearProductsSearchClick"></span>
-				<span class="description" data-bind="text: productsSearchText"></span>
+				<span class="description" data-bind="text: searchText"></span>
 			</span>
-			<span class="list_notification" data-bind="visible: loadingProductsList()" id="selenium_products_loading_info">
-				<span class="description" data-bind="i18n: {'key': '%MODULENAME%/INFO_LOADING_LIST'}"></span>
+			<span class="list_notification" data-bind="visible: listLoading()" id="selenium_products_loading_info">
+				<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}"></span>
 			</span>
-			<div class="items_sub_list products_sub_list" data-bind="foreach: productsList, visible : !loadingProductsList()">
+			<div class="items_sub_list products_sub_list" data-bind="foreach: objectList, visible : !listLoading()">
 				<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
 					<div class="item_content">
 						<span class="data table fadeout" >
@@ -29,4 +29,4 @@
 		</div>
 	</div>
 </div>
-<div class="panel_bottom unselectable" data-bind="visible: isProductsVisible() && oProductsPageSwitcher.pages().length > 0 && !loadingProductsList(), template: {name: oProductsPageSwitcher.ViewTemplate, data: oProductsPageSwitcher}"></div>
+<div class="panel_bottom unselectable" data-bind="visible: isVisible() && oPageSwitcher.pages().length > 0 && !listLoading(), template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>

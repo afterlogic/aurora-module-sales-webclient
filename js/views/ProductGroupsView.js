@@ -9,10 +9,12 @@ var
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
-	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -23,45 +25,40 @@ var
 function CProductGroupsView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	this.iItemsPerPage = 20;
-	/**
-	 * Text for displaying in browser title when product groups screen is shown.
-	 */
-	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
-	//Product Groups
-	this.productGroupsList = ko.observableArray([]);
-	this.productGroupsCount = ko.observable(0);
+	
+	this.objectList = ko.observableArray([]);
+	this.objectsCount = ko.observable(0);
 	this.productGroupsFullList = ko.observableArray([]);
-	this.selectedProductGroupsItem = ko.observable(null);
-	this.isProductGroupsSearchFocused = ko.observable(false);
-	this.newProductGroupsSearchInput = ko.observable('');
-	this.productGroupsSearchInput = ko.observable('');
-	this.productGroupsSearchText = ko.computed(function () {
+	this.selectedObject = ko.observable(null);
+	this.searchFocused = ko.observable(false);
+	this.searchInputValue = ko.observable('');
+	this.searchValue = ko.observable('');
+	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.productGroupsSearchInput(),
-			'COUNT': this.productGroupsCount()
+			'SEARCH': this.searchValue(),
+			'COUNT': this.objectsCount()
 		});
 	}, this);
-	this.productGroupsSelector = new CSelector(
-		this.productGroupsList,
+	this.oSelector = new CSelector(
+		this.objectList,
 		_.bind(this.viewProductGroupsItem, this)
 	);
-	this.isProductGroupsSearch = ko.computed(function () {
-		return this.productGroupsSearchInput() !== '';
+	this.isSearch = ko.computed(function () {
+		return this.searchValue() !== '';
 	}, this);
-	this.currentProductGroupsPage = ko.observable(1);
-	this.oProductGroupsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
-	this.oProductGroupsPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
-		this.currentProductGroupsPage(iCurrentpage);
+	this.currentPage = ko.observable(1);
+	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ItemsPerPage);
+	this.oPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentPage(iCurrentpage);
 		this.requestProductGroupsList();
 	}, this);
-	this.loadingProductGroupsList = ko.observable(false);
-	this.isProductGroupsVisible = ko.observable(false);
-	this.isUpdatingProductGroup = ko.observable(false);
+	this.listLoading = ko.observable(false);
+	this.isVisible = ko.observable(false);
+	this.isUpdating = ko.observable(false);
 	this.saveProductGroup = _.bind(this.saveProductGroup, this);
 	this.removeProductGroupBinded = _.bind(this.removeProductGroup, this);
-	this.selectedProductGroupsItem.subscribe(_.bind(function () {
-		this.isUpdatingProductGroup(false);
+	this.selectedObject.subscribe(_.bind(function () {
+		this.isUpdating(false);
 	}, this));
 }
 
@@ -81,15 +78,15 @@ CProductGroupsView.prototype.onShow = function ()
 //Product groups
 CProductGroupsView.prototype.requestProductGroupsList = function ()
 {
-	this.loadingProductGroupsList(true);
-	this.productGroupsSearchInput(this.newProductGroupsSearchInput());
+	this.listLoading(true);
+	this.searchValue(this.searchInputValue());
 	Ajax.send(
 		'Sales',
 		'GetProductGroups', 
 		{
-			'Offset': (this.currentProductGroupsPage() - 1) * this.iItemsPerPage,
-			'Limit': this.iItemsPerPage,
-			'Search': this.productGroupsSearchInput()
+			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
+			'Limit': Settings.ItemsPerPage,
+			'Search': this.searchValue()
 		},
 		this.onGetProductGroupsResponse,
 		this
@@ -109,36 +106,36 @@ CProductGroupsView.prototype.onGetProductGroupsResponse = function (oResponse)
 					oItem.parse(oItemData);
 					return oItem;
 				}));
-		this.productGroupsList(aNewCollection);
-		this.productGroupsCount(iItemsCount);
-		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
-		this.loadingProductGroupsList(false);
+		this.objectList(aNewCollection);
+		this.objectsCount(iItemsCount);
+		this.oPageSwitcher.setCount(iItemsCount);
+		this.listLoading(false);
 	}
 };
 
 CProductGroupsView.prototype.viewProductGroupsItem = function (oItem)
 {
-	this.selectedProductGroupsItem(oItem);
+	this.selectedObject(oItem);
 };
 
 CProductGroupsView.prototype.onClearProductGroupsSearchClick = function ()
 {
 	// initiation empty search
-	this.newProductGroupsSearchInput('');
-	this.productGroupsSearchInput('');
+	this.searchInputValue('');
+	this.searchValue('');
 	this.productGroupsSearchSubmit();
 };
 
 CProductGroupsView.prototype.productGroupsSearchSubmit = function ()
 {
-	this.oProductGroupsPageSwitcher.currentPage(1);
+	this.oPageSwitcher.currentPage(1);
 	this.requestProductGroupsList();
 };
 
 CProductGroupsView.prototype.saveProductGroup = function ()
 {
 	var
-		oProductGroup = this.selectedProductGroupsItem(),
+		oProductGroup = this.selectedObject(),
 		oParameters = oProductGroup ? {
 			'ProductGroupId': oProductGroup.id,
 			'Title': oProductGroup.sTitle,
@@ -160,7 +157,7 @@ CProductGroupsView.prototype.saveProductGroup = function ()
 			{
 				oParameters.ProductId = oProductGroup.id;
 			}
-			this.isUpdatingProductGroup(true);
+			this.isUpdating(true);
 			Ajax.send('Sales', sMethod, oParameters, this.onGetProductGroupUpdateResponse, this);
 		}
 	}
@@ -168,12 +165,12 @@ CProductGroupsView.prototype.saveProductGroup = function ()
 
 CProductGroupsView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 {
-	this.isUpdatingProductGroup(false);
+	this.isUpdating(false);
 
 	if (oResponse.Result)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
-		this.selectedProductGroupsItem(null);
+		this.selectedObject(null);
 	}
 	else
 	{
@@ -220,23 +217,23 @@ CProductGroupsView.prototype.onProductGroupDeleteResponse = function (oResponse)
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_GROUP_SUCCESS'));
 		this.requestProductGroupsFullList();
 		this.requestProductGroupsList();
-		this.selectedProductGroupsItem(null);
+		this.selectedObject(null);
 	}
 };
 
 CProductGroupsView.prototype.show = function ()
 {
-	this.isProductGroupsVisible(true);
+	this.isVisible(true);
 };
 
 CProductGroupsView.prototype.hide = function ()
 {
-	this.isProductGroupsVisible(false);
+	this.isVisible(false);
 };
 
 CProductGroupsView.prototype.onBind = function ()
 {
-	this.productGroupsSelector.initOnApplyBindings(
+	this.oSelector.initOnApplyBindings(
 		'.product_groups_sub_list .item',
 		'.product_groups_sub_list .selected.item',
 		$('.product_groups_list', this.$viewDom),
@@ -246,7 +243,7 @@ CProductGroupsView.prototype.onBind = function ()
 
 CProductGroupsView.prototype.requestProductGroupsFullList = function ()
 {
-	this.loadingProductGroupsList(true);
+	this.listLoading(true);
 	Ajax.send(
 		'Sales',
 		'GetProductGroups', 
@@ -271,12 +268,12 @@ CProductGroupsView.prototype.onGetProductGroupsFullListResponse = function (oRes
 			})),
 			oEmptyGroupItem = new CProductGroupsListItemModel()
 		;
-		this.oProductGroupsPageSwitcher.setCount(iItemsCount);
-		if (this.productGroupsList().length < 1)
+		this.oPageSwitcher.setCount(iItemsCount);
+		if (this.objectList().length < 1)
 		{
-			this.productGroupsList(aNewProductGroupsCollection.slice(0, this.iItemsPerPage));
+			this.objectList(aNewProductGroupsCollection.slice(0, Settings.ItemsPerPage));
 		}
-		this.loadingProductGroupsList(false);
+		this.listLoading(false);
 		oEmptyGroupItem.id = 0;
 		oEmptyGroupItem.UUID = "";
 		oEmptyGroupItem.sTitle = "-";

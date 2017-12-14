@@ -8,7 +8,7 @@ var
 /**
  * @enum {number}
  */
-Enums.SalesStorages = {
+Enums.SalesObjectsTypes = {
 	'Sales': 'sales',
 	'Products': 'products',
 	'ProductGroups': 'product_groups'

@@ -11,7 +11,7 @@
 				</div>
 				<div class="items_list collapsible">
 					<div class="folders" data-bind="foreach: aObjectTabs">
-						<div class="item canSelect" data-bind="css: { 'selected': sType === $parent.selectedStorage() }">
+						<div class="item canSelect" data-bind="css: { 'selected': sType === $parent.selectedType() }">
 							<a class="title" href="javascript: void(0);" data-bind="click: function () { $parent.showObjects(sType); }">
 								<span class="name">
 									<span class="text animGoal" data-bind="text: sText"></span>

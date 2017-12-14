@@ -9,10 +9,12 @@ var
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
-	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -23,43 +25,38 @@ var
 function CSalesView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	this.iItemsPerPage = 20;
-	/**
-	 * Text for displaying in browser title when sales screen is shown.
-	 */
-	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
-	//Sales
-	this.salesList = ko.observableArray([]);
-	this.salesCount = ko.observable(0);
-	this.selectedSalesItem = ko.observable(null);
-	this.isSalesSearchFocused = ko.observable(false);
-	this.newSalesSearchInput = ko.observable('');
-	this.salesSearchInput = ko.observable('');
-	this.salesSearchText = ko.computed(function () {
+	
+	this.objectList = ko.observableArray([]);
+	this.objectsCount = ko.observable(0);
+	this.selectedObject = ko.observable(null);
+	this.searchFocused = ko.observable(false);
+	this.searchInputValue = ko.observable('');
+	this.searchValue = ko.observable('');
+	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.salesSearchInput(),
-			'COUNT': this.salesCount()
+			'SEARCH': this.searchValue(),
+			'COUNT': this.objectsCount()
 		});
 	}, this);
-	this.salesSelector = new CSelector(
-		this.salesList,
+	this.oSelector = new CSelector(
+		this.objectList,
 		_.bind(this.viewSalesItem, this)
 	);
-	this.isSalesSearch = ko.computed(function () {
-		return this.salesSearchInput() !== '';
+	this.isSearch = ko.computed(function () {
+		return this.searchValue() !== '';
 	}, this);
-	this.currentSalesPage = ko.observable(1);
-	this.oSalesPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
-	this.oSalesPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
-		this.currentSalesPage(iCurrentpage);
+	this.currentPage = ko.observable(1);
+	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ItemsPerPage);
+	this.oPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentPage(iCurrentpage);
 		this.requestSalesList();
 	}, this);
-	this.loadingSalesList = ko.observable(false);
-	this.isSalesVisible =  ko.observable(true);
-	this.isUpdatingSale = ko.observable(false);
+	this.listLoading = ko.observable(false);
+	this.isVisible =  ko.observable(true);
+	this.isUpdating = ko.observable(false);
 	this.saveSale = _.bind(this.saveSale, this);
-	this.selectedSalesItem.subscribe(_.bind(function () {
-		this.isUpdatingSale(false);
+	this.selectedObject.subscribe(_.bind(function () {
+		this.isUpdating(false);
 	}, this));
 }
 
@@ -79,15 +76,15 @@ CSalesView.prototype.onShow = function ()
 
 CSalesView.prototype.requestSalesList = function ()
 {
-	this.loadingSalesList(true);
-	this.salesSearchInput(this.newSalesSearchInput());
+	this.listLoading(true);
+	this.searchValue(this.searchInputValue());
 	Ajax.send(
 		'Sales',
 		'GetSales', 
 		{
-			'Offset': (this.currentSalesPage() - 1) * this.iItemsPerPage,
-			'Limit': this.iItemsPerPage,
-			'Search': this.salesSearchInput()
+			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
+			'Limit': Settings.ItemsPerPage,
+			'Search': this.searchValue()
 		},
 		this.onGetSalesResponse,
 		this
@@ -108,21 +105,21 @@ CSalesView.prototype.onGetSalesResponse = function (oResponse)
 					return oItem;
 				})) : []
 		;
-		this.salesList(aNewCollection);
-		this.salesCount(iItemsCount);
-		this.oSalesPageSwitcher.setCount(iItemsCount);
-		this.loadingSalesList(false);
+		this.objectList(aNewCollection);
+		this.objectsCount(iItemsCount);
+		this.oPageSwitcher.setCount(iItemsCount);
+		this.listLoading(false);
 	}
 };
 
 CSalesView.prototype.viewSalesItem = function (oItem)
 {
-	this.selectedSalesItem(oItem);
+	this.selectedObject(oItem);
 };
 
 CSalesView.prototype.onBind = function ()
 {
-	this.salesSelector.initOnApplyBindings(
+	this.oSelector.initOnApplyBindings(
 		'.sales_sub_list .item',
 		'.sales_sub_list .selected.item',
 		$('.sales_list', this.$viewDom),
@@ -132,32 +129,32 @@ CSalesView.prototype.onBind = function ()
 
 CSalesView.prototype.salesSearchSubmit = function ()
 {
-	this.oSalesPageSwitcher.currentPage(1);
+	this.oPageSwitcher.currentPage(1);
 	this.requestSalesList();
 };
 
 CSalesView.prototype.onClearSalesSearchClick = function ()
 {
 	// initiation empty search
-	this.newSalesSearchInput('');
-	this.salesSearchInput('');
+	this.searchInputValue('');
+	this.searchValue('');
 	this.salesSearchSubmit();
 };
 
 CSalesView.prototype.show = function ()
 {
-	this.isSalesVisible(true);
+	this.isVisible(true);
 };
 
 CSalesView.prototype.hide = function ()
 {
-	this.isSalesVisible(false);
+	this.isVisible(false);
 };
 
 CSalesView.prototype.saveSale = function ()
 {
-	this.isUpdatingSale(true);
-	if (this.selectedSalesItem().id === 0 || this.selectedSalesItem().iProductId === 0)
+	this.isUpdating(true);
+	if (this.selectedObject().id === 0 || this.selectedObject().iProductId === 0)
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
 	}
@@ -167,8 +164,8 @@ CSalesView.prototype.saveSale = function ()
 			'Sales',
 			'UpdateSale', 
 			{
-				'SaleId': this.selectedSalesItem().id,
-				'ProductId': this.selectedSalesItem().iProductId
+				'SaleId': this.selectedObject().id,
+				'ProductId': this.selectedObject().iProductId
 			},
 			this.onGetSaleUpdateResponse,
 			this
@@ -180,7 +177,7 @@ CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 {
 	var oResult = oResponse.Result;
 
-	this.isUpdatingSale(false);
+	this.isUpdating(false);
 
 	if (oResult)
 	{

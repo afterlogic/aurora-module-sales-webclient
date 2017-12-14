@@ -1,31 +1,44 @@
-<div class="middle_bar" data-bind="with: selectedProductGroupsItem">
-	<div class="fields clearfix sales-edit-fields">
-		<div class="row">
-			<span class="label" data-bind="text: 'Product group name:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
+<div data-bind="visible: isVisible()">
+	<div class="middle_bar" data-bind="with: selectedObject">
+		<div class="fields clearfix sales-edit-fields">
+			<div class="row">
+				<span class="label" data-bind="text: 'Product group name:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Homepage:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Product code:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sProductCode, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
+				</span>
+			</div>
+		</div>
+		<div class="buttons" data-bind="visible: UUID !== ''">
+			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductGroupBinded, visible: !!UUID"></span>
+			<span class="button" data-bind="click: $parent.saveProductGroup, visible: !$parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
+			</span>
+			<span class="button" data-bind="visible: $parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
 			</span>
 		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Homepage:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
+		<div class="buttons" data-bind="visible: UUID === ''">
+			<span class="button" data-bind="click: $parent.saveProductGroup, visible: !$parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE'}"></span>
+			</span>
+			<span class="button" data-bind="visible: $parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE_IN_PROGRESS'}"></span>
+			</span>
+			<span class="button" data-bind="click: function () { $parent.selectedObject(null); }">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}"></span>
 			</span>
 		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Product code:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sProductCode, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
-			</span>
-		</div>
-	</div>
-	<div class="buttons">
-		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductGroupBinded, visible: !!UUID"></span>
-		<span class="button" data-bind="click: $parent.saveProductGroup, visible: !$parent.isUpdatingProductGroup()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
-		</span>
-		<span class="button" data-bind="visible: $parent.isUpdatingProductGroup()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
-		</span>
 	</div>
 </div>

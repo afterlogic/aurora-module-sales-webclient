@@ -6,17 +6,10 @@ var
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
-	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
-	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
-	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
-	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
+	
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
-	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
-	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
-	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js')
+	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js')
 ;
 
 /**
@@ -32,48 +25,47 @@ function CMainView()
 	this.oProductsView = require('modules/%ModuleName%/js/views/ProductsView.js');
 	this.oProductGroupsView = require('modules/%ModuleName%/js/views/ProductGroupsView.js');
 	
-	this.iItemsPerPage = 20;
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
 	 */
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
 	
-	this.selectedStorage = ko.observable(Enums.SalesStorages.Sales);
+	this.selectedType = ko.observable(Enums.SalesObjectsTypes.Sales);
 	this.bigButtonText = ko.computed(function () {
-		switch (this.selectedStorage())
+		switch (this.selectedType())
 		{
-			case Enums.SalesStorages.Products:
-				return 'New Product';
-			case Enums.SalesStorages.ProductGroups:
-				return 'New Group';
+			case Enums.SalesObjectsTypes.Products:
+				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCT');
+			case Enums.SalesObjectsTypes.ProductGroups:
+				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCTS_GROUP');
 		}
 		return '';
 	}, this);
 	this.bigButtonCommand = Utils.createCommand(this, function () {
-		switch (this.selectedStorage())
+		switch (this.selectedType())
 		{
-			case Enums.SalesStorages.Products:
-				this.selectedProductsItem(new CProductsListItemModel());
-				this.productsSelector.itemSelected(null);
+			case Enums.SalesObjectsTypes.Products:
+				this.oProductsView.selectedObject(new CProductsListItemModel());
+				this.oProductsView.oSelector.itemSelected(null);
 				break;
-			case Enums.SalesStorages.ProductGroups:
-				this.selectedProductGroupsItem(new CProductGroupsListItemModel());
-				this.productGroupsSelector.itemSelected(null);
+			case Enums.SalesObjectsTypes.ProductGroups:
+				this.oProductGroupsView.selectedObject(new CProductGroupsListItemModel());
+				this.oProductGroupsView.oSelector.itemSelected(null);
 				break;
 		}
 	});
 	
 	this.aObjectTabs = [
 		{
-			sType: Enums.SalesStorages.Sales,
+			sType: Enums.SalesObjectsTypes.Sales,
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_SALES_LIST')
 		},
 		{
-			sType: Enums.SalesStorages.Products,
+			sType: Enums.SalesObjectsTypes.Products,
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_PRODUCTS_LIST')
 		},
 		{
-			sType: Enums.SalesStorages.ProductGroups,
+			sType: Enums.SalesObjectsTypes.ProductGroups,
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_PRODUCT_GROUPS_LIST')
 		}
 	];
@@ -84,28 +76,27 @@ _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
 CMainView.prototype.ViewTemplate = '%ModuleName%_MainView';
 CMainView.prototype.ViewConstructorName = 'CMainView';
 
-
 CMainView.prototype.showObjects = function (sType)
 {
 	switch (sType)
 	{
-		case Enums.SalesStorages.Sales:
+		case Enums.SalesObjectsTypes.Sales:
 			this.oSalesView.show();
 			this.oProductsView.hide();
 			this.oProductGroupsView.hide();
-			this.selectedStorage(Enums.SalesStorages.Sales);
+			this.selectedType(Enums.SalesObjectsTypes.Sales);
 			break;
-		case Enums.SalesStorages.Products:
+		case Enums.SalesObjectsTypes.Products:
 			this.oSalesView.hide();
 			this.oProductsView.show();
 			this.oProductGroupsView.hide();
-			this.selectedStorage(Enums.SalesStorages.Products);
+			this.selectedType(Enums.SalesObjectsTypes.Products);
 			break;
-		case Enums.SalesStorages.ProductGroups:
+		case Enums.SalesObjectsTypes.ProductGroups:
 			this.oSalesView.hide();
 			this.oProductGroupsView.show();
 			this.oProductsView.hide();
-			this.selectedStorage(Enums.SalesStorages.ProductGroups);
+			this.selectedType(Enums.SalesObjectsTypes.ProductGroups);
 			break;
 	}
 };

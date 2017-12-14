@@ -9,10 +9,12 @@ var
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
-	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
-	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js')
+	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
+	Settings = require('modules/%ModuleName%/js/Settings.js')
 ;
 
 /**
@@ -23,45 +25,40 @@ var
 function CProductsView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	this.iItemsPerPage = 20;
-	/**
-	 * Text for displaying in browser title when products screen is shown.
-	 */
-	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
-	//Products
-	this.productsList = ko.observableArray([]);
-	this.productsCount = ko.observable(0);
+	
+	this.objectList = ko.observableArray([]);
+	this.objectsCount = ko.observable(0);
 	this.productsFullList = ko.observableArray([]);
-	this.selectedProductsItem = ko.observable(null);
-	this.isProductsSearchFocused = ko.observable(false);
-	this.newProductsSearchInput = ko.observable('');
-	this.productsSearchInput = ko.observable('');
-	this.productsSearchText = ko.computed(function () {
+	this.selectedObject = ko.observable(null);
+	this.searchFocused = ko.observable(false);
+	this.searchInputValue = ko.observable('');
+	this.searchValue = ko.observable('');
+	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.productsSearchInput(),
-			'COUNT': this.productsCount()
+			'SEARCH': this.searchValue(),
+			'COUNT': this.objectsCount()
 		});
 	}, this);
-	this.productsSelector = new CSelector(
-		this.productsList,
+	this.oSelector = new CSelector(
+		this.objectList,
 		_.bind(this.viewProductsItem, this)
 	);
-	this.isProductsSearch = ko.computed(function () {
-		return this.productsSearchInput() !== '';
+	this.isSearch = ko.computed(function () {
+		return this.searchValue() !== '';
 	}, this);
-	this.currentProductsPage = ko.observable(1);
-	this.oProductsPageSwitcher = new CPageSwitcherView(0, this.iItemsPerPage);
-	this.oProductsPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
-		this.currentProductsPage(iCurrentpage);
+	this.currentPage = ko.observable(1);
+	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ItemsPerPage);
+	this.oPageSwitcher.currentPage.subscribe(function (iCurrentpage) {
+		this.currentPage(iCurrentpage);
 		this.requestProductsList();
 	}, this);
-	this.loadingProductsList = ko.observable(false);
-	this.isProductsVisible = ko.observable(false);
-	this.isUpdatingProduct = ko.observable(false);
+	this.listLoading = ko.observable(false);
+	this.isVisible = ko.observable(false);
+	this.isUpdating = ko.observable(false);
 	this.saveProduct = _.bind(this.saveProduct, this);
 	this.removeProductBinded = _.bind(this.removeProduct, this);
-	this.selectedProductsItem.subscribe(_.bind(function () {
-		this.isUpdatingProduct(false);
+	this.selectedObject.subscribe(_.bind(function () {
+		this.isUpdating(false);
 	}, this));
 }
 
@@ -80,15 +77,15 @@ CProductsView.prototype.onShow = function ()
 };
 CProductsView.prototype.requestProductsList = function ()
 {
-	this.loadingProductsList(true);
-	this.productsSearchInput(this.newProductsSearchInput());
+	this.listLoading(true);
+	this.searchValue(this.searchInputValue());
 	Ajax.send(
 		'Sales',
 		'GetProducts', 
 		{
-			'Offset': (this.currentProductsPage() - 1) * this.iItemsPerPage,
-			'Limit': this.iItemsPerPage,
-			'Search': this.productsSearchInput()
+			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
+			'Limit': Settings.ItemsPerPage,
+			'Search': this.searchValue()
 		},
 		this.onGetProductsResponse,
 		this
@@ -97,7 +94,7 @@ CProductsView.prototype.requestProductsList = function ()
 
 CProductsView.prototype.requestProductsFullList = function ()
 {
-	this.loadingProductsList(true);
+	this.listLoading(true);
 	Ajax.send(
 		'Sales',
 		'GetProducts', 
@@ -121,11 +118,10 @@ CProductsView.prototype.onGetProductsResponse = function (oResponse)
 					return oItem;
 				}))
 		;
-		this.productsList(aNewCollection);
-		this.productsCount(iItemsCount);
-		this.oProductsPageSwitcher.setCount(iItemsCount);
-		this.loadingProductsList(false);
-//		this.productsSelector.itemSelected(this.selectedProductsItem());
+		this.objectList(aNewCollection);
+		this.objectsCount(iItemsCount);
+		this.oPageSwitcher.setCount(iItemsCount);
+		this.listLoading(false);
 	}
 };
 
@@ -144,12 +140,12 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 			})),
 			oEmptyItem = new CProductsListItemModel()
 		;
-		this.oProductsPageSwitcher.setCount(iItemsCount);
-		if (this.productsList().length < 1)
+		this.oPageSwitcher.setCount(iItemsCount);
+		if (this.objectList().length < 1)
 		{
-			this.productsList(aNewProductsCollection.slice(0, this.iItemsPerPage));
+			this.objectList(aNewProductsCollection.slice(0, Settings.ItemsPerPage));
 		}
-		this.loadingProductsList(false);
+		this.listLoading(false);
 		oEmptyItem.id = 0;
 		oEmptyItem.sProductTitle = "-";
 		aNewProductsCollection.unshift(oEmptyItem);
@@ -159,27 +155,27 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 
 CProductsView.prototype.viewProductsItem = function (oItem)
 {
-	this.selectedProductsItem(oItem);
+	this.selectedObject(oItem);
 };
 
 CProductsView.prototype.onClearProductsSearchClick = function ()
 {
 	// initiation empty search
-	this.newProductsSearchInput('');
-	this.productsSearchInput('');
+	this.searchInputValue('');
+	this.searchValue('');
 	this.productsSearchSubmit();
 };
 
 CProductsView.prototype.productsSearchSubmit = function ()
 {
-	this.oProductsPageSwitcher.currentPage(1);
+	this.oPageSwitcher.currentPage(1);
 	this.requestProductsList();
 };
 
 CProductsView.prototype.saveProduct = function ()
 {
 	var
-		oProduct = this.selectedProductsItem(),
+		oProduct = this.selectedObject(),
 		oParameters = oProduct ? {
 			'Title': oProduct.sProductTitle,
 			'ProductGroupUUID': oProduct.sProductGroupUUID,
@@ -203,7 +199,7 @@ CProductsView.prototype.saveProduct = function ()
 			{
 				oParameters.ProductId = oProduct.id;
 			}
-			this.isUpdatingProduct(true);
+			this.isUpdating(true);
 			Ajax.send('Sales', sMethod, oParameters, this.onGetProductUpdateResponse, this);
 		}
 	}
@@ -211,7 +207,7 @@ CProductsView.prototype.saveProduct = function ()
 
 CProductsView.prototype.onGetProductUpdateResponse = function (oResponse)
 {
-	this.isUpdatingProduct(false);
+	this.isUpdating(false);
 
 	if (oResponse.Result)
 	{
@@ -263,23 +259,23 @@ CProductsView.prototype.onProductDeleteResponse = function (oResponse)
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_SUCCESS'));
 		this.requestProductsFullList();
 		this.requestProductsList();
-		this.selectedProductsItem(null);
+		this.selectedObject(null);
 	}
 };
 
 CProductsView.prototype.show = function ()
 {
-	this.isProductsVisible(true);
+	this.isVisible(true);
 };
 
 CProductsView.prototype.hide = function ()
 {
-	this.isProductsVisible(false);
+	this.isVisible(false);
 };
 
 CProductsView.prototype.onBind = function ()
 {
-	this.productsSelector.initOnApplyBindings(
+	this.oSelector.initOnApplyBindings(
 		'.products_sub_list .item',
 		'.products_sub_list .selected.item',
 		$('.products_list', this.$viewDom),

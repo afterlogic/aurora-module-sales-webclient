@@ -1,63 +1,65 @@
-<div class="middle_bar" data-bind="with: selectedProductsItem">
-	<div class="fields clearfix sales-edit-fields">
-		<div data-bind="visible: UUID === ''">
-			<h2>New Product</h2>
+<div data-bind="visible: isVisible">
+	<div class="middle_bar" data-bind="with: selectedObject">
+		<div class="fields clearfix sales-edit-fields">
+			<div data-bind="visible: UUID === ''">
+				<h2>New Product</h2>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Product name:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sProductTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Product group:'"></span>
+				<span class="value">
+					<select class="value input" data-bind="value: sProductGroupUUID, options: $parent.productGroupsFullList, optionsText: 'sTitle', optionsValue: 'UUID'"></select>
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'ShareIt product ID:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: iShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'PayPal Item:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sPayPalItem, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Product price:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: iProductPrice, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'Homepage:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
 		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Product name:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sProductTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+		<div class="buttons" data-bind="visible: UUID !== ''">
+			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductBinded, visible: !!UUID"></span>
+			<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
+			</span>
+			<span class="button" data-bind="visible: $parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
 			</span>
 		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Product group:'"></span>
-			<span class="value">
-				<select class="value input" data-bind="value: sProductGroupUUID, options: $parent.productGroupsFullList, optionsText: 'sTitle', optionsValue: 'UUID'"></select>
+		<div class="buttons" data-bind="visible: UUID === ''">
+			<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE'}"></span>
+			</span>
+			<span class="button" data-bind="visible: $parent.isUpdating()">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE_IN_PROGRESS'}"></span>
+			</span>
+			<span class="button" data-bind="click: function () { $parent.selectedObject(null); }">
+				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}"></span>
 			</span>
 		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'ShareIt product ID:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: iShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
-			</span>
-		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'PayPal Item:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sPayPalItem, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
-			</span>
-		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Product price:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: iProductPrice, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
-			</span>
-		</div>
-		<div class="row">
-			<span class="label" data-bind="text: 'Homepage:'"></span>
-			<span class="value">
-				<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
-			</span>
-		</div>
-	</div>
-	<div class="buttons" data-bind="visible: UUID !== ''">
-		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductBinded, visible: !!UUID"></span>
-		<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdatingProduct()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
-		</span>
-		<span class="button" data-bind="visible: $parent.isUpdatingProduct()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
-		</span>
-	</div>
-	<div class="buttons" data-bind="visible: UUID === ''">
-		<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdatingProduct()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE'}"></span>
-		</span>
-		<span class="button" data-bind="visible: $parent.isUpdatingProduct()">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE_IN_PROGRESS'}"></span>
-		</span>
-		<span class="button" data-bind="click: function () { $parent.selectedProductsItem(null); }">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CANCEL'}"></span>
-		</span>
 	</div>
 </div>
