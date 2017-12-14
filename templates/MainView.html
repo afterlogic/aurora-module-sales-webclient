@@ -26,20 +26,16 @@
 			<div class="panel_content">
 				<div class="middle_bar">
 					<!-- ko template: {name: oSalesView.ViewTemplate, data: oSalesView} --><!-- /ko -->
-					<!-- ko template: {name: '%ModuleName%_ProductsView'} --><!-- /ko -->
-					<!-- ko template: {name: '%ModuleName%_ProductGroupsView'} --><!-- /ko -->
+					<!-- ko template: {name: oProductsView.ViewTemplate, data: oProductsView} --><!-- /ko -->
+					<!-- ko template: {name: oProductGroupsView.ViewTemplate, data: oProductGroupsView} --><!-- /ko -->
 				</div>
 			</div>
 		</div>
 		<div class="panel sale_viewer" data-splitter="sale_viewer">
 			<div class="panel_content ">
 				<!-- ko template: {name: oSalesView.EditViewTemplate, data: oSalesView} --><!-- /ko -->
-				<div data-bind="visible: isProductsVisible()">
-				<!-- ko template: {name: '%ModuleName%_ProductsEditView'} --><!-- /ko -->
-				</div>
-				<div data-bind="visible: isProductGroupsVisible()">
-				<!-- ko template: {name: '%ModuleName%_ProductGroupsEditView'} --><!-- /ko -->
-				</div>
+				<!-- ko template: {name: oProductsView.EditViewTemplate, data: oProductsView} --><!-- /ko -->
+				<!-- ko template: {name: oProductGroupsView.EditViewTemplate, data: oProductGroupsView} --><!-- /ko -->
 			</div>
 		</div>
 	</div>
