@@ -9,7 +9,8 @@ var
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
-	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js')
+	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
+	CContactsListItemModel = require('modules/%ModuleName%/js/models/CContactsListItemModel.js')
 ;
 
 /**
@@ -24,6 +25,7 @@ function CMainView()
 	this.oSalesView = require('modules/%ModuleName%/js/views/SalesView.js');
 	this.oProductsView = require('modules/%ModuleName%/js/views/ProductsView.js');
 	this.oProductGroupsView = require('modules/%ModuleName%/js/views/ProductGroupsView.js');
+	this.oContactsView = require('modules/%ModuleName%/js/views/ContactsView.js');
 	
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
@@ -40,6 +42,9 @@ function CMainView()
 				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCTS_GROUP');
 			case Enums.SalesObjectsTypes.Sales:
 				return  this.oSalesView.getBigButtonText();
+			case Enums.SalesObjectsTypes.Contacts:
+				return  TextUtils.i18n('%MODULENAME%/ACTION_NEW_CONTACT');
+
 		}
 		return '';
 	}, this);
@@ -57,6 +62,10 @@ function CMainView()
 			case Enums.SalesObjectsTypes.Sales:
 				this.oSalesView.ParseSales();
 				break;
+			case Enums.SalesObjectsTypes.Contacts:
+				this.oContactsView.selectedObject(new CContactsListItemModel());
+				this.oContactsView.oSelector.itemSelected(null);
+				break;
 		}
 	});
 	
@@ -72,6 +81,10 @@ function CMainView()
 		{
 			sType: Enums.SalesObjectsTypes.ProductGroups,
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_PRODUCT_GROUPS_LIST')
+		},
+		{
+			sType: Enums.SalesObjectsTypes.Contacts,
+			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_CONTACTS_LIST')
 		}
 	];
 }
@@ -89,19 +102,29 @@ CMainView.prototype.showObjects = function (sType)
 			this.oSalesView.show();
 			this.oProductsView.hide();
 			this.oProductGroupsView.hide();
+			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Sales);
 			break;
 		case Enums.SalesObjectsTypes.Products:
 			this.oSalesView.hide();
 			this.oProductsView.show();
 			this.oProductGroupsView.hide();
+			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Products);
 			break;
 		case Enums.SalesObjectsTypes.ProductGroups:
 			this.oSalesView.hide();
 			this.oProductGroupsView.show();
 			this.oProductsView.hide();
+			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.ProductGroups);
+			break;
+		case Enums.SalesObjectsTypes.Contacts:
+			this.oSalesView.hide();
+			this.oProductGroupsView.hide();
+			this.oProductsView.hide();
+			this.oContactsView.show();
+			this.selectedType(Enums.SalesObjectsTypes.Contacts);
 			break;
 	}
 };
@@ -114,6 +137,7 @@ CMainView.prototype.onShow = function ()
 	this.oSalesView.onShow();
 	this.oProductsView.onShow();
 	this.oProductGroupsView.onShow();
+	this.oContactsView.onShow();
 };
 
 CMainView.prototype.onBind = function ()
@@ -121,6 +145,7 @@ CMainView.prototype.onBind = function ()
 	this.oSalesView.onBind();
 	this.oProductsView.onBind();
 	this.oProductGroupsView.onBind();
+	this.oContactsView.onBind();
 };
 
 module.exports = new CMainView();

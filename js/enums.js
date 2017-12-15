@@ -11,7 +11,8 @@ var
 Enums.SalesObjectsTypes = {
 	'Sales': 'sales',
 	'Products': 'products',
-	'ProductGroups': 'product_groups'
+	'ProductGroups': 'product_groups',
+	'Contacts': 'contacts',
 };
 
 if (typeof window.Enums === 'undefined')
