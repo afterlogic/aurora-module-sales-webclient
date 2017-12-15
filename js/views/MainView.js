@@ -38,6 +38,8 @@ function CMainView()
 				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCT');
 			case Enums.SalesObjectsTypes.ProductGroups:
 				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCTS_GROUP');
+			case Enums.SalesObjectsTypes.Sales:
+				return  this.oSalesView.getBigButtonText();
 		}
 		return '';
 	}, this);
@@ -51,6 +53,9 @@ function CMainView()
 			case Enums.SalesObjectsTypes.ProductGroups:
 				this.oProductGroupsView.selectedObject(new CProductGroupsListItemModel());
 				this.oProductGroupsView.oSelector.itemSelected(null);
+				break;
+			case Enums.SalesObjectsTypes.Sales:
+				this.oSalesView.ParseSales();
 				break;
 		}
 	});

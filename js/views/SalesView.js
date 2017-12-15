@@ -58,6 +58,9 @@ function CSalesView()
 	this.selectedObject.subscribe(_.bind(function () {
 		this.isUpdating(false);
 	}, this));
+	this.isSalesUpdating = ko.observable(false);
+	this.isParsePaypalDone = ko.observable(false);
+	this.isParseShareitDone = ko.observable(false);
 }
 
 _.extendOwn(CSalesView.prototype, CAbstractScreenView.prototype);
@@ -189,6 +192,90 @@ CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	}
 	this.requestProductsList();
 	this.requestSalesList();
+};
+
+CSalesView.prototype.ParseSales = function ()
+{
+	this.isSalesUpdating(true);
+	$.ajax({
+		url: '/modules/Sales/Crons/parse_shareit.php',
+		type: 'POST',
+		async: true,
+		dataType: 'json',
+		success: _.bind(function (data) {
+			this.isParseShareitDone(true); 
+			if (data.result === true)
+			{
+				if (this.isParsePaypalDone())
+				{
+					Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
+					this.ParseSalesDone();
+				}
+			}
+			else
+			{
+				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
+			}
+		}, this),
+		error: _.bind(function() { console.log("shareit error");
+			if (!this.isParsePaypalDone())
+			{
+				this.isParseShareitDone(true); 
+			}
+			else
+			{
+				this.ParseSalesDone();
+			}
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
+		}, this),
+		timeout: 50000
+	});
+	$.ajax({
+		url: '/modules/Sales/Crons/parse_paypal.php',
+		type: 'POST',
+		async: true,
+		dataType: 'json',
+		success: _.bind(function (data) {
+			this.isParsePaypalDone(true);
+			if (data.result === true)
+			{
+				if (this.isParseShareitDone())
+				{
+					Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
+					this.ParseSalesDone();
+				}
+			}
+			else
+			{
+				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
+			}
+		}, this),
+		error: _.bind(function() {
+			if (!this.isParseShareitDone())
+			{
+				this.isParsePaypalDone(true); 
+			}
+			else
+			{
+				this.ParseSalesDone();
+			}
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
+		}, this),
+		timeout: 50000
+	});
+};
+
+CSalesView.prototype.ParseSalesDone = function ()
+{
+	this.isParsePaypalDone(false);
+	this.isParseShareitDone(false);
+	this.isSalesUpdating(false);
+	this.requestSalesList();
+};
+
+CSalesView.prototype.getBigButtonText = function ()
+{
+	return this.isSalesUpdating() ? TextUtils.i18n('COREWEBCLIENT/INFO_LOADING') : TextUtils.i18n('%MODULENAME%/ACTION_PARSE_SALES');
 };
 
 module.exports = new CSalesView();
