@@ -10,8 +10,12 @@ var
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
+	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 	
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js')
@@ -75,6 +79,7 @@ CProductsView.prototype.onShow = function ()
 {
 	this.requestProductsList();
 };
+
 CProductsView.prototype.requestProductsList = function ()
 {
 	this.listLoading(true);
@@ -220,7 +225,6 @@ CProductsView.prototype.onGetProductUpdateResponse = function (oResponse)
 	
 	this.requestProductsFullList();
 	this.requestProductsList();
-	this.requestSalesList();
 };
 
 CProductsView.prototype.removeProduct = function (oProduct)
@@ -275,6 +279,7 @@ CProductsView.prototype.hide = function ()
 
 CProductsView.prototype.onBind = function ()
 {
+	this.requestProductsFullList();
 	this.oSelector.initOnApplyBindings(
 		'.products_sub_list .item',
 		'.products_sub_list .selected.item',

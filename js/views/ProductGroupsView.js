@@ -10,8 +10,12 @@ var
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
+	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 	
 	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js')
@@ -73,9 +77,9 @@ CProductGroupsView.prototype.ViewConstructorName = 'CProductGroupsView';
  */
 CProductGroupsView.prototype.onShow = function ()
 {
-	this.requestProductGroupsFullList();
+	this.requestProductGroupsList();
 };
-//Product groups
+
 CProductGroupsView.prototype.requestProductGroupsList = function ()
 {
 	this.listLoading(true);
@@ -233,6 +237,7 @@ CProductGroupsView.prototype.hide = function ()
 
 CProductGroupsView.prototype.onBind = function ()
 {
+	this.requestProductGroupsFullList();
 	this.oSelector.initOnApplyBindings(
 		'.product_groups_sub_list .item',
 		'.product_groups_sub_list .selected.item',
