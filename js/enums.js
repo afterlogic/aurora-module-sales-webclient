@@ -6,13 +6,22 @@ var
 ;
 
 /**
- * @enum {number}
+ * @enum {string}
  */
 Enums.SalesObjectsTypes = {
 	'Sales': 'sales',
 	'Products': 'products',
 	'ProductGroups': 'product_groups',
-	'Contacts': 'contacts',
+	'Contacts': 'contacts'
+};
+
+/**
+ * @enum {string}
+ */
+Enums.ChartRangeTypes = {
+	'Week': 'week',
+	'Month': 'month',
+	'Year': 'year'
 };
 
 if (typeof window.Enums === 'undefined')

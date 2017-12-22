@@ -6,6 +6,31 @@
 		</span>
 	</span>
 </div>
+
+<div class="chart-ctrl">
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Week), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Week, 'disabled': listLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_WEEK_CHART'}"></button>
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Month), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Month, 'disabled': listLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_MONTH_CHART'}"></button>
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Year), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Year, 'disabled': listLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_YEAR_CHART'}"></button>
+	<div class="chart-ctrl_range" data-bind="text: currentRange, css: {active: !listLoading()}"></div>
+</div>
+
+<div class="chart-container" data-bind="css: { 
+		'chart-container_week': rangeType() === Enums.ChartRangeTypes.Week,  
+		'chart-container_month': rangeType() === Enums.ChartRangeTypes.Month,  
+		'chart-container_year': rangeType() === Enums.ChartRangeTypes.Year }">
+	<canvas id="myPieChart" data-bind="initDom: chartCont, css: {active: !listLoading()}"></canvas>
+	<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}, visible: listLoading()"></span>
+</div>
+
 <div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isVisible">
 	<div class="sales_list_scroll scroll-inner">
 		<div class="items_list sales_list">
