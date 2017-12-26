@@ -113,8 +113,14 @@ CProductGroupsView.prototype.onGetProductGroupsResponse = function (oResponse)
 		this.objectList(aNewCollection);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
-		this.listLoading(false);
 	}
+	else
+	{
+		this.objectList([]);
+		this.objectsCount(0);
+	}
+	
+	this.listLoading(false);
 };
 
 CProductGroupsView.prototype.viewProductGroupsItem = function (oItem)
@@ -248,7 +254,6 @@ CProductGroupsView.prototype.onBind = function ()
 
 CProductGroupsView.prototype.requestProductGroupsFullList = function ()
 {
-	this.listLoading(true);
 	Ajax.send(
 		'Sales',
 		'GetProductGroups', 
@@ -278,7 +283,6 @@ CProductGroupsView.prototype.onGetProductGroupsFullListResponse = function (oRes
 		{
 			this.objectList(aNewProductGroupsCollection.slice(0, Settings.ItemsPerPage));
 		}
-		this.listLoading(false);
 		oEmptyGroupItem.id = 0;
 		oEmptyGroupItem.UUID = "";
 		oEmptyGroupItem.sTitle = "-";

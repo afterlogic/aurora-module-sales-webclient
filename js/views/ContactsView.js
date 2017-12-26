@@ -108,8 +108,14 @@ CContactsView.prototype.onGetContactsResponse = function (oResponse)
 		this.objectList(aNewCollection);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
-		this.listLoading(false);
 	}
+	else
+	{
+		this.objectList([]);
+		this.objectsCount(0);
+	}
+	
+	this.listLoading(false);
 };
 
 CContactsView.prototype.viewContactsItem = function (oItem)

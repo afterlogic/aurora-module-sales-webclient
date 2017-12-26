@@ -69,6 +69,7 @@ function CSalesView()
 	this.isParsePaypalDone = ko.observable(false);
 	this.isParseShareitDone = ko.observable(false);
 	
+	this.chartListLoading = ko.observable(false);
 	this.currentRange = ko.observable();
 	this.chartCont = ko.observable(null);
 	this.rangeType = ko.observable(Enums.ChartRangeTypes.Month);
@@ -122,8 +123,14 @@ CSalesView.prototype.onGetSalesResponse = function (oResponse)
 		this.objectList(aNewCollection);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
-		this.listLoading(false);
 	}
+	else
+	{
+		this.objectList([]);
+		this.objectsCount(0);
+	}
+	
+	this.listLoading(false);
 };
 
 CSalesView.prototype.viewSalesItem = function (oItem)
@@ -165,6 +172,8 @@ CSalesView.prototype.changeRange = function (sRangeType)
 			break;
 	}
 	
+	this.chartListLoading(true);
+	
 	Ajax.send(
 		'Sales',
 		'GetChartSales', 
@@ -175,10 +184,13 @@ CSalesView.prototype.changeRange = function (sRangeType)
 		},
 		function (oResponse) {
 			var oResult = oResponse.Result;
+			
 			if (oResult)
 			{
 				this.chartObjectList(oResult);
 			}
+			
+			this.chartListLoading(false);
 		},
 		this
 	);
@@ -238,7 +250,7 @@ CSalesView.prototype.initChart = function ()
 					}]
 				},
 				legend: {
-					//display: false
+					display: false
 				},
 				tooltips: {
 					displayColors: false,
@@ -297,6 +309,10 @@ CSalesView.prototype.initChart = function ()
 			this.oChart.data.labels = _.keys(oRangePoints);
 			this.oChart.update();
 		}
+	}, this);
+	
+	this.searchValue.subscribe(function () {
+		this.changeRange(this.rangeType());
 	}, this);
 	
 	this.changeRange(Enums.ChartRangeTypes.Month);

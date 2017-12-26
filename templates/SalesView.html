@@ -7,28 +7,28 @@
 	</span>
 </div>
 
-<div class="chart-ctrl">
+<div class="chart-ctrl" data-bind="visible: isVisible">
 	<button class="chart-ctrl_btn" 
 		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Week), 
-					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Week, 'disabled': listLoading()}, 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Week, 'disabled': chartListLoading()}, 
 					i18n: {'key': '%MODULENAME%/ACTION_SHOW_WEEK_CHART'}"></button>
 	<button class="chart-ctrl_btn" 
 		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Month), 
-					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Month, 'disabled': listLoading()}, 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Month, 'disabled': chartListLoading()}, 
 					i18n: {'key': '%MODULENAME%/ACTION_SHOW_MONTH_CHART'}"></button>
 	<button class="chart-ctrl_btn" 
 		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Year), 
-					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Year, 'disabled': listLoading()}, 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Year, 'disabled': chartListLoading()}, 
 					i18n: {'key': '%MODULENAME%/ACTION_SHOW_YEAR_CHART'}"></button>
-	<div class="chart-ctrl_range" data-bind="text: currentRange, css: {active: !listLoading()}"></div>
+	<div class="chart-ctrl_range" data-bind="text: currentRange, css: {active: !chartListLoading()}"></div>
 </div>
 
-<div class="chart-container" data-bind="css: { 
+<div class="chart-container" data-bind="visible: isVisible, css: { 
 		'chart-container_week': rangeType() === Enums.ChartRangeTypes.Week,  
 		'chart-container_month': rangeType() === Enums.ChartRangeTypes.Month,  
 		'chart-container_year': rangeType() === Enums.ChartRangeTypes.Year }">
-	<canvas id="myPieChart" data-bind="initDom: chartCont, css: {active: !listLoading()}"></canvas>
-	<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}, visible: listLoading()"></span>
+	<canvas id="myPieChart" data-bind="initDom: chartCont, css: {active: !chartListLoading()}"></canvas>
+	<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}, visible: chartListLoading()"></span>
 </div>
 
 <div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isVisible">

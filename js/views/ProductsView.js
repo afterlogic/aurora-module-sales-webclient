@@ -99,7 +99,6 @@ CProductsView.prototype.requestProductsList = function ()
 
 CProductsView.prototype.requestProductsFullList = function ()
 {
-	this.listLoading(true);
 	Ajax.send(
 		'Sales',
 		'GetProducts', 
@@ -126,8 +125,14 @@ CProductsView.prototype.onGetProductsResponse = function (oResponse)
 		this.objectList(aNewCollection);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
-		this.listLoading(false);
 	}
+	else
+	{
+		this.objectList([]);
+		this.objectsCount(0);
+	}
+	
+	this.listLoading(false);
 };
 
 CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
@@ -150,7 +155,6 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 		{
 			this.objectList(aNewProductsCollection.slice(0, Settings.ItemsPerPage));
 		}
-		this.listLoading(false);
 		oEmptyItem.id = 0;
 		oEmptyItem.sProductTitle = "-";
 		aNewProductsCollection.unshift(oEmptyItem);
