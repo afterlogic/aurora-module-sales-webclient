@@ -2,6 +2,7 @@
 
 var
 	_ = require('underscore'),
+	$ = require('jquery'),
 	ko = require('knockout'),
 	moment = require('moment'),
 	
@@ -32,6 +33,7 @@ function CSalesView()
 	CAbstractScreenView.call(this, '%ModuleName%');
 	
 	this.objectList = ko.observableArray([]);
+	this.chartObjectList = ko.observableArray([]);
 	this.objectsCount = ko.observable(0);
 	this.selectedObject = ko.observable(null);
 	this.searchFocused = ko.observable(false);
@@ -138,31 +140,75 @@ CSalesView.prototype.onBind = function ()
 		$('.sales_list_scroll.scroll-inner', this.$viewDom)
 	);
 	
+	this.initChart();
+};
+
+CSalesView.prototype.changeRange = function (sRangeType)
+{
+	var
+		oStartMoment = moment(),
+		oEndMoment = moment()
+	;
+	
+	this.rangeType(sRangeType);
+	
+	switch (this.rangeType())
+	{
+		case Enums.ChartRangeTypes.Week:
+			oStartMoment.subtract(7, 'days');
+			break;
+		case Enums.ChartRangeTypes.Month:
+			oStartMoment.subtract(30, 'days');
+			break;
+		case Enums.ChartRangeTypes.Year:
+			oStartMoment.subtract(12, 'months');
+			break;
+	}
+	
+	Ajax.send(
+		'Sales',
+		'GetChartSales', 
+		{
+			'FromDate': oStartMoment.format('YYYY-MM-DD'),
+			'TillDate': oEndMoment.format('YYYY-MM-DD'),
+			'Search': this.searchValue()
+		},
+		function (oResponse) {
+			var oResult = oResponse.Result;
+			if (oResult)
+			{
+				this.chartObjectList(oResult);
+			}
+		},
+		this
+	);
+};
+
+CSalesView.prototype.getSpecificDateRange = function (oBaseMoment, iPointsCount, sIntervalType, sDateFormat)
+{
+	var 
+		oResult = {},
+		oStartMoment = oBaseMoment.subtract(iPointsCount + 1, sIntervalType)
+	;
+	
+	_(iPointsCount + 1).times(function () {
+		var oDay = oStartMoment.add(1, sIntervalType);
+		oResult[oDay.format(sDateFormat)] = 0;
+	});
+
+	return oResult;
+};
+
+CSalesView.prototype.initChart = function ()
+{
 	if (this.chartCont() && this.chartCont()[0])
 	{
-		var ctx = document.getElementById("myPieChart");
+		var oChartCont = this.chartCont()[0];
 		
-		this.oChart = new Chart(ctx, {
+		this.oChart = new Chart(oChartCont, {
             type: 'line',
 			data: {
 				datasets: [
-                    {
-                        label: 'Advert',
-                        backgroundColor: [
-                            'rgba(249, 242, 180, 0.5)'
-                        ],
-                        borderColor: [
-                            'rgb(249, 242, 180)'
-                        ],
-                        pointBackgroundColor: "rgb(249, 242, 180)",
-                        pointHoverBackgroundColor: "rgb(249, 242, 180)",
-                        pointHoverBorderColor: "rgb(249, 242, 180)",
-                        borderWidth: 1,
-                        pointRadius: 3,
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        lineTension: 0
-                    },
 					{
 						label: 'General',
 						backgroundColor: [
@@ -171,9 +217,9 @@ CSalesView.prototype.onBind = function ()
 						borderColor: [
 							'rgba(120, 184, 240, 1)'
 						],
-						pointBackgroundColor: "rgba(120, 184, 240, 1)",
-						pointHoverBackgroundColor: "rgba(120, 184, 240, 1)",
-						pointHoverBorderColor: "rgba(40, 123, 139, 1)",
+						pointBackgroundColor: 'rgba(120, 184, 240, 1)',
+						pointHoverBackgroundColor: 'rgba(120, 184, 240, 1)',
+						pointHoverBorderColor: 'rgba(40, 123, 139, 1)',
 						borderWidth: 1,
 						pointRadius: 3,
 						pointBorderWidth: 1,
@@ -186,79 +232,74 @@ CSalesView.prototype.onBind = function ()
 				maintainAspectRatio: false,
 				scales: {
 					yAxes: [{
-
 						ticks: {
 							beginAtZero:true
 						}
 					}]
 				},
-				legend:{
+				legend: {
 					//display: false
 				},
-				tooltips:{
+				tooltips: {
 					displayColors: false,
-					backgroundColor: "rgba(40, 123, 139, 1)"
+					backgroundColor: 'rgba(40, 123, 139, 1)'
 				},
-				animation:{
+				animation: {
 					duration: 0
 				}
 			}
 		});
 	}
 	
-	this.objectList.subscribe(function (aDownloads) {
-		if(this.oChart)
+	this.chartObjectList.subscribe(function (aSales) {
+		if (this.oChart)
 		{
 			var 
-				oGroupedDownloads,
-                oGroupedDownloadsGa,
-				allRangeDays,
-				oDate = new Date(),
+				oGroupedSales,
+				oRangePoints,
+				oNowMoment = moment(),
 				sDisplayRange = ''
 			;
 
-			switch(this.rangeType())
+			switch (this.rangeType())
 			{
 				case Enums.ChartRangeTypes.Week:
-					allRangeDays = this.getSpecificDateRange(oDate, 7, 'days', 'MM-DD');
-					sDisplayRange = moment(oDate).subtract(7, 'days').format("YYYY-MM-DD") + ' / ' + moment(oDate).format("YYYY-MM-DD");
+					oRangePoints = this.getSpecificDateRange(oNowMoment, 7, 'days', Settings.MMDDDateFormat);
+					sDisplayRange = oNowMoment.subtract(7, 'days').format(Settings.FullDateFormat) + ' / ' 
+							+ oNowMoment.format(Settings.FullDateFormat);
 					
-					aDownloads.forEach(function (i) {
-						i.Date = moment(i.Date).format('MM-DD');
+					aSales.forEach(function (oSalesItem) {
+						oSalesItem.Date = moment(oSalesItem.Date).format(Settings.MMDDDateFormat);
 					});
 					break;
-					
 				case Enums.ChartRangeTypes.Month:
-					allRangeDays = this.getSpecificDateRange(oDate, 30, 'days', 'MM-DD');
-					sDisplayRange = moment(oDate).subtract(30, 'days').format("YYYY-MM-DD") + ' / ' + moment(oDate).format("YYYY-MM-DD");
+					oRangePoints = this.getSpecificDateRange(oNowMoment, 30, 'days', Settings.MMDDDateFormat);
+					sDisplayRange = oNowMoment.subtract(30, 'days').format(Settings.FullDateFormat) + ' / ' 
+							+ oNowMoment.format(Settings.FullDateFormat);
 					
-					aDownloads.forEach(function (i) {
-						i.Date = moment(i.Date).format('MM-DD');
+					aSales.forEach(function (oSalesItem) {
+						oSalesItem.Date = moment(oSalesItem.Date).format(Settings.MMDDDateFormat);
 					});
 					break;
-					
 				case Enums.ChartRangeTypes.Year:
-					allRangeDays = this.getSpecificDateRange(oDate, 12, 'months', 'YYYY-MM');
-					sDisplayRange = moment(oDate).subtract(12, 'months').format("YYYY-MM-DD") + ' / ' + moment(oDate).format("YYYY-MM-DD");
-
-					aDownloads.forEach(function (i) {
-						i.Date = moment(i.Date).format('YYYY-MM');
+					oRangePoints = this.getSpecificDateRange(oNowMoment, 12, 'months', Settings.YYMMDateFormat);
+					sDisplayRange = oNowMoment.subtract(12, 'months').format(Settings.FullDateFormat) + ' / ' 
+							+ oNowMoment.format(Settings.FullDateFormat);
+					
+					aSales.forEach(function (oSalesItem) {
+						oSalesItem.Date = moment(oSalesItem.Date).format(Settings.YYMMDateFormat);
 					});
 					break;
 			}
 			this.currentRange(sDisplayRange);
-
-            var oAllGaDownloads = _.filter(aDownloads, function(item){ return item.Ga !== 0;});
-
-			oGroupedDownloads = _.extendOwn(_.clone(allRangeDays), _.countBy(aDownloads, "Date"));
-			oGroupedDownloadsGa = _.extendOwn(_.clone(allRangeDays), _.countBy(oAllGaDownloads, "Date"));
-
-            this.oChart.data.datasets[0].data = _.values(oGroupedDownloadsGa);
-            this.oChart.data.datasets[1].data = _.values(oGroupedDownloads);
-			this.oChart.data.labels = _.keys(allRangeDays);
+			oGroupedSales = _.extendOwn(_.clone(oRangePoints), _.countBy(aSales, 'Date'));
+            this.oChart.data.datasets[0].data = _.values(oGroupedSales);
+			this.oChart.data.labels = _.keys(oRangePoints);
 			this.oChart.update();
 		}
 	}, this);
+	
+	this.changeRange(Enums.ChartRangeTypes.Month);
 };
 
 CSalesView.prototype.salesSearchSubmit = function ()
@@ -348,7 +389,7 @@ CSalesView.prototype.ParseSales = function ()
 				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
 			}
 		}, this),
-		error: _.bind(function() { console.log("shareit error");
+		error: _.bind(function() { console.log('shareit error');
 			if (!this.isParsePaypalDone())
 			{
 				this.isParseShareitDone(true); 
@@ -407,29 +448,6 @@ CSalesView.prototype.ParseSalesDone = function ()
 CSalesView.prototype.getBigButtonText = function ()
 {
 	return this.isSalesUpdating() ? TextUtils.i18n('COREWEBCLIENT/INFO_LOADING') : TextUtils.i18n('%MODULENAME%/ACTION_PARSE_SALES');
-};
-
-CSalesView.prototype.getSpecificDateRange = function (oDate, iDayCount, sInterval, sDateFormat)
-{
-	var 
-		oResult = {},
-		i = iDayCount,
-		oMoment = moment(oDate).subtract(iDayCount+1, sInterval)
-	;
-
-	for (; i >= 0; i--){
-		var oDay = oMoment.add(1, sInterval);
-
-		oResult[oDay.format(sDateFormat)] = 0;
-	}
-
-	return oResult;
-};
-
-CSalesView.prototype.changeRange = function (sRangeType)
-{
-	this.rangeType(sRangeType);
-	this.objectList.valueHasMutated();
 };
 
 module.exports = new CSalesView();
