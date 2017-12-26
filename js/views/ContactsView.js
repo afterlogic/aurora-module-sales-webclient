@@ -10,8 +10,12 @@ var
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
+	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 	
 	CContactsListItemModel = require('modules/%ModuleName%/js/models/CContactsListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js')
@@ -54,7 +58,8 @@ function CContactsView()
 	this.listLoading = ko.observable(false);
 	this.isVisible =  ko.observable(false);
 	this.isUpdating = ko.observable(false);
-	this.saveContactBinded = _.bind(this.saveContact, this);
+	this.saveContactBound = _.bind(this.saveContact, this);
+	this.removeContactBound = _.bind(this.removeContact, this);
 	this.selectedObject.subscribe(_.bind(function () {
 		this.isUpdating(false);
 	}, this));
@@ -196,6 +201,45 @@ CContactsView.prototype.onGetContactUpdateResponse = function (oResponse)
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
 	this.requestContactsList();
+};
+
+CContactsView.prototype.removeContact = function (oContact)
+{
+	Popups.showPopup(ConfirmPopup, [TextUtils.i18n('%MODULENAME%/CONFIRM_REMOVE_CONTACT'),  _.bind(function (bConfirm) {
+		if (bConfirm)
+		{
+			Ajax.send(
+				'Sales',
+				'DeleteContact',
+				{'IdOrUUID': oContact.UUID},
+				this.onDeleteContactResponse, 
+				this
+			);
+		}
+	}, this), oContact.sFullName || oContact.sEmail]);
+};
+
+CContactsView.prototype.onDeleteContactResponse = function (oResponse)
+{
+	var sMessage = '';
+	if (!oResponse.Result)
+	{
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_REMOVE_PROCESS'));
+		}
+	}
+	else
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_REMOVE_CONTACT'));
+		this.requestContactsList();
+		this.selectedObject(null);
+	}
 };
 
 module.exports = new CContactsView();

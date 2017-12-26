@@ -15,7 +15,8 @@
 			</div>
 		</div>
 		<div class="buttons">
-			<span class="button" data-bind="click: $parent.saveContactBinded, visible: !$parent.isUpdating()">
+			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeContactBound"></span>
+			<span class="button" data-bind="click: $parent.saveContactBound, visible: !$parent.isUpdating()">
 				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 			</span>
 			<span class="button" data-bind="visible: $parent.isUpdating()">

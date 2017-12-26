@@ -60,7 +60,7 @@ function CProductsView()
 	this.isVisible = ko.observable(false);
 	this.isUpdating = ko.observable(false);
 	this.saveProduct = _.bind(this.saveProduct, this);
-	this.removeProductBinded = _.bind(this.removeProduct, this);
+	this.removeProductBound = _.bind(this.removeProduct, this);
 	this.selectedObject.subscribe(_.bind(function () {
 		this.isUpdating(false);
 	}, this));
@@ -264,7 +264,7 @@ CProductsView.prototype.onProductDeleteResponse = function (oResponse)
 	}
 	else
 	{
-		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_SUCCESS'));
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_REMOVE_PRODUCT'));
 		this.requestProductsFullList();
 		this.requestProductsList();
 		this.selectedObject(null);

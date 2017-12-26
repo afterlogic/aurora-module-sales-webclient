@@ -60,7 +60,7 @@ function CProductGroupsView()
 	this.isVisible = ko.observable(false);
 	this.isUpdating = ko.observable(false);
 	this.saveProductGroup = _.bind(this.saveProductGroup, this);
-	this.removeProductGroupBinded = _.bind(this.removeProductGroup, this);
+	this.removeProductGroupBound = _.bind(this.removeProductGroup, this);
 	this.selectedObject.subscribe(_.bind(function () {
 		this.isUpdating(false);
 	}, this));
@@ -224,7 +224,7 @@ CProductGroupsView.prototype.onProductGroupDeleteResponse = function (oResponse)
 	}
 	else
 	{
-		Screens.showReport(TextUtils.i18n('%MODULENAME%/REMOVE_PRODUCT_GROUP_SUCCESS'));
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_REMOVE_PRODUCT_GROUP'));
 		this.requestProductGroupsFullList();
 		this.requestProductGroupsList();
 		this.selectedObject(null);

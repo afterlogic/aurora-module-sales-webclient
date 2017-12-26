@@ -41,8 +41,8 @@
 				</span>
 			</div>
 		</div>
-		<div class="buttons" data-bind="visible: UUID !== ''">
-			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductBinded, visible: !!UUID"></span>
+		<div class="buttons" data-bind="visible: !!UUID">
+			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductBound"></span>
 			<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdating()">
 				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 			</span>
@@ -50,7 +50,7 @@
 				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
 			</span>
 		</div>
-		<div class="buttons" data-bind="visible: UUID === ''">
+		<div class="buttons" data-bind="visible: !UUID">
 			<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdating()">
 				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CREATE'}"></span>
 			</span>

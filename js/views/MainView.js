@@ -44,9 +44,7 @@ function CMainView()
 			case Enums.SalesObjectsTypes.ProductGroups:
 				return TextUtils.i18n('%MODULENAME%/ACTION_NEW_PRODUCTS_GROUP');
 			case Enums.SalesObjectsTypes.Sales:
-				return  this.oSalesView.getBigButtonText();
-			case Enums.SalesObjectsTypes.Contacts:
-				return  TextUtils.i18n('%MODULENAME%/ACTION_NEW_CONTACT');
+				return this.oSalesView.getBigButtonText();
 
 		}
 		return '';
@@ -64,10 +62,6 @@ function CMainView()
 				break;
 			case Enums.SalesObjectsTypes.Sales:
 				this.oSalesView.ParseSales();
-				break;
-			case Enums.SalesObjectsTypes.Contacts:
-				this.oContactsView.selectedObject(new CContactsListItemModel());
-				this.oContactsView.oSelector.itemSelected(null);
 				break;
 		}
 	});
