@@ -18,7 +18,7 @@ var
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 	
-	Chart = require('modules/AfterlogicDownloadsWebclient/js/vendor/chart.js'),
+	Chart = require('modules/%ModuleName%/js/vendor/chart.js'),
 	
 	Enums = window.Enums
 ;
