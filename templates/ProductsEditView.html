@@ -19,7 +19,13 @@
 			<div class="row">
 				<span class="label" data-bind="text: 'ShareIt product ID:'"></span>
 				<span class="value">
-					<input class="input" type="text" data-bind="value: iShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+					<input class="input" type="text" data-bind="value: sShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
+				</span>
+			</div>
+			<div class="row">
+				<span class="label" data-bind="text: 'CRM product ID:'"></span>
+				<span class="value">
+					<input class="input" type="text" data-bind="value: sCrmProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">

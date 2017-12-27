@@ -188,7 +188,8 @@ CProductsView.prototype.saveProduct = function ()
 		oParameters = oProduct ? {
 			'Title': oProduct.sProductTitle,
 			'ProductGroupUUID': oProduct.sProductGroupUUID,
-			'ShareItProductId': oProduct.iShareItProductId,
+			'ShareItProductId': oProduct.sShareItProductId,
+			'CrmProductId': oProduct.sCrmProductId,
 			'PayPalItem': oProduct.sPayPalItem,
 			'ProductPrice': oProduct.iProductPrice,
 			'Homepage': oProduct.sHomepage
