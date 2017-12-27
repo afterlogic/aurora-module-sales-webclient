@@ -133,6 +133,7 @@ CContactsView.prototype.onBind = function ()
 	this.oSelector.initOnApplyBindings(
 		'.contacts_sub_list .item',
 		'.contacts_sub_list .selected.item',
+		'.contacts_sub_list .selected.item',
 		$('.contacts_list', this.$viewDom),
 		$('.contacts_list_scroll.scroll-inner', this.$viewDom)
 	);

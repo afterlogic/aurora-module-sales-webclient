@@ -247,6 +247,7 @@ CProductGroupsView.prototype.onBind = function ()
 	this.oSelector.initOnApplyBindings(
 		'.product_groups_sub_list .item',
 		'.product_groups_sub_list .selected.item',
+		'.product_groups_sub_list .selected.item',
 		$('.product_groups_list', this.$viewDom),
 		$('.product_groups_list_scroll.scroll-inner', this.$viewDom)
 	);

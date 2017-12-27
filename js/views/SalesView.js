@@ -143,6 +143,7 @@ CSalesView.prototype.onBind = function ()
 	this.oSelector.initOnApplyBindings(
 		'.sales_sub_list .item',
 		'.sales_sub_list .selected.item',
+		'.sales_sub_list .selected.item',
 		$('.sales_list', this.$viewDom),
 		$('.sales_list_scroll.scroll-inner', this.$viewDom)
 	);
