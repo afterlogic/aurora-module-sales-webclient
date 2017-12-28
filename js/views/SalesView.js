@@ -395,18 +395,18 @@ CSalesView.prototype.ParseSales = function ()
 			this.isParseShareitDone(true); 
 			if (data.result === true)
 			{
-				if (this.isParsePaypalDone())
-				{
-					Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
-					this.ParseSalesDone();
-				}
+				Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
 			}
 			else
 			{
 				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
 			}
+			if (this.isParsePaypalDone())
+			{
+				this.ParseSalesDone();
+			}
 		}, this),
-		error: _.bind(function() { console.log('shareit error');
+		error: _.bind(function() {
 			if (!this.isParsePaypalDone())
 			{
 				this.isParseShareitDone(true); 
@@ -428,15 +428,15 @@ CSalesView.prototype.ParseSales = function ()
 			this.isParsePaypalDone(true);
 			if (data.result === true)
 			{
-				if (this.isParseShareitDone())
-				{
-					Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
-					this.ParseSalesDone();
-				}
+				Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
 			}
 			else
 			{
 				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
+			}
+			if (this.isParseShareitDone())
+			{
+				this.ParseSalesDone();
 			}
 		}, this),
 		error: _.bind(function() {
