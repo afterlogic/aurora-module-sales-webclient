@@ -9,8 +9,7 @@ var
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
-	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js'),
-	CContactsListItemModel = require('modules/%ModuleName%/js/models/CContactsListItemModel.js')
+	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js')
 ;
 
 /**

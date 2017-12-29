@@ -388,7 +388,6 @@ CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	{
 		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
 	}
-	this.requestProductsList();
 	this.requestSalesList();
 };
 
