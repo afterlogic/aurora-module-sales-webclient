@@ -3,7 +3,8 @@
 		<div class="fields clearfix">
 			<div class="row">
 				<span class="label">Product name:</span>
-				<select class="value input" data-bind="value: iProductId, options: $parent.productsFullList, optionsText: 'sProductTitle', optionsValue: 'id'"></select>
+				<span class="value" data-bind="text: sProductTitle, visible: !!sProductTitle"></span>
+				<select class="value input" data-bind="value: iProductId, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !sProductTitle"></select>
 			</div>
 			<div class="row">
 				<span class="label">License key:</span>
@@ -40,6 +41,10 @@
 			<div class="row">
 				<span class="label">Maintenance Expiration Date:</span>
 				<span class="value" data-bind="text: sMaintenanceExpirationDate"></span>
+			</div>
+			<div class="row">
+				<span class="label">PayPal item:</span>
+				<span class="value" data-bind="text: sPayPalItem"></span>
 			</div>
 		</div>
 		<div class="buttons">

@@ -87,6 +87,18 @@ CSalesView.prototype.ViewConstructorName = 'CSalesView';
 CSalesView.prototype.onShow = function ()
 {
 	this.requestSalesList();
+	this.getProductsList  = ko.computed(function () {
+		if (this.selectedObject() !== null && this.selectedObject().sProductTitle === '' && this.selectedObject().sPayPalItem === '')
+		{
+			return this.productsFullList();
+		}
+		else if(this.selectedObject() !== null && this.selectedObject().sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
+		{
+			return _.filter(this.productsFullList(), _.bind(function(oProduct) {
+				return oProduct.sPayPalItem === this.selectedObject().sPayPalItem;
+			}, this));
+		}
+	}, this);
 };
 
 CSalesView.prototype.requestSalesList = function ()

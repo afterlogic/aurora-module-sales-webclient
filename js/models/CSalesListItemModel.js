@@ -31,6 +31,7 @@ function CSalesListItemModel()
 	this.sLicenseKey = '';
 	this.iNetTotal = 0;
 	this.sMaintenanceExpirationDate = '';
+	this.sPayPalItem = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -67,6 +68,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.sLicenseKey = Types.pString(oData[sModuleName + '::LicenseKey'], this.sLicenseKey);
 	this.iNetTotal = Types.pInt(oData['Price'], this.iNetTotal);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + '::MaintenanceExpirationDate'], this.sMaintenanceExpirationDate);
+	this.sPayPalItem = Types.pString(oData[sModuleName + '::PayPalItem'], this.sPayPalItem);
 };
 
 module.exports = CSalesListItemModel;
