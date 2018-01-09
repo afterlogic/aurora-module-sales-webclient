@@ -180,6 +180,14 @@ CContactsView.prototype.saveContact = function ()
 				'FullName': this.selectedObject().sFullName,
 				'Email': this.selectedObject().sEmail,
 				'Address': this.selectedObject().sAddress,
+				'Phone': this.selectedObject().sPhone,
+				'Fax': this.selectedObject().sFax,
+				'Facebook': this.selectedObject().sFacebook,
+				'LinkedIn': this.selectedObject().sLinkedIn,
+				'Instagram': this.selectedObject().sInstagram,
+				'Salutation': this.selectedObject().sSalutation,
+				'LastName': this.selectedObject().sLastName,
+				'FirstName': this.selectedObject().sFirstName
 			},
 			this.onGetContactUpdateResponse,
 			this
