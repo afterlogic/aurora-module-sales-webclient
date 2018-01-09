@@ -19,6 +19,7 @@ var
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 	
 	Chart = require('modules/%ModuleName%/js/vendor/chart.js'),
+	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js'),
 	
 	Enums = window.Enums
 ;
