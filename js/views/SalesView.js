@@ -92,7 +92,7 @@ CSalesView.prototype.onShow = function ()
 		if(this.selectedObject() !== null && this.selectedObject().sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
 		{
 			return _.filter(this.productsFullList(), _.bind(function(oProduct) {
-				return oProduct.sPayPalItem === this.selectedObject().sPayPalItem;
+				return oProduct.sPayPalItem === this.selectedObject().sPayPalItem || oProduct.id === 0;
 			}, this));
 		}
 		return this.productsFullList();
