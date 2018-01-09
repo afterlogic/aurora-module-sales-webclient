@@ -376,7 +376,10 @@ CSalesView.prototype.saveSale = function ()
 
 CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 {
-	var oResult = oResponse.Result;
+	var
+		oResult = oResponse.Result,
+		sMessage = ''
+	;
 
 	this.isUpdating(false);
 
@@ -386,7 +389,15 @@ CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	}
 	else
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		}
 	}
 	this.requestSalesList();
 };

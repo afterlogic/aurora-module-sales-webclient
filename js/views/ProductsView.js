@@ -217,6 +217,7 @@ CProductsView.prototype.saveProduct = function ()
 
 CProductsView.prototype.onGetProductUpdateResponse = function (oResponse)
 {
+	var sMessage = '';
 	this.isUpdating(false);
 
 	if (oResponse.Result)
@@ -225,7 +226,15 @@ CProductsView.prototype.onGetProductUpdateResponse = function (oResponse)
 	}
 	else
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		}
 	}
 	
 	this.requestProductsFullList();

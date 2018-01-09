@@ -175,6 +175,7 @@ CProductGroupsView.prototype.saveProductGroup = function ()
 
 CProductGroupsView.prototype.onGetProductGroupUpdateResponse = function (oResponse)
 {
+	var sMessage = '';
 	this.isUpdating(false);
 
 	if (oResponse.Result)
@@ -184,7 +185,15 @@ CProductGroupsView.prototype.onGetProductGroupUpdateResponse = function (oRespon
 	}
 	else
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		}
 	}
 	
 	this.requestProductGroupsFullList();
