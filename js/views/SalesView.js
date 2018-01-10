@@ -364,19 +364,15 @@ CSalesView.prototype.hide = function ()
 
 CSalesView.prototype.saveSale = function ()
 {
-	this.isUpdating(true);
-	if (this.selectedObject().id === 0 || this.selectedObject().iProductId === 0)
+	if (this.selectedObject().id !== 0)
 	{
-		Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_INPUT'));
-	}
-	else
-	{
+		this.isUpdating(true);
 		Ajax.send(
 			'Sales',
 			'UpdateSale', 
 			{
 				'SaleId': this.selectedObject().id,
-				'ProductId': this.selectedObject().iProductId
+				'ProductIdOrUUID': this.selectedObject().iProductId
 			},
 			this.onGetSaleUpdateResponse,
 			this
