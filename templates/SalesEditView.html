@@ -1,50 +1,137 @@
-<div data-bind="visible: isVisible">
+<div class="sale-edit-content" data-bind="visible: isVisible">
 	<div class="middle_bar" data-bind="with: selectedObject">
 		<div class="fields clearfix">
-			<div class="row">
-				<span class="label">Product name:</span>
-				<span class="value" data-bind="text: sProductTitle, visible: !!sProductTitle"></span>
-				<select class="value input" data-bind="value: iProductId, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !sProductTitle"></select>
-			</div>
-			<div class="row">
-				<span class="label">License key:</span>
-				<span class="value" data-bind="text: sLicenseKey"></span>
-			</div>
-			<div class="row">
-				<span class="label">Net total:</span>
-				<span class="value" data-bind="text: '$' + iNetTotal"></span>
-			</div>
-			<div class="row">
-				<span class="label">Date:</span>
-				<span class="value" data-bind="text: sDate"></span>
-			</div>
-			<div class="row">
-				<span class="label">UUID:</span>
-				<span class="value" data-bind="text: UUID"></span>
-			</div>
-			<div class="row">
-				<span class="label">Customer name:</span>
-				<span class="value" data-bind="text: sCustomerRegName"></span>
-			</div>
-			<div class="row">
-				<span class="label">Email:</span>
-				<span class="value" data-bind="text: sEmail"></span>
-			</div>
-			<div class="row">
-				<span class="label">Phone:</span>
-				<span class="value" data-bind="text: sPhone"></span>
-			</div>
-			<div class="row">
-				<span class="label">Language:</span>
-				<span class="value" data-bind="text: sLanguage"></span>
-			</div>
-			<div class="row">
-				<span class="label">Maintenance Expiration Date:</span>
-				<span class="value" data-bind="text: sMaintenanceExpirationDate"></span>
-			</div>
-			<div class="row">
-				<span class="label">PayPal item:</span>
-				<span class="value" data-bind="text: sPayPalItem"></span>
+			<div class="panel_center" data-bind="customScrollbar: {x: false}">
+				<div class="scroll-inner">
+					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_SALES_LIST'}"></h2>
+					<div class="row">
+						<span class="label">UUID:</span>
+						<span class="value" data-bind="text: UUID"></span>
+					</div>
+					<div class="row">
+						<span class="label">Date:</span>
+						<span class="value" data-bind="text: sDate"></span>
+					</div>
+					<div class="row">
+						<span class="label">License key:</span>
+						<span class="value" data-bind="text: sLicenseKey"></span>
+					</div>
+					<div class="row">
+						<span class="label">Net total:</span>
+						<span class="value" data-bind="text: '$' + iNetTotal"></span>
+					</div>
+					<div class="row">
+						<span class="label">Maintenance Expiration Date:</span>
+						<span class="value" data-bind="text: sMaintenanceExpirationDate"></span>
+					</div>
+					<div class="row">
+						<span class="label">PayPal item:</span>
+						<span class="value" data-bind="text: sPayPalItem"></span>
+					</div>
+					<div class="row">
+						<span class="label">Vat ID:</span>
+						<span class="value" data-bind="text: sVatId"></span>
+					</div>
+					<div class="row">
+						<span class="label">Payment ID:</span>
+						<span class="value" data-bind="text: sPayment"></span>
+					</div>
+					<div class="row">
+						<span class="label">Referer number:</span>
+						<span class="value" data-bind="text: iRefNumber"></span>
+					</div>
+					<div class="row">
+						<span class="label">ShareIt purchase ID:</span>
+						<span class="value" data-bind="text: sShareItPurchaseId"></span>
+					</div>
+					<div class="row">
+						<span class="label">Is notified:</span>
+						<span class="value" data-bind="text: bIsNotified"></span>
+					</div>
+					<div class="row">
+						<span class="label">Recurrent maintenance:</span>
+						<span class="value" data-bind="text: bRecurrentMaintenance"></span>
+					</div>
+					<div class="row">
+						<span class="label">Two months email sent:</span>
+						<span class="value" data-bind="text: bTwoMonthsEmailSent"></span>
+					</div>
+					<div class="row">
+						<span class="label">Parent sale ID:</span>
+						<span class="value" data-bind="text: iParentSaleId"></span>
+					</div>
+					<div class="row">
+						<span class="label">Payment system:</span>
+						<span class="value" data-bind="text: iPaymentSystem"></span>
+					</div>
+					<div class="row">
+						<span class="label">Number of licenses:</span>
+						<span class="value" data-bind="text: iNumberOfLicenses"></span>
+					</div>
+					<span  data-bind="visible: !!iDownloadId">Download section</span>
+					<div class="fields clearfix"  data-bind="visible: !!iDownloadId">
+						<div class="row">
+							<span class="label">Referer:</span>
+							<span class="value" data-bind="text: sReferer"></span>
+						</div>
+						<div class="row">
+							<span class="label">Ip:</span>
+							<span class="value" data-bind="text: sIp"></span>
+						</div>
+						<div class="row">
+							<span class="label">GAD:</span>
+							<span class="value" data-bind="text: sGad"></span>
+						</div>
+						<div class="row">
+							<span class="label">Product version:</span>
+							<span class="value" data-bind="text: sProductVersion"></span>
+						</div>
+						<div class="row">
+							<span class="label">License type:</span>
+							<span class="value" data-bind="text: iLicenseType"></span>
+						</div>
+						<div class="row">
+							<span class="label">Referrer page:</span>
+							<span class="value" data-bind="text: iReferrerPage"></span>
+						</div>
+						<div class="row">
+							<span class="label">Is upgrade:</span>
+							<span class="value" data-bind="text: bIsUpgrade"></span>
+						</div>
+						<div class="row">
+							<span class="label">Platform type:</span>
+							<span class="value" data-bind="text: iPlatformType"></span>
+						</div>
+					</div>
+
+					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_CONTACTS_LIST'}"></h2>
+					<div class="row">
+						<span class="label">Customer name:</span>
+						<span class="value" data-bind="text: sCustomerRegName"></span>
+					</div>
+					<div class="row">
+						<span class="label">Email:</span>
+						<span class="value" data-bind="text: sEmail"></span>
+					</div>
+					<div class="row">
+						<span class="label">Phone:</span>
+						<span class="value" data-bind="text: sPhone"></span>
+					</div>
+					<div class="row">
+						<span class="label">Address:</span>
+						<span class="value" data-bind="text: sAddress"></span>
+					</div>
+					<div class="row">
+						<span class="label">Language:</span>
+						<span class="value" data-bind="text: sLanguage"></span>
+					</div>
+					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_PRODUCTS_LIST'}"></h2>
+					<div class="row">
+						<span class="label">Product name:</span>
+						<span class="value" data-bind="text: sProductTitle, visible: !!sProductTitle"></span>
+						<select class="value input" data-bind="value: iProductId, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !sProductTitle"></select>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="buttons">
