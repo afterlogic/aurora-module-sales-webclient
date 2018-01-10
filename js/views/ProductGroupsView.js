@@ -105,12 +105,22 @@ CProductGroupsView.prototype.onGetProductGroupsResponse = function (oResponse)
 	{
 		var
 			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
-					var oItem = new CProductGroupsListItemModel();
-					oItem.parse(oItemData);
-					return oItem;
-				}));
+			iSelectedId = this.selectedObject() ? this.selectedObject().id : 0,
+			oSelectedObj = null,
+			aNewCollection = oResult.ProductGroups ? _.compact(_.map(oResult.ProductGroups, function (oItemData) {
+				var oItem = new CProductGroupsListItemModel();
+				oItem.parse(oItemData);
+				if (oItem.id === iSelectedId)
+				{
+					oSelectedObj = oItem;
+					oSelectedObj.selected(true);
+				}
+				return oItem;
+			})) : []
+		;
 		this.objectList(aNewCollection);
+		this.selectedObject(oSelectedObj);
+		this.oSelector.itemSelected(oSelectedObj);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
 	}
@@ -181,7 +191,6 @@ CProductGroupsView.prototype.onGetProductGroupUpdateResponse = function (oRespon
 	if (oResponse.Result)
 	{
 		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
-		this.selectedObject(null);
 	}
 	else
 	{

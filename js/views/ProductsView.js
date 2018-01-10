@@ -116,13 +116,22 @@ CProductsView.prototype.onGetProductsResponse = function (oResponse)
 	{
 		var
 			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = _.compact(_.map(oResult.Products, function (oItemData) {
-					var oItem = new CProductsListItemModel();
-					oItem.parse(oItemData);
-					return oItem;
-				}))
+			iSelectedId = this.selectedObject() ? this.selectedObject().id : 0,
+			oSelectedObj = null,
+			aNewCollection = oResult.Products ? _.compact(_.map(oResult.Products, function (oItemData) {
+				var oItem = new CProductsListItemModel();
+				oItem.parse(oItemData);
+				if (oItem.id === iSelectedId)
+				{
+					oSelectedObj = oItem;
+					oSelectedObj.selected(true);
+				}
+				return oItem;
+			})) : []
 		;
 		this.objectList(aNewCollection);
+		this.selectedObject(oSelectedObj);
+		this.oSelector.itemSelected(oSelectedObj);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
 	}

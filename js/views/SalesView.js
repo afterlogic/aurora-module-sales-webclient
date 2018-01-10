@@ -124,13 +124,22 @@ CSalesView.prototype.onGetSalesResponse = function (oResponse)
 	{
 		var
 			iItemsCount = Types.pInt(oResult.ItemsCount),
-			aNewCollection = Types.isNonEmptyArray(oResult.Sales) ? _.compact(_.map(oResult.Sales, function (oItemData) {
-					var oItem = new CSalesListItemModel();
-					oItem.parse(oItemData, oResult.Customers, oResult.Products);
-					return oItem;
-				})) : []
+			iSelectedId = this.selectedObject() ? this.selectedObject().id : 0,
+			oSelectedObj = null,
+			aNewCollection = oResult.Sales ? _.compact(_.map(oResult.Sales, function (oItemData) {
+				var oItem = new CSalesListItemModel();
+				oItem.parse(oItemData, oResult.Customers, oResult.Products);
+				if (oItem.id === iSelectedId)
+				{
+					oSelectedObj = oItem;
+					oSelectedObj.selected(true);
+				}
+				return oItem;
+			})) : []
 		;
 		this.objectList(aNewCollection);
+		this.selectedObject(oSelectedObj);
+		this.oSelector.itemSelected(oSelectedObj);
 		this.objectsCount(iItemsCount);
 		this.oPageSwitcher.setCount(iItemsCount);
 	}
