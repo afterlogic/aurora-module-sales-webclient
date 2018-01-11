@@ -5,8 +5,8 @@ var
 	moment = require('moment'),
 	
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-	
-	Settings = require('modules/%ModuleName%/js/Settings.js')
+	Settings = require('modules/%ModuleName%/js/Settings.js'),
+	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js')
 ;
 
 /**
@@ -43,9 +43,7 @@ function CSalesListItemModel()
 	this.iPlatformType = 0;
 
 	// Product section
-	this.iProductCode = 0;
-	this.iProductId = 0;
-	this.sProductTitle = '';
+	this.oProduct = null;
 
 	// Customer section
 	this.iCustomerId = 0;
@@ -105,11 +103,10 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 		this.sAddress  = Types.pString(oCustomer[sModuleName + '::Address'], this.sLanguage);
 	}
 	
+	this.oProduct = new CProductsListItemModel();
 	if (oProduct !== null)
 	{
-		this.iProductCode = Types.pInt(oProduct[sModuleName + '::ProductCode'], this.iProductCode);
-		this.iProductId = Types.pInt(oProduct['EntityId'], this.iProductId);
-		this.sProductTitle = Types.pString(oProduct['Title'], this.sProductTitle);
+		this.oProduct.parse(oProduct);
 	}
 };
 

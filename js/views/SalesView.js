@@ -89,7 +89,7 @@ CSalesView.prototype.onShow = function ()
 {
 	this.requestSalesList();
 	this.getProductsList  = ko.computed(function () {
-		if(this.selectedObject() !== null && this.selectedObject().sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
+		if (this.selectedObject() && this.selectedObject().oProduct.sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
 		{
 			return _.filter(this.productsFullList(), _.bind(function(oProduct) {
 				return oProduct.sPayPalItem === this.selectedObject().sPayPalItem || oProduct.id === 0;
@@ -496,7 +496,7 @@ CSalesView.prototype.getPaymentSystem = function ()
 {
 	var sResult = '';
 
-	if(this.selectedObject() !== null)
+	if (this.selectedObject() !== null)
 	{
 		switch (this.selectedObject().iPaymentSystem)
 		{
