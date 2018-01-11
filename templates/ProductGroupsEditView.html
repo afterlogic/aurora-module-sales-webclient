@@ -2,19 +2,19 @@
 	<div class="middle_bar" data-bind="with: selectedObject">
 		<div class="fields clearfix sales-edit-fields">
 			<div class="row">
-				<span class="label" data-bind="text: 'Product group name:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_GROUP_EDIT_NAME'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Homepage:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_GROUP_EDIT_HOMEPAGE'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Product code:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_GROUP_EDIT_CODE'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sProductCode, valueUpdate: 'afterkeydown', onEnter: $parent.saveProductGroup" />
 				</span>

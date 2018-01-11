@@ -5,43 +5,43 @@
 				<h2>New Product</h2>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Product name:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_NAME'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sProductTitle, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Product group:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_GROUP'}"></span>
 				<span class="value">
 					<select class="value input" data-bind="value: sProductGroupUUID, options: $parent.productGroupsFullList, optionsText: 'sTitle', optionsValue: 'UUID'"></select>
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'ShareIt product ID:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_SHAREIT_ID'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'CRM product ID:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_CRM_ID'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sCrmProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'PayPal Item:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PAYPAL_ITEM'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sPayPalItem, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Product price:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PRICE'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: iProductPrice, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>
 			</div>
 			<div class="row">
-				<span class="label" data-bind="text: 'Homepage:'"></span>
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_HOMEPAGE'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sHomepage, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />
 				</span>

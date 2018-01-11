@@ -28,6 +28,7 @@ function CMainView()
 	
 	this.oSalesView.productsFullList = this.oProductsView.productsFullList;
 	this.oProductsView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
+	this.oSalesView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
 	
 	/**
 	 * Text for displaying in browser title when sales screen is shown.

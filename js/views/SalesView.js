@@ -514,4 +514,24 @@ CSalesView.prototype.getPaymentSystem = function ()
 	return sResult;
 };
 
+CSalesView.prototype.getProductGroup = function ()
+{
+	var
+		sResult = '',
+		oGroup = null
+	;
+
+	if (this.selectedObject() && this.selectedObject().oProduct && this.selectedObject().oProduct.sProductGroupUUID)
+	{
+		oGroup = _.find(this.productGroupsFullList(), _.bind(function(oProductsGroup) {
+			return oProductsGroup.UUID === this.selectedObject().oProduct.sProductGroupUUID;
+		}, this));
+		if (oGroup && oGroup.sTitle)
+		{
+			sResult = oGroup.sTitle;
+		}
+	}
+	return sResult;
+};
+
 module.exports = new CSalesView();

@@ -127,13 +127,37 @@
 					</div>
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
 					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT_UUID'}"></span>
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_UUID'}"></span>
 						<span class="value" data-bind="text: oProduct.UUID, visible: !!oProduct.UUID"></span>
 					</div>
 					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT_NAME'}"></span>
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_NAME'}"></span>
 						<span class="value" data-bind="text: oProduct.sProductTitle, visible: !!oProduct.sProductTitle"></span>
 						<select class="value input" data-bind="value: oProduct.Id, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !oProduct.sProductTitle"></select>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_GROUP'}"></span>
+						<span class="value" data-bind="text: $parent.getProductGroup(), visible: !!oProduct.sProductGroupUUID"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_SHAREIT_ID'}"></span>
+						<span class="value" data-bind="text: oProduct.sShareItProductId, visible: !!oProduct.sShareItProductId"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_CRM_ID'}"></span>
+						<span class="value" data-bind="text: oProduct.sCrmProductId, visible: !!oProduct.sCrmProductId"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PAYPAL_ITEM'}"></span>
+						<span class="value" data-bind="text: oProduct.sPayPalItem, visible: !!oProduct.sPayPalItem"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PRICE'}"></span>
+						<span class="value" data-bind="text: oProduct.iProductPrice, visible: !!oProduct.iProductPrice"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_HOMEPAGE'}"></span>
+						<span class="value" data-bind="text: oProduct.sHomepage, visible: !!oProduct.sHomepage"></span>
 					</div>
 				</div>
 			</div>
