@@ -24,6 +24,15 @@ Enums.ChartRangeTypes = {
 	'Year': 'year'
 };
 
+/**
+ * @enum {number}
+ */
+Enums.PaymentSystemTypes = {
+	'ShareIt': 1,
+	'PayPal': 2,
+	'Download': 3
+};
+
 if (typeof window.Enums === 'undefined')
 {
 	window.Enums = {};

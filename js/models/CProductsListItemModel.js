@@ -12,7 +12,7 @@ function CProductsListItemModel()
 {	
 	this.id = '';
 	this.UUID = '';
-	
+
 	this.sProductGroupUUID = '';
 	this.sProductTitle = '';
 	this.sShareItProductId = '';

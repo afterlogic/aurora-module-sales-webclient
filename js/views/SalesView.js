@@ -492,4 +492,26 @@ CSalesView.prototype.getBigButtonText = function ()
 	return this.isSalesUpdating() ? TextUtils.i18n('COREWEBCLIENT/INFO_LOADING') : TextUtils.i18n('%MODULENAME%/ACTION_PARSE_SALES');
 };
 
+CSalesView.prototype.getPaymentSystem = function ()
+{
+	var sResult = '';
+
+	if(this.selectedObject() !== null)
+	{
+		switch (this.selectedObject().iPaymentSystem)
+		{
+			case Enums.PaymentSystemTypes.ShareIt:
+				sResult = TextUtils.i18n('%MODULENAME%/INFO_PAYMENT_SYSTEM_SHAREIT');
+				break;
+			case Enums.PaymentSystemTypes.PayPal:
+				sResult = TextUtils.i18n('%MODULENAME%/INFO_PAYMENT_SYSTEM_PAYPAL');
+				break;
+			case Enums.PaymentSystemTypes.Download:
+				sResult = TextUtils.i18n('%MODULENAME%/INFO_PAYMENT_SYSTEM_DOWNLOAD');
+				break;
+		}
+	}
+	return sResult;
+};
+
 module.exports = new CSalesView();
