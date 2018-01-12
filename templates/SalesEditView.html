@@ -1,7 +1,7 @@
-<div class="sale-edit-content" data-bind="visible: isVisible">
-	<div class="middle_bar" data-bind="with: selectedObject">
-		<div class="fields clearfix">
-			<div class="panel_center" data-bind="customScrollbar: {x: false}">
+<div class="middle_bar" data-bind="with: selectedObject">
+	<div class="panel_center" style="overflow: hidden;" >
+		<div class="fields" style="height: 100%; box-sizing: border-box; padding-right: 0px;">
+			<div data-bind="customScrollbar: {x: false}">
 				<div class="scroll-inner">
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SALE'}"></h2>
 					<div class="row">
@@ -219,13 +219,13 @@
 				</div>
 			</div>
 		</div>
-		<div class="buttons">
-			<span class="button" data-bind="click: $parent.saveSale, visible: !$parent.isUpdating()">
-				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
-			</span>
-			<span class="button" data-bind="visible: $parent.isUpdating()">
-				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
-			</span>
-		</div>
+	</div>
+	<div class="buttons">
+		<span class="button" data-bind="click: $parent.saveSale, visible: !$parent.isUpdating()">
+			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
+		</span>
+		<span class="button" data-bind="visible: $parent.isUpdating()">
+			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
+		</span>
 	</div>
 </div>
