@@ -46,12 +46,28 @@ function CSalesListItemModel()
 	this.oProduct = null;
 
 	// Customer section
-	this.iCustomerId = 0;
-	this.sEmail = '';
-	this.sCustomerRegName = '';
-	this.sPhone = '';
+	this.iCustomerId = 0;	
+	this.sTitle = '';
+	this.sDescription = '';
+	this.iStatus = 0;
 	this.sLanguage = '';
+	this.bNotify = true;
+	this.bGotGreeting = true;
+	this.bGotGreeting2 = true;
+	this.bGotSurvey = true;
+	this.bIsSale = true;
+	// Contact section
+	this.sFullName = '';
 	this.sAddress = '';
+	this.sPhone = '';
+	this.sEmail = '';
+	this.sFacebook = '';
+	this.sLinkedIn = '';
+	this.sInstagram = '';
+	this.sFax = '';
+	this.sSalutation = '';
+	this.sLastName = '';
+	this.sFirstName = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -95,12 +111,29 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 
 	if (oCustomer !== null)
 	{
+		// TODO: store Customer & Contact as objects
 		this.iCustomerId = Types.pInt(oCustomer['EntityId'], this.iCustomerId);
-		this.sEmail = Types.pString(oCustomer[sModuleName + '::Email'], this.sEmail);
-		this.sCustomerRegName = Types.pString(oCustomer[sModuleName + '::FullName'], this.sCustomerRegName);
-		this.sPhone = Types.pString(oCustomer[sModuleName + '::Phone'], this.sPhone);
+		this.sTitle = Types.pString(oCustomer['Title'], this.sTitle);
+		this.sDescription = Types.pString(oCustomer['Description'], this.sDescription);
+		this.iStatus = Types.pInt(oCustomer['Status'], this.iStatus);
 		this.sLanguage = Types.pString(oCustomer[sModuleName + '::Language'], this.sLanguage);
+		this.bNotify = Types.pBool(oData['Notify'], this.bNotify);
+		this.bGotGreeting = Types.pBool(oData['GotGreeting'], this.bGotGreeting);
+		this.bGotGreeting2 = Types.pBool(oData['GotGreeting2'], this.bGotGreeting2);
+		this.bGotSurvey = Types.pBool(oData['GotSurvey'], this.bGotSurvey);
+		this.bIsSale = Types.pBool(oData['IsSale'], this.bIsSale);
+		// Contact section
+		this.sFullName = Types.pString(oCustomer[sModuleName + '::FullName'], this.sFullName);
 		this.sAddress  = Types.pString(oCustomer[sModuleName + '::Address'], this.sLanguage);
+		this.sPhone = Types.pString(oCustomer[sModuleName + '::Phone'], this.sPhone);
+		this.sEmail = Types.pString(oCustomer[sModuleName + '::Email'], this.sEmail);
+		this.sFacebook = Types.pString(oCustomer[sModuleName + '::Facebook'], this.sFacebook);
+		this.sLinkedIn = Types.pString(oCustomer[sModuleName + '::LinkedIn'], this.sLinkedIn);
+		this.sInstagram = Types.pString(oCustomer[sModuleName + '::Instagram'], this.sInstagram);
+		this.sFax = Types.pString(oCustomer[sModuleName + '::Fax'], this.sFax);
+		this.sSalutation = Types.pString(oCustomer[sModuleName + '::Salutation'], this.sSalutation);
+		this.sLastName = Types.pString(oCustomer[sModuleName + '::LastName'], this.sLastName);
+		this.sFirstName = Types.pString(oCustomer[sModuleName + '::FirstName'], this.sFirstName);
 	}
 	
 	this.oProduct = new CProductsListItemModel();
