@@ -372,7 +372,7 @@ CSalesView.prototype.saveSale = function ()
 			'UpdateSale', 
 			{
 				'SaleId': this.selectedObject().id,
-				'ProductIdOrUUID': this.selectedObject().iProductId
+				'ProductIdOrUUID': this.selectedObject().oProduct.id
 			},
 			this.onGetSaleUpdateResponse,
 			this
