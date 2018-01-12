@@ -5,6 +5,14 @@
 			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInputValue, onEnter: salesSearchSubmit, hasfocus: searchFocused" />
 		</span>
 	</span>
+	<span class="toolbar">
+		<span class="content">
+			<span class="item checkstate" data-bind="command: refreshCommand, customTooltip: '%MODULENAME%/ACTION_REFRESH_SALES',
+					checkstate: {'activeClass': 'process', 'state': refreshIndicator(), 'duration': 800}">
+				<span class="icon"></span>
+				<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REFRESH_SALES'}"></span>
+		</span>
+	</span>
 </div>
 
 <div class="chart-ctrl" data-bind="visible: isVisible">

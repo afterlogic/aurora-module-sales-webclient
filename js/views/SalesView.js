@@ -7,6 +7,7 @@ var
 	moment = require('moment'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
 	
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
@@ -74,6 +75,15 @@ function CSalesView()
 	this.currentRange = ko.observable();
 	this.chartCont = ko.observable(null);
 	this.rangeType = ko.observable(Enums.ChartRangeTypes.Month);
+	
+	this.refreshCommand = Utils.createCommand(this, function () {
+		this.requestSalesList();
+		this.changeRange(this.rangeType());
+	});
+	this.refreshIndicator = ko.observable(true).extend({ throttle: 50 });
+	ko.computed(function () {
+		this.refreshIndicator(this.listLoading() || this.chartListLoading());
+	}, this);
 }
 
 _.extendOwn(CSalesView.prototype, CAbstractScreenView.prototype);
@@ -408,7 +418,7 @@ CSalesView.prototype.onGetSaleUpdateResponse = function (oResponse)
 	this.requestSalesList();
 };
 
-CSalesView.prototype.ParseSales = function ()
+CSalesView.prototype.parseSales = function ()
 {
 	this.isSalesUpdating(true);
 	$.ajax({
@@ -428,7 +438,7 @@ CSalesView.prototype.ParseSales = function ()
 			}
 			if (this.isParsePaypalDone())
 			{
-				this.ParseSalesDone();
+				this.parseSalesDone();
 			}
 		}, this),
 		error: _.bind(function() {
@@ -438,7 +448,7 @@ CSalesView.prototype.ParseSales = function ()
 			}
 			else
 			{
-				this.ParseSalesDone();
+				this.parseSalesDone();
 			}
 			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
 		}, this),
@@ -461,7 +471,7 @@ CSalesView.prototype.ParseSales = function ()
 			}
 			if (this.isParseShareitDone())
 			{
-				this.ParseSalesDone();
+				this.parseSalesDone();
 			}
 		}, this),
 		error: _.bind(function() {
@@ -471,7 +481,7 @@ CSalesView.prototype.ParseSales = function ()
 			}
 			else
 			{
-				this.ParseSalesDone();
+				this.parseSalesDone();
 			}
 			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
 		}, this),
@@ -479,7 +489,7 @@ CSalesView.prototype.ParseSales = function ()
 	});
 };
 
-CSalesView.prototype.ParseSalesDone = function ()
+CSalesView.prototype.parseSalesDone = function ()
 {
 	this.isParsePaypalDone(false);
 	this.isParseShareitDone(false);

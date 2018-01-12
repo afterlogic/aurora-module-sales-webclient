@@ -61,7 +61,7 @@ function CMainView()
 				this.oProductGroupsView.oSelector.itemSelected(null);
 				break;
 			case Enums.SalesObjectsTypes.Sales:
-				this.oSalesView.ParseSales();
+				this.oSalesView.parseSales();
 				break;
 		}
 	});

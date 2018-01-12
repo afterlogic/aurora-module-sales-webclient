@@ -5,6 +5,7 @@ var
 	ko = require('knockout'),
 	
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
+	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
 	
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
@@ -63,6 +64,14 @@ function CContactsView()
 	this.selectedObject.subscribe(_.bind(function () {
 		this.isUpdating(false);
 	}, this));
+	
+	this.refreshCommand = Utils.createCommand(this, function () {
+		this.requestContactsList();
+	});
+	this.refreshIndicator = ko.observable(true).extend({ throttle: 50 });
+	ko.computed(function () {
+		this.refreshIndicator(this.listLoading());
+	}, this);
 }
 
 _.extendOwn(CContactsView.prototype, CAbstractScreenView.prototype);

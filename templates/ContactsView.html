@@ -5,6 +5,14 @@
 			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInputValue, onEnter:  contactsSearchSubmit, hasfocus: searchFocused" />
 		</span>
 	</span>
+	<span class="toolbar">
+		<span class="content">
+			<span class="item checkstate" data-bind="command: refreshCommand, customTooltip: '%MODULENAME%/ACTION_REFRESH_CONTACTS',
+					checkstate: {'activeClass': 'process', 'state': refreshIndicator(), 'duration': 800}">
+				<span class="icon"></span>
+				<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REFRESH_CONTACTS'}"></span>
+		</span>
+	</span>
 </div>
 <div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isVisible">
 	<div class=" contacts_list_scroll scroll-inner">
