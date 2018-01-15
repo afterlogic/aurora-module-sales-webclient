@@ -109,6 +109,12 @@ CSalesView.prototype.onShow = function ()
 	}, this);
 };
 
+CSalesView.prototype.requestSearchSalesList = function (sSearch)
+{
+	this.searchInputValue(sSearch);
+	this.requestSalesList();
+};
+
 CSalesView.prototype.requestSalesList = function ()
 {
 	this.listLoading(true);

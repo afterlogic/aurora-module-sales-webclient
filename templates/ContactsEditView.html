@@ -1,59 +1,64 @@
-<div data-bind="visible: isVisible">
-	<div class="middle_bar" data-bind="with: selectedObject">
-		<div class="fields clearfix sales-edit-fields">
-			<div class="row">
-				<span class="label">Contact name:</span>
-				<input class="input" type="text" data-bind="value: sFullName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Email:</span>
-				<input class="input" type="text" data-bind="value: sEmail, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Address:</span>
-				<input class="input" type="text" data-bind="value: sAddress, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Phone:</span>
-				<input class="input" type="text" data-bind="value: sPhone, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Fax:</span>
-				<input class="input" type="text" data-bind="value: sFax, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Facebook:</span>
-				<input class="input" type="text" data-bind="value: sFacebook, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">LinkedIn:</span>
-				<input class="input" type="text" data-bind="value: sLinkedIn, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Instagram:</span>
-				<input class="input" type="text" data-bind="value: sInstagram, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Salutation:</span>
-				<input class="input" type="text" data-bind="value: sSalutation, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">Last name:</span>
-				<input class="input" type="text" data-bind="value: sLastName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
-			</div>
-			<div class="row">
-				<span class="label">First name:</span>
-				<input class="input" type="text" data-bind="value: sFirstName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+<div class="middle_bar" data-bind="visible: isVisible, with: selectedObject">
+	<div class="panel_center" style="overflow: hidden;">
+		<div class="fields clearfix sales-edit-fields" style="height: 100%; box-sizing: border-box; padding-right: 0px;">
+			<div data-bind="customScrollbar: {x: false}">
+				<div class="scroll-inner">
+					<div class="row">
+						<span class="label">Contact name:</span>
+						<input class="input" type="text" data-bind="value: sFullName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Email:</span>
+						<input class="input" type="text" data-bind="value: sEmail, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Address:</span>
+						<input class="input" type="text" data-bind="value: sAddress, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Phone:</span>
+						<input class="input" type="text" data-bind="value: sPhone, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Fax:</span>
+						<input class="input" type="text" data-bind="value: sFax, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Facebook:</span>
+						<input class="input" type="text" data-bind="value: sFacebook, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">LinkedIn:</span>
+						<input class="input" type="text" data-bind="value: sLinkedIn, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Instagram:</span>
+						<input class="input" type="text" data-bind="value: sInstagram, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Salutation:</span>
+						<input class="input" type="text" data-bind="value: sSalutation, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">Last name:</span>
+						<input class="input" type="text" data-bind="value: sLastName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+					<div class="row">
+						<span class="label">First name:</span>
+						<input class="input" type="text" data-bind="value: sFirstName, valueUpdate: 'afterkeydown', onEnter: $parent.saveContact" />
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="buttons">
-			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeContactBound"></span>
-			<span class="button" data-bind="click: $parent.saveContactBound, visible: !$parent.isUpdating()">
-				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
-			</span>
-			<span class="button" data-bind="visible: $parent.isUpdating()">
-				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
-			</span>
-		</div>
+	</div>
+	<div class="buttons">
+		<span class="link sales-remove-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_SALES_WITH_CONTACT'}, click: $root.showSalesWithContactBound"></span>
+		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeContactBound"></span>
+		<span class="button" data-bind="click: $parent.saveContactBound, visible: !$parent.isUpdating()">
+			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
+		</span>
+		<span class="button" data-bind="visible: $parent.isUpdating()">
+			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE_IN_PROGRESS'}"></span>
+		</span>
 	</div>
 </div>

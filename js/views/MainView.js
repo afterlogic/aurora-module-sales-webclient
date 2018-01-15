@@ -84,12 +84,23 @@ function CMainView()
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_CONTACTS_LIST')
 		}
 	];
+	
+	this.showSalesWithContactBound = _.bind(this.showSalesWithContact, this);
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
 
 CMainView.prototype.ViewTemplate = '%ModuleName%_MainView';
 CMainView.prototype.ViewConstructorName = 'CMainView';
+
+CMainView.prototype.showSalesWithContact = function (oContact)
+{
+	if (_.isFunction(this.oSalesView.requestSearchSalesList))
+	{
+		this.showObjects(Enums.SalesObjectsTypes.Sales);
+		this.oSalesView.requestSearchSalesList(oContact.sEmail || oContact.sFullName || oContact.sLastName || oContact.sFirstName);
+	}
+};
 
 CMainView.prototype.showObjects = function (sType)
 {
