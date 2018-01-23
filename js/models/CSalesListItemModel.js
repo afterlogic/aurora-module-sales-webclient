@@ -31,6 +31,7 @@ function CSalesListItemModel()
 	this.iParentSaleId = 0;
 	this.iPaymentSystem = 0;
 	this.iNumberOfLicenses = 0;
+	this.sMessageSubject = '';
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -98,6 +99,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iParentSaleId = Types.pInt(oData[sModuleName + '::ParentSaleId'], this.iParentSaleId);
 	this.iPaymentSystem = Types.pInt(oData[sModuleName + '::PaymentSystem'], this.iPaymentSystem);
 	this.iNumberOfLicenses = Types.pInt(oData[sModuleName + '::NumberOfLicenses'], this.iNumberOfLicenses);
+	this.sMessageSubject = Types.pString(oData[sModuleName + '::MessageSubject'], this.sMessageSubject);
 	// Download section
 	this.iDownloadId = Types.pInt(oData[sModuleName + '::DownloadId'], this.iDownloadId);
 	this.sReferer = Types.pString(oData[sModuleName + '::Referer'], this.sReferer);
