@@ -69,8 +69,6 @@ function CSalesView()
 		this.isUpdating(false);
 	}, this));
 	this.isSalesUpdating = ko.observable(false);
-	this.isParsePaypalDone = ko.observable(false);
-	this.isParseShareitDone = ko.observable(false);
 	
 	this.chartListLoading = ko.observable(false);
 	this.currentRange = ko.observable();
@@ -429,68 +427,24 @@ CSalesView.prototype.parseSales = function ()
 {
 	this.isSalesUpdating(true);
 	$.ajax({
-		url: '/modules/Sales/Crons/parse_shareit.php',
+		url: '/modules/Sales/Crons/parser.php',
 		type: 'POST',
 		async: true,
 		dataType: 'json',
 		success: _.bind(function (data) {
-			this.isParseShareitDone(true); 
 			if (data.result === true)
 			{
 				Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
 			}
 			else
 			{
-				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
+				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE'));
 			}
-			if (this.isParsePaypalDone())
-			{
-				this.parseSalesDone();
-			}
+			this.parseSalesDone();
 		}, this),
 		error: _.bind(function() {
-			if (!this.isParsePaypalDone())
-			{
-				this.isParseShareitDone(true); 
-			}
-			else
-			{
-				this.parseSalesDone();
-			}
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_SHAREIT'));
-		}, this),
-		timeout: 50000
-	});
-	$.ajax({
-		url: '/modules/Sales/Crons/parse_paypal.php',
-		type: 'POST',
-		async: true,
-		dataType: 'json',
-		success: _.bind(function (data) {
-			this.isParsePaypalDone(true);
-			if (data.result === true)
-			{
-				Screens.showReport(TextUtils.i18n('%MODULENAME%/ACTION_PARSE_DONE'));
-			}
-			else
-			{
-				Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
-			}
-			if (this.isParseShareitDone())
-			{
-				this.parseSalesDone();
-			}
-		}, this),
-		error: _.bind(function() {
-			if (!this.isParseShareitDone())
-			{
-				this.isParsePaypalDone(true); 
-			}
-			else
-			{
-				this.parseSalesDone();
-			}
-			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE_PAYPAL'));
+			this.parseSalesDone();
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_PARSE'));
 		}, this),
 		timeout: 50000
 	});
@@ -498,8 +452,6 @@ CSalesView.prototype.parseSales = function ()
 
 CSalesView.prototype.parseSalesDone = function ()
 {
-	this.isParsePaypalDone(false);
-	this.isParseShareitDone(false);
 	this.isSalesUpdating(false);
 	this.requestSalesList();
 };
