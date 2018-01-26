@@ -225,6 +225,9 @@
 		</div>
 	</div>
 	<div class="buttons">
+		<span class="button" data-bind="click: $parent.downloadSaleEml">
+			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DOWNLOAD_FILE'}"></span>
+		</span>
 		<span class="button" data-bind="click: $parent.saveSale, visible: !$parent.isUpdating()">
 			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 		</span>

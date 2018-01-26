@@ -69,6 +69,7 @@ function CSalesListItemModel()
 	this.sSalutation = '';
 	this.sLastName = '';
 	this.sFirstName = '';
+	this.dowloadUrl = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -110,6 +111,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iReferrerPage = Types.pInt(oData[sModuleName + '::ReferrerPage'], this.iReferrerPage);
 	this.bIsUpgrade = Types.pBool(oData[sModuleName + '::IsUpgrade'], this.bIsUpgrade);
 	this.iPlatformType = Types.pInt(oData[sModuleName + '::PlatformType'], this.iPlatformType);
+	this.dowloadUrl = '?download-sale-eml/' + this.UUID;
 
 	if (oCustomer !== null)
 	{

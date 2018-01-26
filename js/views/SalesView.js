@@ -5,23 +5,24 @@ var
 	$ = require('jquery'),
 	ko = require('knockout'),
 	moment = require('moment'),
-	
+
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
-	
+	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
+
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
-	
+
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
-	
+
 	Chart = require('modules/%ModuleName%/js/vendor/chart.js'),
 	ModuleErrors = require('%PathToCoreWebclientModule%/js/ModuleErrors.js'),
-	
+
 	Enums = window.Enums
 ;
 
@@ -548,6 +549,14 @@ CSalesView.prototype.getProductGroup = function ()
 		}
 	}
 	return sResult;
+};
+
+CSalesView.prototype.downloadSaleEml = function ()
+{
+	if (this.dowloadUrl && this.dowloadUrl.length > 0 && this.dowloadUrl !== '#')
+	{
+		UrlUtils.downloadByUrl(this.dowloadUrl);
+	}
 };
 
 module.exports = new CSalesView();
