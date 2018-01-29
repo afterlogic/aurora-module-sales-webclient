@@ -32,6 +32,7 @@ function CSalesListItemModel()
 	this.iPaymentSystem = 0;
 	this.iNumberOfLicenses = 0;
 	this.sMessageSubject = '';
+	this.dowloadUrl = '';
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -69,7 +70,6 @@ function CSalesListItemModel()
 	this.sSalutation = '';
 	this.sLastName = '';
 	this.sFirstName = '';
-	this.dowloadUrl = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);

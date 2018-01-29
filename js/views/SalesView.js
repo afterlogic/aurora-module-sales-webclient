@@ -16,6 +16,8 @@ var
 	CPageSwitcherView = require('%PathToCoreWebclientModule%/js/views/CPageSwitcherView.js'),
 	Screens = require('%PathToCoreWebclientModule%/js/Screens.js'),
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+	Popups = require('%PathToCoreWebclientModule%/js/Popups.js'),
+	ConfirmPopup = require('%PathToCoreWebclientModule%/js/popups/ConfirmPopup.js'),
 
 	CSalesListItemModel = require('modules/%ModuleName%/js/models/CSalesListItemModel.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
@@ -83,6 +85,7 @@ function CSalesView()
 	ko.computed(function () {
 		this.refreshIndicator(this.listLoading() || this.chartListLoading());
 	}, this);
+	this.removeSaleBound = _.bind(this.removeSale, this);
 }
 
 _.extendOwn(CSalesView.prototype, CAbstractScreenView.prototype);
@@ -509,6 +512,53 @@ CSalesView.prototype.downloadSaleEml = function ()
 	{
 		UrlUtils.downloadByUrl(this.dowloadUrl);
 	}
+};
+
+CSalesView.prototype.removeSale = function (oSale)
+{
+	if (oSale.UUID)
+	{
+		Popups.showPopup(ConfirmPopup, [TextUtils.i18n('%MODULENAME%/CONFIRM_REMOVE_SALE'),  _.bind(function(bConfirm) {
+			if (bConfirm)
+			{
+				Ajax.send(
+					'Sales',
+					'DeleteSale', 
+					{
+						'UUID': oSale.UUID
+					},
+					this.onDeleteSaleResponse,
+					this
+				);
+			}
+		}, this), oSale.sMessageSubject]);
+	}
+};
+
+CSalesView.prototype.onDeleteSaleResponse = function (oResponse)
+{
+	var
+		oResult = oResponse.Result,
+		sMessage = ''
+	;
+
+	if (oResult)
+	{
+		Screens.showReport(TextUtils.i18n('%MODULENAME%/REPORT_DATA_UPDATE_SUCCESS'));
+	}
+	else
+	{
+		sMessage = ModuleErrors.getErrorMessage(oResponse);
+		if (sMessage)
+		{
+			Screens.showError(sMessage);
+		}
+		else
+		{
+			Screens.showError(TextUtils.i18n('%MODULENAME%/ERROR_INVALID_DATA_UPDATE'));
+		}
+	}
+	this.requestSalesList();
 };
 
 module.exports = new CSalesView();
