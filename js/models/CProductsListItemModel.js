@@ -21,6 +21,7 @@ function CProductsListItemModel()
 	this.sPayPalItem = '';
 	this.iProductPrice = 0;
 	this.sHomepage = '';
+	this.sProductGroupTitle = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
@@ -46,6 +47,7 @@ CProductsListItemModel.prototype.parse = function (oData)
 	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);
 	this.iProductPrice = Types.pInt(oData['Price']);
 	this.sHomepage = Types.pString(oData['Homepage']);
+	this.sProductGroupTitle = Types.pString(oData['ProductGroupTitle'], this.sProductGroupTitle);
 };
 
 module.exports = CProductsListItemModel;

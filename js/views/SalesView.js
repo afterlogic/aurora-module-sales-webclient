@@ -508,9 +508,9 @@ CSalesView.prototype.getProductGroup = function ()
 
 CSalesView.prototype.downloadSaleEml = function ()
 {
-	if (this.dowloadUrl && this.dowloadUrl.length > 0 && this.dowloadUrl !== '#')
+	if (this.sDowloadUrl && this.sDowloadUrl.length > 0 && this.sDowloadUrl !== '#')
 	{
-		UrlUtils.downloadByUrl(this.dowloadUrl);
+		UrlUtils.downloadByUrl(this.sDowloadUrl);
 	}
 };
 

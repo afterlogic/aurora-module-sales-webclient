@@ -32,7 +32,7 @@ function CSalesListItemModel()
 	this.iPaymentSystem = 0;
 	this.iNumberOfLicenses = 0;
 	this.sMessageSubject = '';
-	this.dowloadUrl = '';
+	this.sDowloadUrl = '';
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -101,6 +101,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iPaymentSystem = Types.pInt(oData[sModuleName + '::PaymentSystem'], this.iPaymentSystem);
 	this.iNumberOfLicenses = Types.pInt(oData[sModuleName + '::NumberOfLicenses'], this.iNumberOfLicenses);
 	this.sMessageSubject = Types.pString(oData[sModuleName + '::MessageSubject'], this.sMessageSubject);
+	this.sDowloadUrl = '?download-sale-eml/' + this.UUID;
 	// Download section
 	this.iDownloadId = Types.pInt(oData[sModuleName + '::DownloadId'], this.iDownloadId);
 	this.sReferer = Types.pString(oData[sModuleName + '::Referer'], this.sReferer);
@@ -111,7 +112,6 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iReferrerPage = Types.pInt(oData[sModuleName + '::ReferrerPage'], this.iReferrerPage);
 	this.bIsUpgrade = Types.pBool(oData[sModuleName + '::IsUpgrade'], this.bIsUpgrade);
 	this.iPlatformType = Types.pInt(oData[sModuleName + '::PlatformType'], this.iPlatformType);
-	this.dowloadUrl = '?download-sale-eml/' + this.UUID;
 
 	if (oCustomer !== null)
 	{
