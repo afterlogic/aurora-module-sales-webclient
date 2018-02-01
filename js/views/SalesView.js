@@ -43,10 +43,11 @@ function CSalesView()
 	this.selectedObject = ko.observable(null);
 	this.searchFocused = ko.observable(false);
 	this.searchInputValue = ko.observable('');
+	this.searchByProduct = ko.observable(null);
 	this.searchValue = ko.observable('');
 	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.searchValue(),
+			'SEARCH': (this.searchByProduct() !== null) ? this.searchByProduct().sProductTitle + ' | ' + this.searchByProduct().UUID: this.searchValue(),
 			'COUNT': this.objectsCount()
 		});
 	}, this);
@@ -55,7 +56,7 @@ function CSalesView()
 		_.bind(this.viewSalesItem, this)
 	);
 	this.isSearch = ko.computed(function () {
-		return this.searchValue() !== '';
+		return this.searchValue() !== '' || this.searchByProduct() !== null;
 	}, this);
 	this.currentPage = ko.observable(1);
 	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ItemsPerPage);
@@ -114,6 +115,7 @@ CSalesView.prototype.onShow = function ()
 CSalesView.prototype.requestSearchSalesList = function (sSearch)
 {
 	this.searchInputValue(sSearch);
+	this.searchByProduct(null);
 	this.requestSalesList();
 };
 
@@ -127,7 +129,8 @@ CSalesView.prototype.requestSalesList = function ()
 		{
 			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
 			'Limit': Settings.ItemsPerPage,
-			'Search': this.searchValue()
+			'Search': this.searchValue(),
+			'ProductUUID': (this.searchByProduct() !== null && this.searchByProduct().UUID) ?  this.searchByProduct().UUID : null
 		},
 		this.onGetSalesResponse,
 		this
@@ -359,12 +362,14 @@ CSalesView.prototype.initChart = function ()
 CSalesView.prototype.salesSearchSubmit = function ()
 {
 	this.oPageSwitcher.currentPage(1);
+	this.searchByProduct(null);
 	this.requestSalesList();
 };
 
 CSalesView.prototype.onClearSalesSearchClick = function ()
 {
 	// initiation empty search
+	this.searchByProduct(null);
 	this.searchInputValue('');
 	this.searchValue('');
 	this.salesSearchSubmit();

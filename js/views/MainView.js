@@ -86,6 +86,7 @@ function CMainView()
 	];
 	
 	this.showSalesWithContactBound = _.bind(this.showSalesWithContact, this);
+	this.showSalesWithProductBound = _.bind(this.showSalesWithProduct, this);
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -100,6 +101,14 @@ CMainView.prototype.showSalesWithContact = function (oContact)
 		this.showObjects(Enums.SalesObjectsTypes.Sales);
 		this.oSalesView.requestSearchSalesList(oContact.sEmail || oContact.sFullName || oContact.sLastName || oContact.sFirstName);
 	}
+};
+
+CMainView.prototype.showSalesWithProduct = function (oProduct)
+{
+	this.oSalesView.searchByProduct(oProduct);
+	this.oSalesView.searchInputValue('');
+	this.showObjects(Enums.SalesObjectsTypes.Sales);
+	this.oSalesView.requestSalesList();
 };
 
 CMainView.prototype.showObjects = function (sType)

@@ -48,6 +48,7 @@
 			</div>
 		</div>
 		<div class="buttons" data-bind="visible: !!UUID">
+			<span class="link sales-remove-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_SHOW_SALES_WITH_PRODUCT'}, click: $root.showSalesWithProductBound"></span>
 			<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeProductBound"></span>
 			<span class="button" data-bind="click: $parent.saveProduct, visible: !$parent.isUpdating()">
 				<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
