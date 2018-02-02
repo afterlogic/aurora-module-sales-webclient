@@ -10,6 +10,7 @@ var
  */
 Enums.SalesObjectsTypes = {
 	'Sales': 'sales',
+	'Downloads': 'downloads',
 	'Products': 'products',
 	'ProductGroups': 'product_groups',
 	'Contacts': 'contacts'

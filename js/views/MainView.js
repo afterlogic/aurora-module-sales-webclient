@@ -22,6 +22,7 @@ function CMainView()
 	CAbstractScreenView.call(this, '%ModuleName%');
 	
 	this.oSalesView = require('modules/%ModuleName%/js/views/SalesView.js');
+	this.oDownloadsView = require('modules/%ModuleName%/js/views/DownloadsView.js');
 	this.oProductsView = require('modules/%ModuleName%/js/views/ProductsView.js');
 	this.oProductGroupsView = require('modules/%ModuleName%/js/views/ProductGroupsView.js');
 	this.oContactsView = require('modules/%ModuleName%/js/views/ContactsView.js');
@@ -29,6 +30,8 @@ function CMainView()
 	this.oSalesView.productsFullList = this.oProductsView.productsFullList;
 	this.oProductsView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
 	this.oSalesView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
+	this.oDownloadsView.productsFullList = this.oProductsView.productsFullList;
+	this.oDownloadsView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
 	
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
@@ -70,6 +73,10 @@ function CMainView()
 		{
 			sType: Enums.SalesObjectsTypes.Sales,
 			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_SALES_LIST')
+		},
+		{
+			sType: Enums.SalesObjectsTypes.Downloads,
+			sText: TextUtils.i18n('%MODULENAME%/ACTION_SHOW_DOWNLOADS_LIST')
 		},
 		{
 			sType: Enums.SalesObjectsTypes.Products,
@@ -117,13 +124,23 @@ CMainView.prototype.showObjects = function (sType)
 	{
 		case Enums.SalesObjectsTypes.Sales:
 			this.oSalesView.show();
+			this.oDownloadsView.hide();
 			this.oProductsView.hide();
 			this.oProductGroupsView.hide();
 			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Sales);
 			break;
+		case Enums.SalesObjectsTypes.Downloads:
+			this.oSalesView.hide();
+			this.oDownloadsView.show();
+			this.oProductsView.hide();
+			this.oProductGroupsView.hide();
+			this.oContactsView.hide();
+			this.selectedType(Enums.SalesObjectsTypes.Downloads);
+			break;
 		case Enums.SalesObjectsTypes.Products:
 			this.oSalesView.hide();
+			this.oDownloadsView.hide();
 			this.oProductsView.show();
 			this.oProductGroupsView.hide();
 			this.oContactsView.hide();
@@ -131,6 +148,7 @@ CMainView.prototype.showObjects = function (sType)
 			break;
 		case Enums.SalesObjectsTypes.ProductGroups:
 			this.oSalesView.hide();
+			this.oDownloadsView.hide();
 			this.oProductGroupsView.show();
 			this.oProductsView.hide();
 			this.oContactsView.hide();
@@ -138,6 +156,7 @@ CMainView.prototype.showObjects = function (sType)
 			break;
 		case Enums.SalesObjectsTypes.Contacts:
 			this.oSalesView.hide();
+			this.oDownloadsView.hide();
 			this.oProductGroupsView.hide();
 			this.oProductsView.hide();
 			this.oContactsView.show();
@@ -152,6 +171,7 @@ CMainView.prototype.showObjects = function (sType)
 CMainView.prototype.onShow = function ()
 {
 	this.oSalesView.onShow();
+	this.oDownloadsView.onShow();
 	this.oProductsView.onShow();
 	this.oProductGroupsView.onShow();
 	this.oContactsView.onShow();
@@ -160,6 +180,7 @@ CMainView.prototype.onShow = function ()
 CMainView.prototype.onBind = function ()
 {
 	this.oSalesView.onBind();
+	this.oDownloadsView.onBind();
 	this.oProductsView.onBind();
 	this.oProductGroupsView.onBind();
 	this.oContactsView.onBind();

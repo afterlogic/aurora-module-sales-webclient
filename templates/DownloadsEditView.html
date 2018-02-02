@@ -72,6 +72,41 @@
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_NUMBER_OF_LICENSES'}"></span>
 						<span class="value" data-bind="text: iNumberOfLicenses"></span>
 					</div>
+					<span>Download section</span>
+					<div class="fields clearfix"  data-bind="visible: !!iDownloadId">
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERER'}"></span>
+							<span class="value" data-bind="text: sReferer"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_IP'}"></span>
+							<span class="value" data-bind="text: sIp"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_GAD'}"></span>
+							<span class="value" data-bind="text: sGad"></span>
+						</div>
+						<div class="row">
+							<span class="label"></span>
+							<span class="value" data-bind="text: sProductVersion"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_LICENSE_TYPE'}"></span>
+							<span class="value" data-bind="text: iLicenseType"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERRER_PAGE'}"></span>
+							<span class="value" data-bind="text: iReferrerPage"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_IS_UPGRADE'}"></span>
+							<span class="value" data-bind="text: bIsUpgrade"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PLATFORM_TYPE'}"></span>
+							<span class="value" data-bind="text: iPlatformType"></span>
+						</div>
+					</div>
 					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER'}"></h2>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_TITLE'}"></span>
@@ -190,11 +225,8 @@
 		</div>
 	</div>
 	<div class="buttons">
-		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeSaleBound"></span>
-		<span class="button" data-bind="click: $parent.downloadSaleEml">
-			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DOWNLOAD_FILE'}"></span>
-		</span>
-		<span class="button" data-bind="click: $parent.saveSale, visible: !$parent.isUpdating()">
+		<span class="link sales-remove-link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_DELETE'}, click: $parent.removeDownloadBound"></span>
+		<span class="button" data-bind="click: $parent.saveDownloadBound, visible: !$parent.isUpdating()">
 			<span data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SAVE'}"></span>
 		</span>
 		<span class="button" data-bind="visible: $parent.isUpdating()">

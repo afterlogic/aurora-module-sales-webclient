@@ -1,0 +1,68 @@
+<div class="panel_top" data-bind="visible: isVisible">
+	<span class="search_block">
+		<span class="input" data-bind="css: {'focus': searchFocused}">
+			<span class="icon search" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_SEARCH'}, click: downloadsSearchSubmit"></span>
+			<input class="field" type="text" data-bind="valueUpdate: 'afterkeydown', value: searchInputValue, onEnter: downloadsSearchSubmit, hasfocus: searchFocused" />
+		</span>
+	</span>
+	<span class="toolbar">
+		<span class="content">
+			<span class="item checkstate" data-bind="command: refreshCommand, customTooltip: '%MODULENAME%/ACTION_REFRESH_SALES',
+					checkstate: {'activeClass': 'process', 'state': refreshIndicator(), 'duration': 800}">
+				<span class="icon"></span>
+				<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REFRESH_SALES'}"></span>
+		</span>
+	</span>
+</div>
+
+<div class="chart-ctrl" data-bind="visible: isVisible">
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Week), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Week, 'disabled': chartListLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_WEEK_CHART'}"></button>
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Month), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Month, 'disabled': chartListLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_MONTH_CHART'}"></button>
+	<button class="chart-ctrl_btn" 
+		data-bind="	click: changeRange.bind($data, Enums.ChartRangeTypes.Year), 
+					css: { 'active' : rangeType() === Enums.ChartRangeTypes.Year, 'disabled': chartListLoading()}, 
+					i18n: {'key': '%MODULENAME%/ACTION_SHOW_YEAR_CHART'}"></button>
+	<div class="chart-ctrl_range" data-bind="text: currentRange, css: {active: !chartListLoading()}"></div>
+</div>
+
+<div class="chart-container" data-bind="visible: isVisible, css: { 
+		'chart-container_week': rangeType() === Enums.ChartRangeTypes.Week,  
+		'chart-container_month': rangeType() === Enums.ChartRangeTypes.Month,  
+		'chart-container_year': rangeType() === Enums.ChartRangeTypes.Year }">
+	<canvas id="myPieChart" data-bind="initDom: chartCont, css: {active: !chartListLoading()}"></canvas>
+	<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}, visible: chartListLoading()"></span>
+</div>
+
+<div class="panel_center unselectable" data-bind="customScrollbar: {x: false}, visible: isVisible">
+	<div class="downloads_list_scroll scroll-inner">
+		<div class="items_list downloads_list">
+			<span class="list_notification" data-bind="visible: isSearch() && !listLoading()">
+				<span class="link" data-bind="i18n: {'key': 'COREWEBCLIENT/ACTION_CLEAR_SEARCH'}, click: onClearDownloadsSearchClick"></span>
+				<span class="description" data-bind="text: searchText"></span>
+			</span>
+			<span class="list_notification" data-bind="visible: listLoading()" id="selenium_downloads_loading_info">
+				<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}"></span>
+			</span>
+			<div class="items_sub_list downloads_sub_list" data-bind="foreach: objectList, visible : !listLoading()">
+				<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
+					<div class="item_content">
+						<span class="data table fadeout" >
+							<span style="width: 30%" class="" data-bind="text: oProduct.sProductTitle"></span>
+							<span style="width: 20%" class="fixed" data-bind="text: sEmail"></span>
+							<span style="width: 40%" class="" data-bind="text: sFullName"></span>
+							<span style="width: 110px" class="fixed" data-bind="text: sDate"></span>
+						</span>
+						<div class="separator"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel_bottom unselectable" data-bind="visible: isVisible() && oPageSwitcher.pages().length > 0 && !listLoading(), template: {name: oPageSwitcher.ViewTemplate, data: oPageSwitcher}"></div>
