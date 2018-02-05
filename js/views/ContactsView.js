@@ -80,14 +80,6 @@ CContactsView.prototype.ViewTemplate = '%ModuleName%_ContactsView';
 CContactsView.prototype.EditViewTemplate = '%ModuleName%_ContactsEditView';
 CContactsView.prototype.ViewConstructorName = 'CContactsView';
 
-/**
- * Called every time when screen is shown.
- */
-CContactsView.prototype.onShow = function ()
-{
-	this.requestContactsList();
-};
-
 CContactsView.prototype.requestContactsList = function ()
 {
 	this.listLoading(true);
@@ -173,6 +165,10 @@ CContactsView.prototype.onClearContactsSearchClick = function ()
 
 CContactsView.prototype.show = function ()
 {
+	if (this.objectList().length === 0)
+	{
+		this.requestContactsList();
+	}
 	this.isVisible(true);
 };
 

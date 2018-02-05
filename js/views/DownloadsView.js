@@ -8,7 +8,6 @@ var
 
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
-	UrlUtils = require('%PathToCoreWebclientModule%/js/utils/Url.js'),
 
 	Ajax = require('%PathToCoreWebclientModule%/js/Ajax.js'),
 	CSelector = require('%PathToCoreWebclientModule%/js/CSelector.js'),
@@ -98,7 +97,6 @@ CDownloadsView.prototype.ViewConstructorName = 'CDownloadsView';
  */
 CDownloadsView.prototype.onShow = function ()
 {
-	this.requestDownloadsList();
 	this.getProductsList  = ko.computed(function () {
 		if (this.selectedObject() && this.selectedObject().oProduct.sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
 		{
@@ -184,8 +182,6 @@ CDownloadsView.prototype.onBind = function ()
 		$('.downloads_list', this.$viewDom),
 		$('.downloads_list_scroll.scroll-inner', this.$viewDom)
 	);
-	
-	this.initChart();
 };
 
 CDownloadsView.prototype.changeRange = function (sRangeType)
@@ -373,6 +369,11 @@ CDownloadsView.prototype.onClearDownloadsSearchClick = function ()
 
 CDownloadsView.prototype.show = function ()
 {
+	if (this.objectList().length === 0)
+	{
+		this.requestDownloadsList();
+		this.initChart();
+	}
 	this.isVisible(true);
 };
 

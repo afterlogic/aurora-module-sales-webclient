@@ -86,7 +86,10 @@ CProductsView.prototype.ViewConstructorName = 'CProductsView';
  */
 CProductsView.prototype.onShow = function ()
 {
-	this.requestProductsList();
+	if (this.objectList().length === 0)
+	{
+		this.requestProductsList();
+	}
 };
 
 CProductsView.prototype.requestProductsList = function ()

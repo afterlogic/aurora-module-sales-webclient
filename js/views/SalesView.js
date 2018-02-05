@@ -100,7 +100,10 @@ CSalesView.prototype.ViewConstructorName = 'CSalesView';
  */
 CSalesView.prototype.onShow = function ()
 {
-	this.requestSalesList();
+	if (this.objectList().length === 0)
+	{
+		this.requestSalesList();
+	}
 	this.getProductsList  = ko.computed(function () {
 		if (this.selectedObject() && this.selectedObject().oProduct.sProductTitle === '' && this.selectedObject().sPayPalItem !== '')
 		{
