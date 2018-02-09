@@ -6,7 +6,9 @@ var
 	
 	Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
-	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js')
+	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
+	
+	Enums = window.Enums
 ;
 
 /**
@@ -33,6 +35,7 @@ function CSalesListItemModel()
 	this.iNumberOfLicenses = 0;
 	this.sMessageSubject = '';
 	this.sDowloadUrl = '';
+	this.iParsingStatus = 0;
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -73,6 +76,7 @@ function CSalesListItemModel()
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
+	this.not_parsed = ko.observable(false);
 }
 
 CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
@@ -102,6 +106,8 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iNumberOfLicenses = Types.pInt(oData[sModuleName + '::NumberOfLicenses'], this.iNumberOfLicenses);
 	this.sMessageSubject = Types.pString(oData[sModuleName + '::MessageSubject'], this.sMessageSubject);
 	this.sDowloadUrl = '?download-sale-eml/' + this.UUID;
+	this.iParsingStatus =  Types.pInt(oData[sModuleName + '::ParsingStatus'], this.iParsingStatus);
+	this.not_parsed(this.iParsingStatus === Enums.ParsingStatus.NotParsed);
 	// Download section
 	this.iDownloadId = Types.pInt(oData[sModuleName + '::DownloadId'], this.iDownloadId);
 	this.sReferer = Types.pString(oData[sModuleName + '::Referer'], this.sReferer);

@@ -34,6 +34,15 @@ Enums.PaymentSystemTypes = {
 	'Download': 3
 };
 
+/**
+ * @enum {number}
+ */
+Enums.ParsingStatus = {
+	'NotParsed': 1,
+	'ParsedWithShareItSuccesfully': 2,
+	'ParsedWithPayPalSuccesfully': 3
+};
+
 if (typeof window.Enums === 'undefined')
 {
 	window.Enums = {};
