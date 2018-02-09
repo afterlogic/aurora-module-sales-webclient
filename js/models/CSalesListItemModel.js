@@ -36,6 +36,7 @@ function CSalesListItemModel()
 	this.sMessageSubject = '';
 	this.sDowloadUrl = '';
 	this.iParsingStatus = 0;
+	this.bIsEmlAvailable = false;
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -108,6 +109,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.sDowloadUrl = '?download-sale-eml/' + this.UUID;
 	this.iParsingStatus =  Types.pInt(oData[sModuleName + '::ParsingStatus'], this.iParsingStatus);
 	this.not_parsed(this.iParsingStatus === Enums.ParsingStatus.NotParsed);
+	this.bIsEmlAvailable = !!oData['IsEmlAvailable'];
 	// Download section
 	this.iDownloadId = Types.pInt(oData[sModuleName + '::DownloadId'], this.iDownloadId);
 	this.sReferer = Types.pString(oData[sModuleName + '::Referer'], this.sReferer);
