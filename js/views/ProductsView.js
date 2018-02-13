@@ -213,7 +213,8 @@ CProductsView.prototype.saveProduct = function ()
 			'CrmProductId': oProduct.sCrmProductId,
 			'PayPalItem': oProduct.sPayPalItem,
 			'ProductPrice': oProduct.iProductPrice,
-			'Homepage': oProduct.sHomepage
+			'Homepage': oProduct.sHomepage,
+			'IsAutocreated': false
 		} : null,
 		sMethod = oProduct && oProduct.UUID === '' ? 'CreateProduct' : 'UpdateProduct'
 	;
