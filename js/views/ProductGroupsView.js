@@ -301,7 +301,6 @@ CProductGroupsView.prototype.onGetProductGroupsFullListResponse = function (oRes
 	if (oResult)
 	{
 		var
-			iItemsCount = Types.pInt(oResult.ItemsCount),
 			aNewProductGroupsCollection = _.compact(_.map(oResult.ProductGroups, function (oItemData) {
 				var oItem = new CProductGroupsListItemModel();
 				oItem.parse(oItemData);
@@ -309,7 +308,6 @@ CProductGroupsView.prototype.onGetProductGroupsFullListResponse = function (oRes
 			})),
 			oEmptyGroupItem = new CProductGroupsListItemModel()
 		;
-		this.oPageSwitcher.setCount(iItemsCount);
 		if (this.objectList().length < 1)
 		{
 			this.objectList(aNewProductGroupsCollection.slice(0, Settings.ItemsPerPage));

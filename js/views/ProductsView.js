@@ -163,7 +163,6 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 	if (oResult)
 	{
 		var
-			iItemsCount = Types.pInt(oResult.ItemsCount),
 			aNewProductsCollection = _.compact(_.map(oResult.Products, function (oItemData) {
 				var oItem = new CProductsListItemModel();
 				oItem.parse(oItemData);
@@ -171,7 +170,7 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 			})),
 			oEmptyItem = new CProductsListItemModel()
 		;
-		this.oPageSwitcher.setCount(iItemsCount);
+
 		if (this.objectList().length < 1)
 		{
 			this.objectList(aNewProductsCollection.slice(0, Settings.ItemsPerPage));
