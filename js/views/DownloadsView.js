@@ -85,6 +85,7 @@ function CDownloadsView()
 		this.refreshIndicator(this.listLoading() || this.chartListLoading());
 	}, this);
 	this.removeDownloadBound = _.bind(this.removeDownload, this);
+	this.editDownloadsProductBound = _.bind(this.editDownloadsProduct, this);
 }
 
 _.extendOwn(CDownloadsView.prototype, CAbstractScreenView.prototype);
@@ -519,6 +520,11 @@ CDownloadsView.prototype.onDeleteDownloadResponse = function (oResponse)
 		}
 	}
 	this.requestDownloadsList();
+};
+
+CDownloadsView.prototype.editDownloadsProduct = function (oSale)
+{
+	oSale.bIsSalesProductEditing(!oSale.bIsSalesProductEditing());
 };
 
 module.exports = new CDownloadsView();
