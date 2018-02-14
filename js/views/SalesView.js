@@ -87,6 +87,7 @@ function CSalesView()
 		this.refreshIndicator(this.listLoading() || this.chartListLoading());
 	}, this);
 	this.removeSaleBound = _.bind(this.removeSale, this);
+	this.editSalesProductBound = _.bind(this.editSalesProduct, this);
 }
 
 _.extendOwn(CSalesView.prototype, CAbstractScreenView.prototype);
@@ -567,6 +568,11 @@ CSalesView.prototype.onDeleteSaleResponse = function (oResponse)
 		}
 	}
 	this.requestSalesList();
+};
+
+CSalesView.prototype.editSalesProduct = function (oSale)
+{
+	oSale.bIsSalesProductEditing(!oSale.bIsSalesProductEditing());
 };
 
 module.exports = new CSalesView();

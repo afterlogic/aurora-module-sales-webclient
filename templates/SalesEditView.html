@@ -3,7 +3,9 @@
 		<div class="fields" style="height: 100%; box-sizing: border-box; padding-right: 0px;">
 			<div data-bind="customScrollbar: {x: false}">
 				<div class="scroll-inner">
-					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SALE'}"></h2>
+					<div class="row">
+						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SALE'}"></h2>
+					</div>
 					<div class="row">
 						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_MESSAGE_SUBJECT'}"></span>
 						<span class="value" data-bind="text: sMessageSubject"></span>
@@ -72,7 +74,9 @@
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_NUMBER_OF_LICENSES'}"></span>
 						<span class="value" data-bind="text: iNumberOfLicenses"></span>
 					</div>
-					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER'}"></h2>
+					<div class="row">
+						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER'}"></h2>
+					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_TITLE'}"></span>
 						<span class="value" data-bind="text: sTitle"></span>
@@ -105,8 +109,9 @@
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_IS_SALE'}"></span>
 						<span class="value" data-bind="text: bIsSale"></span>
 					</div>
-
-					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT'}"></h2>
+					<div class="row">
+						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT'}"></h2>
+					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT_NAME'}"></span>
 						<span class="value" data-bind="text: sFullName"></span>
@@ -151,15 +156,18 @@
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_FIRST_NAME'}"></span>
 						<span class="value" data-bind="text:sFirstName"></span>
 					</div>
-					<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
+					<div class="row">
+						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
+						<span class="link sales-edit-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHANGE'}, click: $parent.editSalesProduct"></span>
+					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_UUID'}"></span>
-						<span class="value" data-bind="text: oProduct.UUID, visible: !!oProduct.UUID"></span>
+						<span class="value" data-bind="text: oProduct.UUID, visible: !!oProduct.UUID || !bIsSalesProductEditing()"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_NAME'}"></span>
-						<span class="value" data-bind="text: oProduct.sProductTitle, visible: !!oProduct.sProductTitle"></span>
-						<select class="value input" data-bind="value: oProduct.id, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !oProduct.sProductTitle"></select>
+						<span class="value" data-bind="text: oProduct.sProductTitle, visible: !!oProduct.sProductTitle && !bIsSalesProductEditing()"></span>
+						<select class="value input" data-bind="value: oProduct.id, options: $parent.getProductsList, optionsText: 'sProductTitle', optionsValue: 'id', visible: !oProduct.sProductTitle || bIsSalesProductEditing()"></select>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_GROUP'}"></span>

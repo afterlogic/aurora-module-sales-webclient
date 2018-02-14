@@ -78,6 +78,7 @@ function CSalesListItemModel()
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
 	this.parsed = ko.observable(false);
+	this.bIsSalesProductEditing = ko.observable(false);
 }
 
 CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
