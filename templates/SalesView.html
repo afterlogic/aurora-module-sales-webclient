@@ -50,7 +50,7 @@
 				<span class="description" data-bind="i18n: {'key': 'COREWEBCLIENT/INFO_LOADING'}"></span>
 			</span>
 			<div class="items_sub_list sales_sub_list" data-bind="foreach: objectList, visible : !listLoading()">
-				<div class="item" data-bind="css: {'checked': checked, 'selected': selected, 'not-parsed': not_parsed}">
+				<div class="item" data-bind="css: {'checked': checked, 'selected': selected, 'not-parsed': !parsed()}">
 					<div class="item_content">
 						<span class="data table fadeout" >
 							<span style="width: 30%" class="" data-bind="text: oProduct.sProductTitle"></span>
