@@ -42,10 +42,11 @@ function CDownloadsView()
 	this.selectedObject = ko.observable(null);
 	this.searchFocused = ko.observable(false);
 	this.searchInputValue = ko.observable('');
+	this.searchByProduct = ko.observable(null);
 	this.searchValue = ko.observable('');
 	this.searchText = ko.computed(function () {
 		return TextUtils.i18n('%MODULENAME%/INFO_SEARCH_RESULT', {
-			'SEARCH': this.searchValue(),
+			'SEARCH': (this.searchByProduct() !== null) ? this.searchByProduct().sProductTitle + ' | ' + this.searchByProduct().UUID: this.searchValue(),
 			'COUNT': this.objectsCount()
 		});
 	}, this);
@@ -54,7 +55,7 @@ function CDownloadsView()
 		_.bind(this.viewDownloadsItem, this)
 	);
 	this.isSearch = ko.computed(function () {
-		return this.searchValue() !== '';
+		return this.searchValue() !== '' || this.searchByProduct() !== null;
 	}, this);
 	this.currentPage = ko.observable(1);
 	this.oPageSwitcher = new CPageSwitcherView(0, Settings.ItemsPerPage);
@@ -111,6 +112,7 @@ CDownloadsView.prototype.onShow = function ()
 CDownloadsView.prototype.requestSearchDownloadsList = function (sSearch)
 {
 	this.searchInputValue(sSearch);
+	this.searchByProduct(null);
 	this.requestDownloadsList();
 };
 
@@ -125,7 +127,8 @@ CDownloadsView.prototype.requestDownloadsList = function ()
 			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
 			'Limit': Settings.ItemsPerPage,
 			'Search': this.searchValue(),
-			'GetDownloads': true
+			'GetDownloads': true,
+			'ProductUUID': (this.searchByProduct() !== null && this.searchByProduct().UUID) ?  this.searchByProduct().UUID : null
 		},
 		this.onGetDownloadsResponse,
 		this
@@ -362,6 +365,7 @@ CDownloadsView.prototype.downloadsSearchSubmit = function ()
 CDownloadsView.prototype.onClearDownloadsSearchClick = function ()
 {
 	// initiation empty search
+	this.searchByProduct(null);
 	this.searchInputValue('');
 	this.searchValue('');
 	this.downloadsSearchSubmit();

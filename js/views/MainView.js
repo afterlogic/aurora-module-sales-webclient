@@ -94,6 +94,7 @@ function CMainView()
 	
 	this.showSalesWithContactBound = _.bind(this.showSalesWithContact, this);
 	this.showSalesWithProductBound = _.bind(this.showSalesWithProduct, this);
+	this.showDownloadsWithProductBound = _.bind(this.showDownloadsWithProduct, this);
 }
 
 _.extendOwn(CMainView.prototype, CAbstractScreenView.prototype);
@@ -116,6 +117,14 @@ CMainView.prototype.showSalesWithProduct = function (oProduct)
 	this.oSalesView.searchInputValue('');
 	this.showObjects(Enums.SalesObjectsTypes.Sales);
 	this.oSalesView.requestSalesList();
+};
+
+CMainView.prototype.showDownloadsWithProduct = function (oProduct)
+{
+	this.oDownloadsView.searchByProduct(oProduct);
+	this.oDownloadsView.searchInputValue('');
+	this.showObjects(Enums.SalesObjectsTypes.Downloads);
+	this.oDownloadsView.requestDownloadsList();
 };
 
 CMainView.prototype.showObjects = function (sType)
