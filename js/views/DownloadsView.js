@@ -488,7 +488,7 @@ CDownloadsView.prototype.removeDownload = function (oSale)
 					{
 						'UUID': oSale.UUID
 					},
-					this.onDeleteSaleResponse,
+					this.onDeleteDownloadResponse,
 					this
 				);
 			}
