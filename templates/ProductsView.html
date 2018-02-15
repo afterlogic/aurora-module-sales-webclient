@@ -11,6 +11,12 @@
 					checkstate: {'activeClass': 'process', 'state': refreshIndicator(), 'duration': 800}">
 				<span class="icon"></span>
 				<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REFRESH_PRODUCTS'}"></span>
+			</span>
+			<span class="item sales-autocreated-filter" data-bind="command: showAutocreated, customTooltip: '%MODULENAME%/ACTION_SHOW_AUTOCREATED_PRODUCTS',
+				css: {'active': activeAutocreatedFilter}">
+				A
+				<span class="text" data-bind="i18n: {'key': '%MODULENAME%/ACTION_REFRESH_PRODUCTS'}"></span>
+			</span>
 		</span>
 	</span>
 </div>

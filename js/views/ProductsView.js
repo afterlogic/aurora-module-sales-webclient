@@ -73,6 +73,11 @@ function CProductsView()
 	ko.computed(function () {
 		this.refreshIndicator(this.listLoading());
 	}, this);
+	this.activeAutocreatedFilter = ko.observable(false);
+	this.showAutocreated = Utils.createCommand(this, function () {
+		this. activeAutocreatedFilter(!this. activeAutocreatedFilter());
+		this.requestProductsList();
+	});
 }
 
 _.extendOwn(CProductsView.prototype, CAbstractScreenView.prototype);
@@ -94,6 +99,12 @@ CProductsView.prototype.onShow = function ()
 
 CProductsView.prototype.requestProductsList = function ()
 {
+	var oFilters = {};
+
+	if (this.activeAutocreatedFilter())
+	{
+		oFilters["Autocreated"] = true;
+	}
 	this.listLoading(true);
 	this.searchValue(this.searchInputValue());
 	Ajax.send(
@@ -102,7 +113,8 @@ CProductsView.prototype.requestProductsList = function ()
 		{
 			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
 			'Limit': Settings.ItemsPerPage,
-			'Search': this.searchValue()
+			'Search': this.searchValue(),
+			'Filters': oFilters
 		},
 		this.onGetProductsResponse,
 		this
