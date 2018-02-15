@@ -12,7 +12,7 @@ Enums.SalesObjectsTypes = {
 	'Sales': 'sales',
 	'Downloads': 'downloads',
 	'Products': 'products',
-	'ProductGroups': 'product_groups',
+	'ProductGroups': 'product-groups',
 	'Contacts': 'contacts'
 };
 

@@ -87,6 +87,14 @@ CProductsView.prototype.EditViewTemplate = '%ModuleName%_ProductsEditView';
 CProductsView.prototype.ViewConstructorName = 'CProductsView';
 
 /**
+ * @param {Array} aParams
+ */
+CProductsView.prototype.onRoute = function (aParams)
+{
+	
+};
+
+/**
  * Called every time when screen is shown.
  */
 CProductsView.prototype.onShow = function ()

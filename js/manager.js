@@ -5,8 +5,10 @@ module.exports = function (oAppData) {
 	
 	var
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
-		sHashModuleName = 'sales'
+		Settings = require('modules/%ModuleName%/js/Settings.js')
 	;
+	
+//	Settings.init(oAppData);
 	
 	if (App.getUserRole() === Enums.UserRole.NormalUser)
 	{
@@ -25,7 +27,7 @@ module.exports = function (oAppData) {
 			{
 				var oScreens = {};
 				
-				oScreens[sHashModuleName] = function () {
+				oScreens[Settings.HashModuleName] = function () {
 					return require('modules/%ModuleName%/js/views/MainView.js');
 				};
 				
@@ -46,7 +48,7 @@ module.exports = function (oAppData) {
 
 				return {
 					item: HeaderItemView,
-					name: sHashModuleName
+					name: Settings.HashModuleName
 				};
 			}
 		};
