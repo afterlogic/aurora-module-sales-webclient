@@ -119,6 +119,12 @@ CDownloadsView.prototype.requestSearchDownloadsList = function (sSearch)
 
 CDownloadsView.prototype.requestDownloadsList = function ()
 {
+	var oFilters = {'GetDownloads': true};
+
+	if (this.searchByProduct() !== null && this.searchByProduct().UUID)
+	{
+		oFilters["ProductUUID"] = this.searchByProduct().UUID;
+	}
 	this.listLoading(true);
 	this.searchValue(this.searchInputValue());
 	Ajax.send(
@@ -128,8 +134,7 @@ CDownloadsView.prototype.requestDownloadsList = function ()
 			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
 			'Limit': Settings.ItemsPerPage,
 			'Search': this.searchValue(),
-			'GetDownloads': true,
-			'ProductUUID': (this.searchByProduct() !== null && this.searchByProduct().UUID) ?  this.searchByProduct().UUID : null
+			'Filters': oFilters
 		},
 		this.onGetDownloadsResponse,
 		this
@@ -214,7 +219,7 @@ CDownloadsView.prototype.changeRange = function (sRangeType)
 
 	Ajax.send(
 		'Sales',
-		'GetChartSales', 
+		'GetChartSales',
 		{
 			'FromDate': oStartMoment.format('YYYY-MM-DD'),
 			'TillDate': oEndMoment.format('YYYY-MM-DD'),

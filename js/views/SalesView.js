@@ -88,6 +88,11 @@ function CSalesView()
 	}, this);
 	this.removeSaleBound = _.bind(this.removeSale, this);
 	this.editSalesProductBound = _.bind(this.editSalesProduct, this);
+	this.activeNotParsedFilter = ko.observable(false);
+	this.showNotParsed = Utils.createCommand(this, function () {
+		this.activeNotParsedFilter(!this.activeNotParsedFilter());
+		this.requestSalesList();
+	});
 }
 
 _.extendOwn(CSalesView.prototype, CAbstractScreenView.prototype);
@@ -125,6 +130,16 @@ CSalesView.prototype.requestSearchSalesList = function (sSearch)
 
 CSalesView.prototype.requestSalesList = function ()
 {
+	var oFilters = {};
+
+	if (this.activeNotParsedFilter())
+	{
+		oFilters["NotParsed"] = true;
+	}
+	if (this.searchByProduct() !== null && this.searchByProduct().UUID)
+	{
+		oFilters["ProductUUID"] = this.searchByProduct().UUID;
+	}
 	this.listLoading(true);
 	this.searchValue(this.searchInputValue());
 	Ajax.send(
@@ -134,7 +149,7 @@ CSalesView.prototype.requestSalesList = function ()
 			'Offset': (this.currentPage() - 1) * Settings.ItemsPerPage,
 			'Limit': Settings.ItemsPerPage,
 			'Search': this.searchValue(),
-			'ProductUUID': (this.searchByProduct() !== null && this.searchByProduct().UUID) ?  this.searchByProduct().UUID : null
+			'Filters': oFilters
 		},
 		this.onGetSalesResponse,
 		this
