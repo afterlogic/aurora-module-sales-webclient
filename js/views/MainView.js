@@ -152,7 +152,6 @@ CMainView.prototype.showDownloadsWithProduct = function (oProduct)
 
 CMainView.prototype.switchObjectsTab = function (sType)
 {
-	console.log(Routing.currentHash());
 	var oCurrentTab = null;
 	
 	switch (sType)
