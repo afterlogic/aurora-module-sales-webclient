@@ -231,7 +231,7 @@ CProductsView.prototype.saveProduct = function ()
 			'ShareItProductId': oProduct.sShareItProductId,
 			'CrmProductId': oProduct.sCrmProductId,
 			'PayPalItem': oProduct.sPayPalItem,
-			'ProductPrice': oProduct.iProductPrice,
+			'ProductPrice': oProduct.dProductPrice,
 			'Homepage': oProduct.sHomepage,
 			'IsAutocreated': false
 		} : null,

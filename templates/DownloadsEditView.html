@@ -24,7 +24,7 @@
 					</div>
 					<div class="row">
 						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_NET_TOTAL'}"></span>
-						<span class="value" data-bind="text: '$' + iNetTotal"></span>
+						<span class="value" data-bind="text: '$' + dNetTotal"></span>
 					</div>
 					<div class="row">
 						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_MAINTENANCE_EXPIRATION_DATE'}"></span>
@@ -222,7 +222,7 @@
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PRICE'}"></span>
-						<span class="value" data-bind="text: oProduct.iProductPrice, visible: !!oProduct.iProductPrice"></span>
+						<span class="value" data-bind="text: oProduct.dProductPrice, visible: !!oProduct.dProductPrice"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_HOMEPAGE'}"></span>

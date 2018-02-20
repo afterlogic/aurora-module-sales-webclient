@@ -19,7 +19,7 @@ function CProductsListItemModel()
 	this.sCrmProductId = '';
 	this.bIsAutocreated = false;
 	this.sPayPalItem = '';
-	this.iProductPrice = 0;
+	this.dProductPrice = 0;
 	this.sHomepage = '';
 	this.sProductGroupTitle = '';
 
@@ -45,7 +45,7 @@ CProductsListItemModel.prototype.parse = function (oData)
 	this.sCrmProductId = Types.pString(oData[sModuleName + "::CrmProductId"]);
 	this.bIsAutocreated = !!oData[sModuleName + "::IsAutocreated"];
 	this.sPayPalItem = Types.pString(oData[sModuleName + "::PayPalItem"]);
-	this.iProductPrice = Types.pInt(oData['Price']);
+	this.dProductPrice = Types.pDouble(oData['Price']).toFixed(2);
 	this.sHomepage = Types.pString(oData['Homepage']);
 	this.sProductGroupTitle = Types.pString(oData['ProductGroupTitle'], this.sProductGroupTitle);
 };

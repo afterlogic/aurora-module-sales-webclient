@@ -20,7 +20,7 @@ function CSalesListItemModel()
 	this.UUID = '';
 	this.sDate = '';
 	this.sLicenseKey = '';
-	this.iNetTotal = 0;
+	this.dNetTotal = 0;
 	this.sMaintenanceExpirationDate = '';
 	this.sPayPalItem = '';
 	this.sVatId = '';
@@ -93,7 +93,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.UUID =  Types.pString(oData['UUID'], this.UUID);
 	this.sDate =  moment(oData['Date']).format(Settings.FullDateFormat + ' ' + Settings.getTimeFormat());
 	this.sLicenseKey = Types.pString(oData[sModuleName + '::LicenseKey'], this.sLicenseKey);
-	this.iNetTotal = Types.pInt(oData['Price'], this.iNetTotal);
+	this.dNetTotal = Types.pDouble(oData['Price'], this.dNetTotal).toFixed(2);
 	this.sMaintenanceExpirationDate = Types.pString(oData[sModuleName + '::MaintenanceExpirationDate'], this.sMaintenanceExpirationDate);
 	this.sPayPalItem = Types.pString(oData[sModuleName + '::PayPalItem'], this.sPayPalItem);
 	this.sVatId = Types.pString(oData[sModuleName + '::VatId'], this.sVatId);
