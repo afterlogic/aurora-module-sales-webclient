@@ -156,6 +156,31 @@
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_FIRST_NAME'}"></span>
 						<span class="value" data-bind="text:sFirstName"></span>
 					</div>
+					<div data-bind="visible: bIsCompany()">
+						<div class="row">
+							<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY'}"></h2>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_TITLE'}"></span>
+							<span class="value" data-bind="text:sCompanyTitle"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_DESCRIPTION'}"></span>
+							<span class="value" data-bind="text:sCompanyDescription"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_ADDRESS'}"></span>
+							<span class="value" data-bind="text:sCompanyAddress"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_PHONE'}"></span>
+							<span class="value" data-bind="text:sCompanyPhone"></span>
+						</div>
+						<div class="row">
+							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_WEBSIT'}"></span>
+							<span class="value" data-bind="text:sCompanyWebsit"></span>
+						</div>
+					</div>
 					<div class="row">
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
 						<span class="link sales-edit-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHANGE'}, click: $parent.editSalesProductBound"></span>

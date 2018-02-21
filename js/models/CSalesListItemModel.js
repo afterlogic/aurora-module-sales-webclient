@@ -74,11 +74,18 @@ function CSalesListItemModel()
 	this.sSalutation = '';
 	this.sLastName = '';
 	this.sFirstName = '';
+	// Company section
+	this.sCompanyTitle = '';
+	this.sCompanyDescription = '';
+	this.sCompanyAddress = '';
+	this.sCompanyPhone = '';
+	this.sCompanyWebsit = '';
 
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
 	this.parsed = ko.observable(false);
 	this.bIsSalesProductEditing = ko.observable(false);
+	this.bIsCompany = ko.observable(false);
 }
 
 CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
@@ -147,7 +154,14 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 		this.sSalutation = Types.pString(oCustomer[sModuleName + '::Salutation'], this.sSalutation);
 		this.sLastName = Types.pString(oCustomer[sModuleName + '::LastName'], this.sLastName);
 		this.sFirstName = Types.pString(oCustomer[sModuleName + '::FirstName'], this.sFirstName);
-	}
+		// Company section
+		this.sCompanyTitle = Types.pString(oCustomer[sModuleName + '::Company_Title'], this.sCompanyTitle);
+		this.sCompanyDescription = Types.pString(oCustomer[sModuleName + '::Company_Description'], this.sCompanyDescription);
+		this.sCompanyAddress = Types.pString(oCustomer[sModuleName + '::Company_Address'], this.sCompanyAddress);
+		this.sCompanyPhone = Types.pString(oCustomer[sModuleName + '::Company_Phone'], this.sCompanyPhone);
+		this.sCompanyWebsit = Types.pString(oCustomer[sModuleName + '::Company_Websit'], this.sCompanyWebsit);
+		this.bIsCompany(!!this.sCompanyTitle || !!this.sCompanyDescription || !!this.sCompanyAddress || !!this.sCompanyPhone || !!this.sCompanyWebsit);
+}
 	
 	this.oProduct = new CProductsListItemModel();
 	if (oProduct !== null)
