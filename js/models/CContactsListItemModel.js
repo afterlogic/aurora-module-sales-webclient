@@ -9,10 +9,10 @@ var
  * @constructor
  */
 function CContactsListItemModel()
-{	
+{
 	this.id = "";
 	this.UUID = "";
-	
+
 	this.sFullName = "";
 	this.sAddress = "";
 	this.sPhone = "";
@@ -43,7 +43,7 @@ CContactsListItemModel.prototype.parse = function (oData)
 
 	this.id =  Types.pInt(oData['EntityId']);
 	this.UUID =  Types.pString(oData['UUID']);
-	
+
 	this.sFullName = Types.pString(oData["FullName"]);
 	this.sAddress = Types.pString(oData["Address"]);
 	this.sPhone = Types.pString(oData["Phone"]);

@@ -11,6 +11,10 @@
 						<span class="value" data-bind="text: sMessageSubject"></span>
 					</div>
 					<div class="row">
+						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
+						<span class="value" data-bind="text: id"></span>
+					</div>
+					<div class="row">
 						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
 						<span class="value" data-bind="text: UUID"></span>
 					</div>
@@ -82,6 +86,14 @@
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER'}"></h2>
 					</div>
 					<div class="row">
+						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
+						<span class="value" data-bind="text: iCustomerId"></span>
+					</div>
+					<div class="row">
+						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
+						<span class="value" data-bind="text: sCustomerUUID"></span>
+					</div>
+					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_TITLE'}"></span>
 						<span class="value" data-bind="text: sTitle"></span>
 					</div>
@@ -115,6 +127,14 @@
 					</div>
 					<div class="row">
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT'}"></h2>
+					</div>
+					<div class="row">
+						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
+						<span class="value" data-bind="text: iContactId"></span>
+					</div>
+					<div class="row">
+						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
+						<span class="value" data-bind="text: sContactUUID"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT_NAME'}"></span>
@@ -165,6 +185,14 @@
 							<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY'}"></h2>
 						</div>
 						<div class="row">
+							<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
+							<span class="value" data-bind="text: iCompanyId"></span>
+						</div>
+						<div class="row">
+							<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
+							<span class="value" data-bind="text: sCompanyUUID"></span>
+						</div>
+						<div class="row">
 							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_COMPANY_TITLE'}"></span>
 							<span class="value" data-bind="text:sCompanyTitle"></span>
 						</div>
@@ -188,6 +216,10 @@
 					<div class="row">
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
 						<span class="link sales-edit-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHANGE'}, click: $parent.editSalesProductBound"></span>
+					</div>
+					<div class="row">
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
+						<span class="value" data-bind="text: oProduct.id, visible: !!oProduct.UUID || !bIsSalesProductEditing()"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_UUID'}"></span>

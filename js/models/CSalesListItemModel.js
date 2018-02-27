@@ -16,7 +16,7 @@ var
  */
 function CSalesListItemModel()
 {	
-	this.id = '';
+	this.id = 0;
 	this.UUID = '';
 	this.sDate = '';
 	this.sLicenseKey = '';
@@ -53,7 +53,8 @@ function CSalesListItemModel()
 	this.oProduct = null;
 
 	// Customer section
-	this.iCustomerId = 0;	
+	this.iCustomerId = 0;
+	this.sCustomerUUID = '';
 	this.sTitle = '';
 	this.sDescription = '';
 	this.iStatus = 0;
@@ -64,6 +65,8 @@ function CSalesListItemModel()
 	this.bGotSurvey = true;
 	this.bIsSale = true;
 	// Contact section
+	this.iContactId = 0;
+	this.sContactUUID = '';
 	this.sFullName = '';
 	this.sAddress = '';
 	this.sPhone = '';
@@ -76,6 +79,8 @@ function CSalesListItemModel()
 	this.sLastName = '';
 	this.sFirstName = '';
 	// Company section
+	this.iCompanyId = 0;
+	this.sCompanyUUID = '';
 	this.sCompanyTitle = '';
 	this.sCompanyDescription = '';
 	this.sCompanyAddress = '';
@@ -135,6 +140,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	{
 		// TODO: store Customer & Contact as objects
 		this.iCustomerId = Types.pInt(oCustomer['EntityId'], this.iCustomerId);
+		this.sCustomerUUID = Types.pString(oCustomer['UUID'], this.sCustomerUUID);
 		this.sTitle = Types.pString(oCustomer['Title'], this.sTitle);
 		this.sDescription = Types.pString(oCustomer['Description'], this.sDescription);
 		this.iStatus = Types.pInt(oCustomer['Status'], this.iStatus);
@@ -145,6 +151,8 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 		this.bGotSurvey = Types.pBool(oData['GotSurvey'], this.bGotSurvey);
 		this.bIsSale = Types.pBool(oData['IsSale'], this.bIsSale);
 		// Contact section
+		this.iContactId = Types.pInt(oCustomer[sModuleName + '::ContactId'], this.iContactId);
+		this.sContactUUID = Types.pString(oCustomer[sModuleName + '::ContactUUID'], this.sContactUUID);
 		this.sFullName = Types.pString(oCustomer[sModuleName + '::FullName'], this.sFullName);
 		this.sAddress  = Types.pString(oCustomer[sModuleName + '::Address'], this.sLanguage);
 		this.sPhone = Types.pString(oCustomer[sModuleName + '::Phone'], this.sPhone);
@@ -157,14 +165,16 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 		this.sLastName = Types.pString(oCustomer[sModuleName + '::LastName'], this.sLastName);
 		this.sFirstName = Types.pString(oCustomer[sModuleName + '::FirstName'], this.sFirstName);
 		// Company section
+		this.iCompanyId = Types.pInt(oCustomer[sModuleName + '::Company_Id'], this.iCompanyId);
+		this.sCompanyUUID = Types.pString(oCustomer[sModuleName + '::Company_UUID'], this.sCompanyUUID);
 		this.sCompanyTitle = Types.pString(oCustomer[sModuleName + '::Company_Title'], this.sCompanyTitle);
 		this.sCompanyDescription = Types.pString(oCustomer[sModuleName + '::Company_Description'], this.sCompanyDescription);
 		this.sCompanyAddress = Types.pString(oCustomer[sModuleName + '::Company_Address'], this.sCompanyAddress);
 		this.sCompanyPhone = Types.pString(oCustomer[sModuleName + '::Company_Phone'], this.sCompanyPhone);
 		this.sCompanyWebsit = Types.pString(oCustomer[sModuleName + '::Company_Websit'], this.sCompanyWebsit);
 		this.bIsCompany(!!this.sCompanyTitle || !!this.sCompanyDescription || !!this.sCompanyAddress || !!this.sCompanyPhone || !!this.sCompanyWebsit);
-}
-	
+	}
+
 	this.oProduct = new CProductsListItemModel();
 	if (oProduct !== null)
 	{
