@@ -38,6 +38,8 @@ function CSalesListItemModel()
 	this.iParsingStatus = 0;
 	this.bIsEmlAvailable = false;
 	this.sTransactionId = '';
+	this.sReseller = '',
+	this.sPromotionName = '',
 	// Download section
 	this.iDownloadId = 0;
 	this.sReferer = '';
@@ -125,6 +127,8 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.parsed(this.iParsingStatus !== Enums.ParsingStatus.NotParsed);
 	this.bIsEmlAvailable = !!oData['IsEmlAvailable'];
 	this.sTransactionId = Types.pString(oData[sModuleName + '::TransactionId'], this.sTransactionId);
+	this.sReseller = Types.pString(oData[sModuleName + '::Reseller'], this.sReseller);
+	this.sPromotionName = Types.pString(oData[sModuleName + '::PromotionName'], this.sPromotionName);
 	// Download section
 	this.iDownloadId = Types.pInt(oData[sModuleName + '::DownloadId'], this.iDownloadId);
 	this.sReferer = Types.pString(oData[sModuleName + '::Referer'], this.sReferer);
