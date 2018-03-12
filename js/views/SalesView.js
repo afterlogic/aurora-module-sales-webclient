@@ -305,7 +305,8 @@ CSalesView.prototype.initChart = function ()
 				scales: {
 					yAxes: [{
 						ticks: {
-							beginAtZero:true
+							beginAtZero:true,
+							suggestedMax: 10
 						}
 					}]
 				},
