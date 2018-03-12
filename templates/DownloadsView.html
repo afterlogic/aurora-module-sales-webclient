@@ -53,10 +53,10 @@
 				<div class="item" data-bind="css: {'checked': checked, 'selected': selected}">
 					<div class="item_content">
 						<span class="data table fadeout" >
-							<span style="width: 30%" class="" data-bind="text: oProduct.sProductTitle"></span>
-							<span style="width: 20%" class="fixed" data-bind="text: sEmail"></span>
-							<span style="width: 40%" class="" data-bind="text: sFullName"></span>
-							<span style="width: 110px" class="fixed" data-bind="text: sDate"></span>
+							<span style="width: 30%" data-bind="text: oProduct.sProductTitle"></span>
+							<span style="width: 20%" data-bind="text: sEmail"></span>
+							<span style="width: 40%" data-bind="text: sFullName"></span>
+							<span style="width: 110px; flex-shrink: 0" data-bind="text: sDate"></span>
 						</span>
 						<div class="separator"></div>
 					</div>
