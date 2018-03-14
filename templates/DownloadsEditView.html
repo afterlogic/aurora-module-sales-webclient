@@ -7,18 +7,6 @@
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SALE'}"></h2>
 					</div>
 					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_MESSAGE_SUBJECT'}"></span>
-						<span class="value" data-bind="text: sMessageSubject"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
-						<span class="value" data-bind="text: id"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
-						<span class="value" data-bind="text: UUID"></span>
-					</div>
-					<div class="row">
 						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_DATE'}"></span>
 						<span class="value" data-bind="text: sDate"></span>
 					</div>
@@ -27,201 +15,19 @@
 						<span class="value" data-bind="text: sLicenseKey"></span>
 					</div>
 					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_NET_TOTAL'}"></span>
-						<span class="value" data-bind="text: '$' + dNetTotal"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_MAINTENANCE_EXPIRATION_DATE'}"></span>
-						<span class="value" data-bind="text: sMaintenanceExpirationDate"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PAYPAL_ITEM'}"></span>
-						<span class="value" data-bind="text: sPayPalItem"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_VAT_ID'}"></span>
-						<span class="value" data-bind="text: sVatId"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PAYMENT_ID'}"></span>
-						<span class="value" data-bind="text: sPayment"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERER_NUMBER'}"></span>
-						<span class="value" data-bind="text: iRefNumber"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SHAREIT_PURCHASE_ID'}"></span>
-						<span class="value" data-bind="text: sShareItPurchaseId"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_IS_NOTIFIED'}"></span>
-						<span class="value" data-bind="text: bIsNotified"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_RECURRENT_MAINTENANCE'}"></span>
-						<span class="value" data-bind="text: bRecurrentMaintenance"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_TWO_MONTHS_EMAIL_SENT'}"></span>
-						<span class="value" data-bind="text: bTwoMonthsEmailSent"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PARENT_SALE_ID'}"></span>
-						<span class="value" data-bind="text: iParentSaleId"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PAYMENT_SYSTEM'}"></span>
-						<span class="value" data-bind="text: $parent.getPaymentSystem()"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_NUMBER_OF_LICENSES'}"></span>
-						<span class="value" data-bind="text: iNumberOfLicenses"></span>
-					</div>
-					<span>Download section</span>
-					<div class="fields clearfix">
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERER'}"></span>
-							<span class="value" data-bind="text: sReferer"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_IP'}"></span>
-							<span class="value" data-bind="text: sIp"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_GAD'}"></span>
-							<span class="value" data-bind="text: sGad"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT_VERSION'}"></span>
-							<span class="value" data-bind="text: sProductVersion"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_LICENSE_TYPE'}"></span>
-							<span class="value" data-bind="text: iLicenseType"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERRER_PAGE'}"></span>
-							<span class="value" data-bind="text: iReferrerPage"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_IS_UPGRADE'}"></span>
-							<span class="value" data-bind="text: bIsUpgrade"></span>
-						</div>
-						<div class="row">
-							<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PLATFORM_TYPE'}"></span>
-							<span class="value" data-bind="text: iPlatformType"></span>
-						</div>
-					</div>
-					<div class="row">
-						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER'}"></h2>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
-						<span class="value" data-bind="text: iCustomerId"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
-						<span class="value" data-bind="text: sCustomerUUID"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_TITLE'}"></span>
-						<span class="value" data-bind="text: sTitle"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_DESCRIPTION'}"></span>
-						<span class="value" data-bind="text: sDescription"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_LANGUAGE'}"></span>
-						<span class="value" data-bind="text: sLanguage"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_NOTIFY'}"></span>
-						<span class="value" data-bind="text: bNotify"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_GOT_GREETING'}"></span>
-						<span class="value" data-bind="text: bGotGreeting"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_GOT_GREETING2'}"></span>
-						<span class="value" data-bind="text: bGotGreeting2"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_GOT_SURVEY'}"></span>
-						<span class="value" data-bind="text: bGotSurvey"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CUSTOMER_IS_SALE'}"></span>
-						<span class="value" data-bind="text: bIsSale"></span>
+						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_REFERER'}"></span>
+						<span class="value" data-bind="text: sReferer"></span>
 					</div>
 					<div class="row">
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT'}"></h2>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
-						<span class="value" data-bind="text: iContactId"></span>
-					</div>
-					<div class="row">
-						<span class="label"  data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_UUID'}"></span>
-						<span class="value" data-bind="text: sContactUUID"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_CONTACT_NAME'}"></span>
-						<span class="value" data-bind="text: sFullName"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_EMAIL'}"></span>
 						<span class="value" data-bind="text: sEmail"></span>
 					</div>
 					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PHONE'}"></span>
-						<span class="value" data-bind="text: sPhone"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_FAX'}"></span>
-						<span class="value" data-bind="text: sFax"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ADDRESS'}"></span>
-						<span class="value" data-bind="text: sAddress"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_FACEBOOK'}"></span>
-						<span class="value" data-bind="text: sFacebook"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_LINKEDIN'}"></span>
-						<span class="value" data-bind="text: sLinkedIn"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_INSTAGRAM'}"></span>
-						<span class="value" data-bind="text: sInstagram"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_SALUTATION'}"></span>
-						<span class="value" data-bind="text: sSalutation"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_LAST_NAME'}"></span>
-						<span class="value" data-bind="text: sLastName"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_FIRST_NAME'}"></span>
-						<span class="value" data-bind="text:sFirstName"></span>
-					</div>
-					<div class="row">
 						<h2 class="subheading" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_PRODUCT'}"></h2>
 						<span class="link sales-edit-link" data-bind="i18n: {'key': '%MODULENAME%/ACTION_CHANGE'}, click: $parent.editDownloadsProductBound"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_SALE_EDIT_ID'}"></span>
-						<span class="value" data-bind="text: oProduct.id, visible: !!oProduct.UUID || !bIsSalesProductEditing()"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_UUID'}"></span>
-						<span class="value" data-bind="text: oProduct.UUID, visible: !!oProduct.UUID || !bIsSalesProductEditing()"></span>
 					</div>
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_NAME'}"></span>
@@ -231,26 +37,6 @@
 					<div class="row">
 						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_GROUP'}"></span>
 						<span class="value" data-bind="text: $parent.getProductGroup(), visible: !!oProduct.sProductGroupUUID"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_SHAREIT_ID'}"></span>
-						<span class="value" data-bind="text: oProduct.sShareItProductId, visible: !!oProduct.sShareItProductId"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_CRM_ID'}"></span>
-						<span class="value" data-bind="text: oProduct.sCrmProductId, visible: !!oProduct.sCrmProductId"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PAYPAL_ITEM'}"></span>
-						<span class="value" data-bind="text: oProduct.sPayPalItem, visible: !!oProduct.sPayPalItem"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_PRICE'}"></span>
-						<span class="value" data-bind="text: oProduct.dProductPrice, visible: !!oProduct.dProductPrice"></span>
-					</div>
-					<div class="row">
-						<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_HOMEPAGE'}"></span>
-						<span class="value" data-bind="text: oProduct.sHomepage, visible: !!oProduct.sHomepage"></span>
 					</div>
 				</div>
 			</div>
