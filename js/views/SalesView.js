@@ -282,7 +282,7 @@ CSalesView.prototype.initChart = function ()
 			data: {
 				datasets: [
 					{
-						label: 'General',
+						label: 'Sales',
 						backgroundColor: [
 							'rgba(120, 184, 240, 0.5)'
 						],
@@ -296,19 +296,58 @@ CSalesView.prototype.initChart = function ()
 						pointRadius: 3,
 						pointBorderWidth: 1,
 						pointHoverRadius: 5,
-						lineTension: 0
+						lineTension: 0,
+						yAxisID: 'y-axis-1'
+					},
+					{
+						label: 'Money',
+						backgroundColor: [
+							'rgba(20, 184, 40, 0.5)'
+						],
+						borderColor: [
+							'rgba(20, 184, 40, 1)'
+						],
+						pointBackgroundColor: 'rgba(20, 184, 40, 1)',
+						pointHoverBackgroundColor: 'rgba(20, 184, 40, 1)',
+						pointHoverBorderColor: 'rgba(40, 123, 139, 1)',
+						borderWidth: 1,
+						pointRadius: 3,
+						pointBorderWidth: 1,
+						pointHoverRadius: 5,
+						lineTension: 0,
+						yAxisID: 'y-axis-2'
 					}
 				]
 			},
 			options: {
 				maintainAspectRatio: false,
 				scales: {
-					yAxes: [{
-						ticks: {
-							beginAtZero:true,
-							suggestedMax: 10
+					yAxes: [
+						{
+							position: 'left',
+							id: 'y-axis-1',
+							scaleLabel: {
+								display: true,
+								labelString: 'Sales'
+							},
+							ticks: {
+								beginAtZero:true,
+								suggestedMax: 10
+							}
+						},
+						{
+							position: 'right',
+							id: 'y-axis-2',
+							scaleLabel: {
+								display: true,
+								labelString: 'Money'
+							},
+							ticks: {
+								beginAtZero:true,
+								suggestedMax: 10
+							}
 						}
-					}]
+					]
 				},
 				legend: {
 					display: false
@@ -365,8 +404,13 @@ CSalesView.prototype.initChart = function ()
 					break;
 			}
 			this.currentRange(sDisplayRange);
-			oGroupedSales = _.extendOwn(_.clone(oRangePoints), _.countBy(aSales, 'Date'));
-            this.oChart.data.datasets[0].data = _.values(oGroupedSales);
+			oGroupedSales = _.extendOwn(_.clone(oRangePoints),_.groupBy(aSales, 'Date'));
+			this.oChart.data.datasets[0].data = _.map(_.values(oGroupedSales), function (aItem) { return aItem.length || 0; });
+			this.oChart.data.datasets[1].data = _.map(_.values(oGroupedSales), function (aItem) {
+				return Number(_.reduce(aItem, function (iSum, oItem) {
+					return iSum += oItem.Price;
+				}, 0)).toFixed(2);
+			});
 			this.oChart.data.labels = _.keys(oRangePoints);
 			this.oChart.update();
 		}
