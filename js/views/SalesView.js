@@ -349,9 +349,6 @@ CSalesView.prototype.initChart = function ()
 						}
 					]
 				},
-				legend: {
-					display: false
-				},
 				tooltips: {
 					displayColors: false,
 					backgroundColor: 'rgba(40, 123, 139, 1)'
