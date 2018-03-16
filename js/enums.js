@@ -38,9 +38,10 @@ Enums.PaymentSystemTypes = {
  * @enum {number}
  */
 Enums.ParsingStatus = {
+	'Unknown': 0,
 	'NotParsed': 1,
-	'ParsedWithShareItSuccesfully': 2,
-	'ParsedWithPayPalSuccesfully': 3
+	'ParsedSuccessfully': 2,
+	'ParsedWithWarning': 3
 };
 
 if (typeof window.Enums === 'undefined')

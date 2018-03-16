@@ -92,6 +92,7 @@ function CSalesListItemModel()
 	this.selected = ko.observable(false);
 	this.checked = ko.observable(false);
 	this.parsed = ko.observable(false);
+	this.nedAttention = ko.observable(false);
 	this.bIsSalesProductEditing = ko.observable(false);
 	this.bIsCompany = ko.observable(false);
 }
@@ -125,6 +126,7 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.sDowloadUrl = '?download-sale-eml/' + this.UUID;
 	this.iParsingStatus = Types.pInt(oData[sModuleName + '::ParsingStatus'], this.iParsingStatus);
 	this.parsed(this.iParsingStatus !== Enums.ParsingStatus.NotParsed);
+	this.nedAttention(this.iParsingStatus === Enums.ParsingStatus.ParsedWithWarning);
 	this.bIsEmlAvailable = !!oData['IsEmlAvailable'];
 	this.sTransactionId = Types.pString(oData[sModuleName + '::TransactionId'], this.sTransactionId);
 	this.sReseller = Types.pString(oData[sModuleName + '::Reseller'], this.sReseller);
