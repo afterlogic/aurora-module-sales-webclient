@@ -90,6 +90,7 @@ CProductGroupsView.prototype.onShow = function ()
 	{
 		this.requestProductGroupsList();
 	}
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CProductGroupsView.prototype.requestProductGroupsList = function ()
@@ -264,11 +265,13 @@ CProductGroupsView.prototype.onProductGroupDeleteResponse = function (oResponse)
 CProductGroupsView.prototype.show = function ()
 {
 	this.isVisible(true);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CProductGroupsView.prototype.hide = function ()
 {
 	this.isVisible(false);
+	this.oSelector.useKeyboardKeys(false);
 };
 
 CProductGroupsView.prototype.onBind = function ()
@@ -318,6 +321,11 @@ CProductGroupsView.prototype.onGetProductGroupsFullListResponse = function (oRes
 		aNewProductGroupsCollection.unshift(oEmptyGroupItem);
 		this.productGroupsFullList(aNewProductGroupsCollection);
 	}
+};
+
+CProductGroupsView.prototype.onHide = function ()
+{
+	this.oSelector.useKeyboardKeys(false);
 };
 
 module.exports = new CProductGroupsView();

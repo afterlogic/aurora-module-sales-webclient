@@ -232,4 +232,16 @@ CMainView.prototype.onBind = function ()
 	this.oContactsView.onBind();
 };
 
+/**
+ * Called every time when screen is shown.
+ */
+CMainView.prototype.onHide = function ()
+{
+	this.oSalesView.onHide();
+	this.oDownloadsView.onHide();
+	this.oProductsView.onHide();
+	this.oProductGroupsView.onHide();
+	this.oContactsView.onHide();
+};
+
 module.exports = new CMainView();

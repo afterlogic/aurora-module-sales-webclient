@@ -108,6 +108,7 @@ CDownloadsView.prototype.onShow = function ()
 		}
 		return this.productsFullList();
 	}, this);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CDownloadsView.prototype.requestSearchDownloadsList = function (sSearch)
@@ -386,11 +387,13 @@ CDownloadsView.prototype.show = function ()
 		this.initChart();
 	}
 	this.isVisible(true);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CDownloadsView.prototype.hide = function ()
 {
 	this.isVisible(false);
+	this.oSelector.useKeyboardKeys(false);
 };
 
 CDownloadsView.prototype.saveDownload = function ()
@@ -531,6 +534,11 @@ CDownloadsView.prototype.onDeleteDownloadResponse = function (oResponse)
 CDownloadsView.prototype.editDownloadsProduct = function (oSale)
 {
 	oSale.bIsSalesProductEditing(!oSale.bIsSalesProductEditing());
+};
+
+CDownloadsView.prototype.onHide = function ()
+{
+	this.oSelector.useKeyboardKeys(false);
 };
 
 module.exports = new CDownloadsView();

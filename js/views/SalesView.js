@@ -119,6 +119,7 @@ CSalesView.prototype.onShow = function ()
 		}
 		return this.productsFullList();
 	}, this);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CSalesView.prototype.requestSearchSalesList = function (sSearch)
@@ -439,11 +440,13 @@ CSalesView.prototype.onClearSalesSearchClick = function ()
 CSalesView.prototype.show = function ()
 {
 	this.isVisible(true);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CSalesView.prototype.hide = function ()
 {
 	this.isVisible(false);
+	this.oSelector.useKeyboardKeys(false);
 };
 
 CSalesView.prototype.saveSale = function ()
@@ -630,6 +633,11 @@ CSalesView.prototype.onDeleteSaleResponse = function (oResponse)
 CSalesView.prototype.editSalesProduct = function (oSale)
 {
 	oSale.bIsSalesProductEditing(!oSale.bIsSalesProductEditing());
+};
+
+CSalesView.prototype.onHide = function ()
+{
+	this.oSelector.useKeyboardKeys(false);
 };
 
 module.exports = new CSalesView();

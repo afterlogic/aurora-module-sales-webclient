@@ -103,6 +103,7 @@ CProductsView.prototype.onShow = function ()
 	{
 		this.requestProductsList();
 	}
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CProductsView.prototype.requestProductsList = function ()
@@ -325,11 +326,13 @@ CProductsView.prototype.onProductDeleteResponse = function (oResponse)
 CProductsView.prototype.show = function ()
 {
 	this.isVisible(true);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CProductsView.prototype.hide = function ()
 {
 	this.isVisible(false);
+	this.oSelector.useKeyboardKeys(false);
 };
 
 CProductsView.prototype.onBind = function ()
@@ -342,6 +345,11 @@ CProductsView.prototype.onBind = function ()
 		$('.products_list', this.$viewDom),
 		$('.products_list_scroll.scroll-inner', this.$viewDom)
 	);
+};
+
+CProductsView.prototype.onHide = function ()
+{
+	this.oSelector.useKeyboardKeys(false);
 };
 
 module.exports = new CProductsView();

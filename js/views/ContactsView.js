@@ -170,11 +170,13 @@ CContactsView.prototype.show = function ()
 		this.requestContactsList();
 	}
 	this.isVisible(true);
+	this.oSelector.useKeyboardKeys(true);
 };
 
 CContactsView.prototype.hide = function ()
 {
 	this.isVisible(false);
+	this.oSelector.useKeyboardKeys(false);
 };
 
 CContactsView.prototype.saveContact = function ()
@@ -270,6 +272,16 @@ CContactsView.prototype.onDeleteContactResponse = function (oResponse)
 		this.requestContactsList();
 		this.selectedObject(null);
 	}
+};
+
+CContactsView.prototype.onShow = function ()
+{
+	this.oSelector.useKeyboardKeys(true);
+};
+
+CContactsView.prototype.onHide = function ()
+{
+	this.oSelector.useKeyboardKeys(false);
 };
 
 module.exports = new CContactsView();
