@@ -50,6 +50,8 @@ function CSalesListItemModel()
 	this.sReferrerPage = 0;
 	this.bIsUpgrade = false;
 	this.iPlatformType = 0;
+	this.sCity = '';
+	this.sCountry = '';
 
 	// Product section
 	this.oProduct = null;
@@ -141,6 +143,8 @@ CSalesListItemModel.prototype.parse = function (oData, aCustomers, aProducts)
 	this.iReferrerPage = Types.pInt(oData[sModuleName + '::ReferrerPage'], this.iReferrerPage);
 	this.bIsUpgrade = Types.pBool(oData[sModuleName + '::IsUpgrade'], this.bIsUpgrade);
 	this.iPlatformType = Types.pInt(oData[sModuleName + '::PlatformType'], this.iPlatformType);
+	this.sCity = Types.pString(oData['City'], this.sCity);
+	this.sCountry = Types.pString(oData['Country'], this.sCountry);
 
 	if (oCustomer !== null)
 	{
