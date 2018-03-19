@@ -325,6 +325,10 @@ CSalesView.prototype.initChart = function ()
 				scales: {
 					yAxes: [
 						{
+							gridLines: {
+								drawBorder: false,
+								color: ['rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)', 'rgba(120, 184, 240, 1)']
+							},
 							position: 'left',
 							id: 'y-axis-1',
 							scaleLabel: {
@@ -337,6 +341,10 @@ CSalesView.prototype.initChart = function ()
 							}
 						},
 						{
+							gridLines: {
+								drawBorder: false,
+								color: ['rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)', 'rgba(20, 184, 40, 1)']
+							},
 							position: 'right',
 							id: 'y-axis-2',
 							scaleLabel: {
