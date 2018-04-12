@@ -8,7 +8,7 @@ module.exports = function (oAppData) {
 		Settings = require('modules/%ModuleName%/js/Settings.js')
 	;
 	
-//	Settings.init(oAppData);
+	Settings.init(oAppData);
 	
 	if (App.getUserRole() === Enums.UserRole.NormalUser)
 	{
@@ -18,6 +18,18 @@ module.exports = function (oAppData) {
 		;
 
 		return {
+			/**
+			* Runs before application start. Subscribes to the event before post displaying.
+			* 
+			* @param {Object} ModulesManager
+			*/
+			start: function (ModulesManager) {
+				ModulesManager.run('SettingsWebclient', 'registerSettingsTab', [
+					function () { return require('modules/%ModuleName%/js/views/SalesSettingsFormView.js'); },
+					Settings.HashModuleName,
+					TextUtils.i18n('%MODULENAME%/LABEL_SETTINGS_TAB')
+				]);
+			},
 			/**
 			 * Returns list of functions that are return module screens.
 			 * 
