@@ -3,12 +3,12 @@
 var
 	_ = require('underscore'),
 	ko = require('knockout'),
-	
+
 	TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
 	Utils = require('%PathToCoreWebclientModule%/js/utils/Common.js'),
 	Routing = require('%PathToCoreWebclientModule%/js/Routing.js'),
 	CAbstractScreenView = require('%PathToCoreWebclientModule%/js/views/CAbstractScreenView.js'),
-	
+
 	Settings = require('modules/%ModuleName%/js/Settings.js'),
 	CProductsListItemModel = require('modules/%ModuleName%/js/models/CProductsListItemModel.js'),
 	CProductGroupsListItemModel = require('modules/%ModuleName%/js/models/CProductGroupsListItemModel.js')
@@ -22,24 +22,24 @@ var
 function CMainView()
 {
 	CAbstractScreenView.call(this, '%ModuleName%');
-	
+
 	this.oSalesView = require('modules/%ModuleName%/js/views/SalesView.js');
 	this.oDownloadsView = require('modules/%ModuleName%/js/views/DownloadsView.js');
 	this.oProductsView = require('modules/%ModuleName%/js/views/ProductsView.js');
 	this.oProductGroupsView = require('modules/%ModuleName%/js/views/ProductGroupsView.js');
 	this.oContactsView = require('modules/%ModuleName%/js/views/ContactsView.js');
-	
+
 	this.oSalesView.productsFullList = this.oProductsView.productsFullList;
 	this.oProductsView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
 	this.oSalesView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
 	this.oDownloadsView.productsFullList = this.oProductsView.productsFullList;
 	this.oDownloadsView.productGroupsFullList = this.oProductGroupsView.productGroupsFullList;
-	
+
 	/**
 	 * Text for displaying in browser title when sales screen is shown.
 	 */
 	this.browserTitle = ko.observable(TextUtils.i18n('%MODULENAME%/HEADING_BROWSER_TAB'));
-	
+
 	this.selectedType = ko.observable(Enums.SalesObjectsTypes.Sales);
 	this.bigButtonText = ko.computed(function () {
 		switch (this.selectedType())
@@ -70,7 +70,7 @@ function CMainView()
 				break;
 		}
 	});
-	
+
 	this.aObjectTabs = [
 		{
 			sType: Enums.SalesObjectsTypes.Sales,
@@ -98,8 +98,9 @@ function CMainView()
 			sRouteHash: Routing.buildHashFromArray([Settings.HashModuleName, Enums.SalesObjectsTypes.Contacts])
 		}
 	];
-	
+
 	this.showSalesWithContactBound = _.bind(this.showSalesWithContact, this);
+	this.showDownloadsWithContactBound = _.bind(this.showDownloadsWithContact, this);
 	this.showSalesWithProductBound = _.bind(this.showSalesWithProduct, this);
 	this.showDownloadsWithProductBound = _.bind(this.showDownloadsWithProduct, this);
 }
@@ -114,11 +115,11 @@ CMainView.prototype.ViewConstructorName = 'CMainView';
  */
 CMainView.prototype.onRoute = function (aParams)
 {
-	var 
+	var
 		Tab = aParams.splice(0, 1),
 		oCurrentTab = this.switchObjectsTab(Tab[0])
 	;
-	
+
 	if (oCurrentTab)
 	{
 		oCurrentTab.onRoute(aParams);
@@ -129,8 +130,17 @@ CMainView.prototype.showSalesWithContact = function (oContact)
 {
 	if (_.isFunction(this.oSalesView.requestSearchSalesList))
 	{
-		this.switchObjectsTab(Enums.SalesObjectsTypes.Sales);
+		Routing.setHash([Settings.HashModuleName, Enums.SalesObjectsTypes.Sales]);
 		this.oSalesView.requestSearchSalesList(oContact.sEmail || oContact.sFullName || oContact.sLastName || oContact.sFirstName);
+	}
+};
+
+CMainView.prototype.showDownloadsWithContact = function (oContact)
+{
+	if (_.isFunction(this.oDownloadsView.requestSearchDownloadsList))
+	{
+		Routing.setHash([Settings.HashModuleName, Enums.SalesObjectsTypes.Downloads]);
+		this.oDownloadsView.requestSearchDownloadsList(oContact.sEmail || oContact.sFullName || oContact.sLastName || oContact.sFirstName);
 	}
 };
 
@@ -138,7 +148,7 @@ CMainView.prototype.showSalesWithProduct = function (oProduct)
 {
 	this.oSalesView.searchByProduct(oProduct);
 	this.oSalesView.searchInputValue('');
-	this.switchObjectsTab(Enums.SalesObjectsTypes.Sales);
+	Routing.setHash([Settings.HashModuleName, Enums.SalesObjectsTypes.Sales]);
 	this.oSalesView.requestSalesList();
 };
 
@@ -146,14 +156,14 @@ CMainView.prototype.showDownloadsWithProduct = function (oProduct)
 {
 	this.oDownloadsView.searchByProduct(oProduct);
 	this.oDownloadsView.searchInputValue('');
-	this.switchObjectsTab(Enums.SalesObjectsTypes.Downloads);
+	Routing.setHash([Settings.HashModuleName, Enums.SalesObjectsTypes.Downloads]);
 	this.oDownloadsView.requestDownloadsList();
 };
 
 CMainView.prototype.switchObjectsTab = function (sType)
 {
 	var oCurrentTab = null;
-	
+
 	switch (sType)
 	{
 		case Enums.SalesObjectsTypes.Sales:
@@ -163,7 +173,7 @@ CMainView.prototype.switchObjectsTab = function (sType)
 			this.oProductGroupsView.hide();
 			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Sales);
-			
+
 			oCurrentTab = this.oSalesView;
 			break;
 		case Enums.SalesObjectsTypes.Downloads:
@@ -173,7 +183,7 @@ CMainView.prototype.switchObjectsTab = function (sType)
 			this.oProductGroupsView.hide();
 			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Downloads);
-			
+
 			oCurrentTab = this.oDownloadsView;
 			break;
 		case Enums.SalesObjectsTypes.Products:
@@ -183,7 +193,7 @@ CMainView.prototype.switchObjectsTab = function (sType)
 			this.oProductGroupsView.hide();
 			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.Products);
-			
+
 			oCurrentTab = this.oProductsView;
 			break;
 		case Enums.SalesObjectsTypes.ProductGroups:
@@ -193,7 +203,7 @@ CMainView.prototype.switchObjectsTab = function (sType)
 			this.oProductsView.hide();
 			this.oContactsView.hide();
 			this.selectedType(Enums.SalesObjectsTypes.ProductGroups);
-			
+
 			oCurrentTab = this.oProductGroupsView;
 			break;
 		case Enums.SalesObjectsTypes.Contacts:
@@ -203,11 +213,11 @@ CMainView.prototype.switchObjectsTab = function (sType)
 			this.oProductsView.hide();
 			this.oContactsView.show();
 			this.selectedType(Enums.SalesObjectsTypes.Contacts);
-			
+
 			oCurrentTab = this.oContactsView;
 			break;
 	}
-	
+
 	return oCurrentTab;
 };
 
