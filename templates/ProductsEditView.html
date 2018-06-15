@@ -17,6 +17,12 @@
 				</span>
 			</div>
 			<div class="row">
+				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_MAILCHIMP_GROUP'}"></span>
+				<span class="value">
+					<select class="value input" data-bind="value: sMailchimpGroupUUID, options: $parent.mailchimpGroupsList, optionsText: 'sName', optionsValue: 'mailchimpGroupUUID' "></select>
+				</span>
+			</div>
+			<div class="row">
 				<span class="label" data-bind="i18n: {'key': '%MODULENAME%/LABEL_PRODUCT_EDIT_SHAREIT_ID'}"></span>
 				<span class="value">
 					<input class="input" type="text" data-bind="value: sShareItProductId, valueUpdate: 'afterkeydown', onEnter: $parent.saveProduct" />

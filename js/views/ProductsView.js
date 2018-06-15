@@ -32,6 +32,7 @@ function CProductsView()
 	CAbstractScreenView.call(this, '%ModuleName%');
 	
 	this.objectList = ko.observableArray([]);
+	this.mailchimpGroupsList = ko.observableArray([]);
 	this.objectsCount = ko.observable(0);
 	this.productsFullList = ko.observableArray([]);
 	this.selectedObject = ko.observable(null);
@@ -103,6 +104,10 @@ CProductsView.prototype.onShow = function ()
 	{
 		this.requestProductsList();
 	}
+	if (this.mailchimpGroupsList().length === 0)
+	{
+		this.requestMailchimpGroupsList();
+	}
 	this.oSelector.useKeyboardKeys(true);
 };
 
@@ -137,6 +142,17 @@ CProductsView.prototype.requestProductsFullList = function ()
 		'GetProducts', 
 		{},
 		this.onGetProductsFullListResponse,
+		this
+	);
+};
+
+CProductsView.prototype.requestMailchimpGroupsList = function ()
+{
+	Ajax.send(
+		'Sales',
+		'GetMailchimpGroups', 
+		{},
+		this.onGetMailchimpGroupsResponse,
 		this
 	);
 };
@@ -203,6 +219,31 @@ CProductsView.prototype.onGetProductsFullListResponse = function (oResponse)
 	}
 };
 
+CProductsView.prototype.onGetMailchimpGroupsResponse = function (oResponse)
+{
+	var oResult = oResponse.Result;
+
+	if (oResult)
+	{
+		var
+			aNewCollection = _.map(oResult.Groups, function (sGroupName, sMailchimpUUID) {
+				return {
+					'mailchimpGroupUUID': sMailchimpUUID,
+					'sName': sGroupName
+				};
+			});
+		aNewCollection.unshift({
+			'mailchimpGroupUUID': '',
+			'sName': '-'
+		});
+		this.mailchimpGroupsList(aNewCollection);
+	}
+	else
+	{
+		this.mailchimpGroupsList([]);
+	}
+};
+
 CProductsView.prototype.viewProductsItem = function (oItem)
 {
 	this.selectedObject(oItem);
@@ -234,11 +275,15 @@ CProductsView.prototype.saveProduct = function ()
 			'PayPalItem': oProduct.sPayPalItem,
 			'ProductPrice': oProduct.dProductPrice,
 			'Homepage': oProduct.sHomepage,
-			'IsAutocreated': false
+			'IsAutocreated': false,
+			'MailchimpGroupUUID': oProduct.sMailchimpGroupUUID,
+			'MailchimpGroupTitle': _.find(this.mailchimpGroupsList(), function(oGroup) {
+				return oGroup.mailchimpGroupUUID === oProduct.sMailchimpGroupUUID;
+			}).sName
 		} : null,
 		sMethod = oProduct && oProduct.UUID === '' ? 'CreateProduct' : 'UpdateProduct'
 	;
-	
+
 	if (oProduct)
 	{
 		if (oProduct.sProductTitle === '')
