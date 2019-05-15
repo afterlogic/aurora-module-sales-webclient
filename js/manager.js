@@ -10,7 +10,7 @@ module.exports = function (oAppData) {
 	
 	Settings.init(oAppData);
 	
-	if (App.getUserRole() === Enums.UserRole.NormalUser)
+	if (App.isUserNormalOrTenant())
 	{
 		var
 			TextUtils = require('%PathToCoreWebclientModule%/js/utils/Text.js'),
